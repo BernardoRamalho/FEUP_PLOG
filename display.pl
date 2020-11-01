@@ -1,6 +1,6 @@
 % The board begins with all of its position empty and
 % consists of a pyramid with 11 levels
-initialBoard([
+initial([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
@@ -102,7 +102,7 @@ printLine([Head|Tail]):-
 
 % Displays the initial board
 displayInitialBoard:-
-    initialBoard(InitialBoard),
+    initial(InitialBoard),
     printBoard(InitialBoard).
 
 % Displays a possible intermediate board
@@ -114,3 +114,12 @@ displayIntermediateBoard:-
 displayFinalBoard:-
     finalBoard(FinalBoard),
     printBoard(FinalBoard).
+
+% Displays a GameState
+displayGame(GameState, Player):-
+    printBoard(GameState).
+
+% For now just display the initial boardstate
+play:-
+    initial(GameState),
+    displayGame(GameState, X).
