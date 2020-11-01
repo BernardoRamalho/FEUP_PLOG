@@ -2,29 +2,21 @@
 
 # Ampel
 
-Trata-se de um jogo de tabuleiro para 2 pessoas.  O seu nome  
-deriva do alemão e significa "semáforo".Isto deve-se ao facto  
-de o objetivo do jogo,ou seja,o  que determina o vencedor é  
-conseguir acumular o maior número de semáforos,sendo que  
-cada semáforo consiste em três peças de cores diferentes e  
-contíguas.
+Trata-se de um jogo de tabuleiro para 2 pessoas.  O seu nome deriva do alemão e significa "semáforo". Isto deve-se ao facto de o  que determina o vencedor é conseguir acumular o maior número de semáforos,sendo que cada semáforo consiste em três peças de cores diferentes e contíguas.
 
 
 ## Regras do jogo em geral  
-O jogo começa com um tabuleiro vazio.Começa-se a fase de "setup" em que um dos jogadores  
-,à sorte,joga um disco amarelo no tabuleiro,sem ser nas arestas ou vertices do "triângulo".O outro  
-jogador faz igual e assim sucessivamente até um possível número máximo de 10 amarelos.Estes  
-discos amarelos não se podem mover tirando quando forem removidos ao formar um semáforo.  
-Depois desta fase inicial pode começar o jogo em si e a primeira jogada é efetuada pelo penúltimo  
-jogador a ter colocado um disco amarelo.
+
+O jogo começa com um tabuleiro vazio. 
+
+Começa-se a fase de "setup" em que um dos jogadores, à sorte, joga um disco amarelo no tabuleiro, sem ser nas arestas ou vertices do "triângulo". O outro jogador faz igual e assim sucessivamente até um possível número máximo de 10 amarelos. Estes discos amarelos não se podem mover tirando quando forem removidos ao formar um semáforo.
+
+Depois desta fase inicial pode começar o jogo em si e a primeira jogada é efetuada pelo penúltimo jogador a ter colocado um disco amarelo.
 
 Cada jogada é constituída por:
 1. Mover um dos discos do próprio jogador
 1. Mover um dos discos do oponente(exceto o que acabou de ser jogado)
 1. Adicionar um dos discos ao jogo mas sem poder formar diretamente um "semáforo"  
-  
-
-  
     
 O jogo acaba quando um jogador acumula metade do total dos discos amarelos.    
 
@@ -115,7 +107,9 @@ pieceSymbol(o, P) :- P = ' '.
 ## Visualização do estado de jogo
 
 O predicado de visualização começa por chamar uma função que desenha o header (consite em número para o jogador facilmente visualizar a coluna que quer escolher). 
+
 Depois chama uma função recursiva responsável por desenhar o board state. Esta função escreve a letra que designa a linha que está a desenhar. Para desenhar o conteudo da linha do board state, é utilizado um função auxiliar. Esta função auxiliar percorre a linha enquanto converte o que encontra para o simbolo desejado e desenha esse simbolo no ecrã. Quando a linha acaba de ser desenha, a função reponsável por desenhar o board state chama-se a si própria, incrementando uma variavel. Quando essa variavel fica igual ao número máximo de linhas, encontra-se a condição de paragem.
+
 No final de o board state estar desenhado, é chamada uma função para desenhar o footer (que é igual ao header mas invertido).
 
 
