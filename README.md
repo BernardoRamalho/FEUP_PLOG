@@ -39,6 +39,16 @@ a mudança de direção tendo como opções 60º ou 120º,esquerda ou direita.
 fonte:https://boardgamegeek.com/boardgame/151978/ampel
 
 ## Representação interna do estado do jogo
+
+Para representar o tabuleiro do jogo utilizamos uma lista de listas em formato triangular para ficar o mais próximo possível do tabuleiro do jogo.  
+
+  
+  As listas podem ter como elementos:
+* 'o' ,o que corresponde à parte da lista excluída do tabuleiro para obter a tal forma triangular.
+* 'empty',que corresponde a um ponto do tabuleiro que se encontra sem nenhuma peça.
+* 'green','yellow','red',corresponde a um ponto do tabuleiro no qual se encontra uma peça verde,amarela e vermelha,respetivamente.  
+
+Os jogadores são representados pela cor das peças que inicialmente escolheram dado que um corresponde às peças verdes e outro às peças vermelhas.
 ### Situação inicial
 ```
 % The board begins with all of its position empty and
@@ -93,6 +103,9 @@ finalBoard([
 ```
 
 ### Representação das peças
+
+As peças são representadas da seguinte forma:  
+
 ```
 % There 3 types of pieces
 % yellow, red and green representing the colours of a 
