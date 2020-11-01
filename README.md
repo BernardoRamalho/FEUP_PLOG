@@ -40,13 +40,13 @@ fonte:https://boardgamegeek.com/boardgame/151978/ampel
 
 ## Representação interna do estado do jogo
 
-Para representar o tabuleiro do jogo utilizamos uma lista de listas em formato triangular para ficar o mais próximo possível do tabuleiro do jogo.  
+Para representar o tabuleiro do jogo utilizamos uma lista de listas, em formato rectângular (11 linhas e 22 colunas). No entanto, para ficar o mais próximo possível do tabuleiro triangular do jogo, utilizamos um elemento para representar zona fora do tabuleiro.  
 
   
   As listas podem ter como elementos:
-* 'o' ,o que corresponde à parte da lista excluída do tabuleiro para obter a tal forma triangular.
-* 'empty',que corresponde a um ponto do tabuleiro que se encontra sem nenhuma peça.
-* 'green','yellow','red',corresponde a um ponto do tabuleiro no qual se encontra uma peça verde,amarela e vermelha,respetivamente.  
+* 'o':- correspondente a uma posição da lista excluída do tabuleiro para obter a tal forma triangular.
+* 'empty':- que corresponde a um ponto do tabuleiro que se encontra sem nenhuma peça.
+* 'green'/'yellow'/'red':- corresponde a um ponto do tabuleiro no qual se encontra, respetivamente, uma peça verde,amarela ou vermelha.  
 
 Os jogadores são representados pela cor das peças que inicialmente escolheram dado que um corresponde às peças verdes e outro às peças vermelhas.
 ### Situação inicial
