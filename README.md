@@ -99,7 +99,25 @@ finalBoard([
     [empty, o, red, o, empty, o, empty, o, red, o, red, o, empty, o, green, o, red, o, empty, o, empty]
 ]).
 ```
-  
+
+### Representação das peças
+```
+% There 3 types of pieces
+% yellow, red and green representing the colours of a 
+% traffic light
+pieceSymbol(empty, P) :- P = 'x'.
+pieceSymbol(red, P) :- P = 'R'.
+pieceSymbol(yellow, P) :- P = 'Y'.
+pieceSymbol(green, P) :- P = 'G'.
+pieceSymbol(o, P) :- P = ' '.
+```  
+
+## Visualização do estado de jogo
+
+
+
+
+
  ### Grupo Ampel_3
 
 * Bernardo da Silva Moço de Soares Ramalho(up201704334)
