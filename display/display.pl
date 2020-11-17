@@ -47,7 +47,7 @@ printPlayArea([Head|Tail], N):-
     printPlayArea(Tail, N1).
 
 printLine([]):-
-    write('\n').
+    write('  |\n').
 
 printLine([Head|Tail]):-
     pieceSymbol(Head, P),
