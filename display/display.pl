@@ -64,6 +64,13 @@ letter(9, L) :- L = 'I'.
 letter(10, L) :- L = 'J'.
 letter(11, L) :- L = 'G'.
 
+% Get Start collumn of a specific row getCollumn(Row, Collumn)
+getCollumn(11, 1).
+getCollumn(X, Y):-
+    X1 is X + 1,
+    getCollumn(X1, Y1),
+    Y is Y1 + 1.
+
 
 % Printing fuctions
 
