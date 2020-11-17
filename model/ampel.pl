@@ -5,4 +5,4 @@
 % For now just display the initial boardstate
 play:-
     initial(GameState),
-    displayGame(GameState, X).
+    displayGame(GameState).

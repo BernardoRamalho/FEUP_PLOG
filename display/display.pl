@@ -22,18 +22,18 @@ letter(11, L) :- L = 'G'.
 
 % Printing fuctions
 
-printHeader(X) :-
+printHeader:-
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n').
 
-printFooter(X):-
+printFooter:-
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n'),
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n').
 
 printBoard(X) :-
-    printHeader(X),
+    printHeader,
     printPlayArea(X, 1),
-    printFooter(X).
+    printFooter.
 
 printPlayArea([], 12).
 
@@ -71,5 +71,5 @@ displayFinalBoard:-
     printBoard(FinalBoard).
 
 % Displays a GameState
-displayGame(GameState, Player):-
+displayGame(GameState):-
     printBoard(GameState).
