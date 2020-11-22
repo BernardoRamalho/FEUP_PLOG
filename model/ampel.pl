@@ -4,7 +4,6 @@
 
 
 % For now just display the initial boardstate
-ampel:-
+ampel(GameType):-
     initial(GameState),
-    askForGameType(GameType),
-    play(GameType).
+    askForGameType(GameType).
