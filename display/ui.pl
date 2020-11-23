@@ -14,3 +14,12 @@ displayGameTypeOptions:-
     write('2 - Ai vs Ai;\n'),
     write('3 - Player vs Ai.\n'),
     write('Enter your option (number): ').
+
+% askForMove(Move), ask the player for a askForMove
+
+askForMove([Collumn | Line]):-
+    write('Enter the column and line where you want to place a piece.\n'),
+    write('Column'),
+    read(Collumn),
+    write('Line'),
+    read(Line).
