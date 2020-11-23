@@ -19,14 +19,17 @@ displayGameTypeOptions:-
 
 % askForMove(Move), ask the player for a askForMove
 
-askForMove([Collumn|Row]):-
+askForMove([Column|Row]):-
     write('Enter the column and row where you want to place a piece.\n'),
     write('Column'),
-    read(Collumn),
+    read(Column),
     write('Row'),
     read(Letter),
     letterToNumber(Letter,Row).
 
-askForMove([Collumn|Row]):-
+askForMove([Column|Row]):-
+    askForMoveAgain([Column|Row]).
+
+askForMoveAgain([Column|Row]):-
     write('Invalid Input. Be sure to write capital letters or numbers.\n'),
-    askForMove([Collumn|Row]).
+    askForMove([Column|Row]).

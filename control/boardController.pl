@@ -1,4 +1,4 @@
-:-include('../utils.pl').
+:-include('../display/ui.pl').
 
 
 % The board begins with all of its position empty and
@@ -16,6 +16,9 @@ initial([
     [o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).
+test(Column, Row):-
+    initial(Board),
+    checkValidMove([Column|Row], Board).
 
 % getPieceAt(Coords, Board, Piece), this function goes through the board until it gets to the Piece at the coordinates given.
 getPieceAt([Column|Row], Board, Piece):-
@@ -29,11 +32,12 @@ checkValidMove([Column|Row], Board):-
     Column > (StartColumn - 1),
     getEndColumn(Row, EndColumn),
     Column < (EndColumn + 1),
-    checkValidColumnRow(Column, Row).
+    checkValidPiece(Column, Row, Board).
 
 
 checkValidMove([Column|Row], Board):-
-    write('Invalid Column').
+    askForMoveAgain([NewColumn|NewRow]),
+    checkValidMove([NewColumn|NewRow], Board).
 
 /* 
     Checks if the column is valid for the row
@@ -48,3 +52,7 @@ checkValidColumnRow(Column, Row):-
     (Row mod 2) =:= 1,
     (Column mod 2) =:= 1.
     
+checkValidPiece(Column, Row, Board):-
+    getPieceAt([Column|Row], Board, Piece),
+    Piece = 'empty'.
+

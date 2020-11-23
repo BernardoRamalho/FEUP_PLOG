@@ -1,6 +1,5 @@
 
 :-include('../control/boardController.pl').
-:-include('../display/ui.pl').
 
 /**
     This file is where we make all the function that control the flow of the game.

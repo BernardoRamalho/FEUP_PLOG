@@ -52,5 +52,6 @@ letterToNumber(11, 11).
 getElementAt(1, [H|_], H).
 
 getElementAt(Position, [_|T], Element):-
+    Position > 0,
     NewPosition is Position - 1,
     getElementAt(NewPosition, T, Element).
