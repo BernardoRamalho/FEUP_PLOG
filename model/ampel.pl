@@ -1,4 +1,3 @@
-:-include('../display/display.pl').
 :-include('../control/gameController.pl').
 :-include('../display/ui.pl').
 
