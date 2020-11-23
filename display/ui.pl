@@ -8,7 +8,8 @@
 % Function used to let the player choose which game type he wants (Player vs Player, Ai vs Ai or Player vs Ai).
 askForGameType(GameType):-
     displayGameTypeOptions,
-    read(GameType).
+    read(GameType),
+    skip_line.
 
 displayGameTypeOptions:-
     write('Which type of game would you like to play?\n'),
@@ -21,10 +22,12 @@ displayGameTypeOptions:-
 
 askForMove([Column|Row]):-
     write('Enter the column and row where you want to place a piece.\n'),
-    write('Column'),
+    write('Column: '),
     read(Column),
-    write('Row'),
+    skip_line,
+    write('Row: '),
     read(Letter),
+    skip_line,
     letterToNumber(Letter,Row).
 
 askForMove([Column|Row]):-
