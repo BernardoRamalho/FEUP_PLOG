@@ -30,7 +30,7 @@ play(GameState, 3):-
     Group of function that run the game based on the type of game.
 */
 playPvP(GameState, Player):-
-    move(GameState, Player).
+    move(GameState, Player, NewBoard).
 
 playEvE(GameState):-
     write('EvE\n').

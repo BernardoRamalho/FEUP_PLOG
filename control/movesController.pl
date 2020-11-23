@@ -41,7 +41,7 @@ checkValidPiece(Column, Row, Board):-
     Checks if the move is valid.
     And places a piece of the Player in the Board at the coords given.
 */
-move(Board, Player):-
+move(Board, Player, NewBoard):-
     askForMove(Coords),
     checkValidMove(Coords, Board),
-    setPieceAt(Coords, Board, Player).
+    setPieceAt(Coords, Board, Player, NewBoard).
