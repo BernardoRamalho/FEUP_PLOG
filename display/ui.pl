@@ -1,3 +1,5 @@
+:-include('../utils.pl').
+
 /**
     This file is where we make all the function that interact with the user.
     If we need to ask something or get the input, the fucntion is in this file.
@@ -17,9 +19,14 @@ displayGameTypeOptions:-
 
 % askForMove(Move), ask the player for a askForMove
 
-askForMove([Collumn | Line]):-
-    write('Enter the column and line where you want to place a piece.\n'),
+askForMove([Collumn|Row]):-
+    write('Enter the column and row where you want to place a piece.\n'),
     write('Column'),
     read(Collumn),
-    write('Line'),
-    read(Line).
+    write('Row'),
+    read(Letter),
+    letterToNumber(Letter,Row).
+
+askForMove([Collumn|Row]):-
+    write('Invalid Input. Be sure to write capital letters or numbers.\n'),
+    askForMove([Collumn|Row]).

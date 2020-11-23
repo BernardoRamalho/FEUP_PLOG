@@ -1,5 +1,6 @@
 
 :-include('../control/boardController.pl').
+:-include('../display/ui.pl').
 
 /**
     This file is where we make all the function that control the flow of the game.
@@ -18,7 +19,7 @@ initiateGame(GameState):-
     3 -> the game is Player vs AI (PvE)
 */
 play(GameState, 1):-
-    playPvP(GameState).
+    playPvP(GameState, 'red').
 
 play(GameState, 2):-
     playEvE(GameState).
@@ -29,8 +30,9 @@ play(GameState, 3):-
 /*
     Group of function that run the game based on the type of game.
 */
-playPvP(GameState):-
-    write('PvP\n').
+playPvP(GameState, Player):-
+    askForMove([Column|Row]),
+    checkValidMove([Column|Row], GameState).
 
 playEvE(GameState):-
     write('EvE\n').
