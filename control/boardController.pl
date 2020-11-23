@@ -5,7 +5,7 @@
 % consists of a pyramid with 11 levels
 initial([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, o, o, empty, 0, empty, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o],
@@ -17,20 +17,10 @@ initial([
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).
 
-% getPieceAtColumn(Column, Row, Piece), this function goes through the row until it gets to the desired column.
-getPieceAtColumn(1, [H|_], H).
-
-getPieceAtColumn(Column, [_|T], Piece):-
-    NewColumn is Column - 1,
-    getPieceAtColumn(NewColumn, T, Piece).
-
-% getPieceAtRow(Coords, Board, Piece), this function goes through the rows until it gets to the desired row.
-getPieceAtRow([Column | 1], [CurrentRow | _], Piece):-
-    getPieceAtColumn(Column, CurrentRow, Piece).
-
-getPieceAtRow([Column|Row], [_ | NextRows], Piece):-
-    NextRow is Row - 1,
-    getPieceAtRow([Column | NextRow], NextRows, Piece).
+% getPieceAt(Coords, Board, Piece), this function goes through the board until it gets to the Piece at the coordinates given.
+getPieceAt([Column|Row], Board, Piece):-
+    getElementAt(Row, Board, PieceRow),
+    getElementAt(Column, PieceRow, Piece).
 
 % checkValidMove(Move, Board) checks if there the move is valid
 

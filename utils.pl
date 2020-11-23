@@ -47,3 +47,10 @@ letterToNumber(8, 8).
 letterToNumber(9, 9).
 letterToNumber(10, 10).
 letterToNumber(11, 11).
+
+% Gets the element at the position in the list getElementAt(Position, Array, Element)
+getElementAt(1, [H|_], H).
+
+getElementAt(Position, [_|T], Element):-
+    NewPosition is Position - 1,
+    getElementAt(NewPosition, T, Element).
