@@ -23,6 +23,39 @@ initial([
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).
 
+/*
+    getValidPosition(Move, Board, PieceType)
+    Uses the ui module to ask the user for a move.
+    Checks if the position given as a piece equals to PieceType.
+*/
+getValidPosition(Coords, Board, PieceType):-
+    askForMove(Coords),
+    checkValidPosition(Coords, Board, PieceType).
+
+getValidPosition(Coords, Board, PieceType):-
+    askForMoveAgainMessage,
+    getValidPosition(Coords, Board, PieceType).
+
+/*
+    checkValidPosition(Move, Board, PieceType)
+    Checks if the move is valid. 
+    Starts by checking if the column is in the correct range and checks if the spot has a piece of PieceType.
+*/
+checkValidPosition([Column|Row], Board, PieceType):-
+    getStartColumn(Row, StartColumn),
+    Column > (StartColumn - 1),
+    getEndColumn(Row, EndColumn),
+    Column < (EndColumn + 1),
+    checkPiece(Column, Row, Board, PieceType).
+
+/* 
+    checkPiece(Column, Row, Board, PieceType).
+    Gets the piece of the board at the row and column given.
+    Checks if the spot is equal to PieceType.
+*/    
+checkPiece(Column, Row, Board, PieceType):-
+    getPieceAt([Column|Row], Board, Piece),
+    Piece = PieceType.
 
 /*
     getPieceAt(Coords, Board, Piece).

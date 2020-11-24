@@ -88,3 +88,10 @@ countAllRowPieces([H|T], Count):-
     countAllRowPieces(T, NewCount).
 countAllRowPieces([_|T], Count):-
     countAllRowPieces(T, Count).
+
+% Checks if two lists with length 2 are diferent
+listIsDifferent([X|_], [Y|_]):-
+    X \= Y.
+
+listIsDifferent([_|Z], [_|T]):-
+    Z \= T.
