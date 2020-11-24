@@ -65,26 +65,26 @@ getElementAt(Position, [_|T], Element):-
 
 % Counts the number os pieces in a row
 
-countPieces([], 0).
-countPieces([H|T], Count):-
+countAllRowPieces([], 0).
+countAllRowPieces([H|T], Count):-
     H = 'Red',
     NewCount is Count + 1,
-    countPieces(T, NewCount).
-countPieces([H|T], Count):-
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
     H = 'red',
     NewCount is Count + 1,
-    countPieces(T, NewCount).
-countPieces([H|T], Count):-
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
     H = 'Green',
     NewCount is Count + 1,
-    countPieces(T, NewCount).
-countPieces([H|T], Count):-
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
     H = 'green',
     NewCount is Count + 1,
-    countPieces(T, NewCount).
-countPieces([H|T], Count):-
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
     H = 'yellow',
     NewCount is Count + 1,
-    countPieces(T, NewCount).
-countPieces([_|T], Count):-
-    countPieces(T, Count).
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([_|T], Count):-
+    countAllRowPieces(T, Count).
