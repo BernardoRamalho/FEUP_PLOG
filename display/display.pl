@@ -2,9 +2,11 @@
 % yellow, red and green representing the colours of a 
 % traffic light
 pieceSymbol(empty, P) :- P = 'x'.
-pieceSymbol(red, P) :- P = 'R'.
-pieceSymbol(yellow, P) :- P = 'Y'.
-pieceSymbol(green, P) :- P = 'G'.
+pieceSymbol(red, P) :- P = 'r'.
+pieceSymbol(yellow, P) :- P = 'y'.
+pieceSymbol(green, P) :- P = 'g'.
+pieceSymbol('Green', P) :- P = 'G'.
+pieceSymbol('Red', P) :- P = 'R'.
 pieceSymbol(o, P) :- P = ' '.
 
 % Conversion of number to letter

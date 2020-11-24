@@ -35,9 +35,12 @@ placeDisc(Board, [PieceColor | NrPieces], NewBoard, [PieceColor | NewNrPieces]):
 
 placeDisc(_, Player, _, Player).
 
-moveDisc(Board, [PieceColor|_], BoardMoved):-
+moveDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
+    PlayerPieces < 20,
     getValidPosition(Coords, Board, PieceColor),
     write(Coords).
+
+moveDisc(Board, _, Board).
 
 /*
     getValidPosition(Move, Board, PieceType)
