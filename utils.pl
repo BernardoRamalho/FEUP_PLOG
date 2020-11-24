@@ -51,7 +51,9 @@ letterToNumber(11, 11).
 % Upper case to Lower case Conversion of Piece Color
 
 pieceColorLower('Red', 'red').
+pieceColorLower('red', 'red').
 pieceColorLower('Green', 'green').
+pieceColorLower('green', 'green').
 
 % Gets the element at the position in the list getElementAt(Position, Array, Element)
 getElementAt(1, [H|_], H).
@@ -60,3 +62,29 @@ getElementAt(Position, [_|T], Element):-
     Position > 0,
     NewPosition is Position - 1,
     getElementAt(NewPosition, T, Element).
+
+% Counts the number os pieces in a row
+
+countPieces([], 0).
+countPieces([H|T], Count):-
+    H = 'Red',
+    NewCount is Count + 1,
+    countPieces(T, NewCount).
+countPieces([H|T], Count):-
+    H = 'red',
+    NewCount is Count + 1,
+    countPieces(T, NewCount).
+countPieces([H|T], Count):-
+    H = 'Green',
+    NewCount is Count + 1,
+    countPieces(T, NewCount).
+countPieces([H|T], Count):-
+    H = 'green',
+    NewCount is Count + 1,
+    countPieces(T, NewCount).
+countPieces([H|T], Count):-
+    H = 'yellow',
+    NewCount is Count + 1,
+    countPieces(T, NewCount).
+countPieces([_|T], Count):-
+    countPieces(T, Count).
