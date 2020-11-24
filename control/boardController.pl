@@ -12,7 +12,7 @@
 initial([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, o, red, o, empty, o, empty, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o],
     [o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
@@ -46,16 +46,16 @@ checkValidPosition([Column|Row], Board, PieceType):-
     Column > (StartColumn - 1),
     getEndColumn(Row, EndColumn),
     Column < (EndColumn + 1),
-    checkPiece(Column, Row, Board, PieceType).
+    checkPiece(Column, Row, Board, Piece),
+    Piece = PieceType.
 
 /* 
     checkPiece(Column, Row, Board, PieceType).
     Gets the piece of the board at the row and column given.
     Checks if the spot is equal to PieceType.
 */    
-checkPiece(Column, Row, Board, PieceType):-
-    getPieceAt([Column|Row], Board, Piece),
-    Piece = PieceType.
+checkPiece(Column, Row, Board, Piece):-
+    getPieceAt([Column|Row], Board, Piece).
 
 /*
     getPieceAt(Coords, Board, Piece).

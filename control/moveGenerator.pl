@@ -12,9 +12,7 @@ test(Moves, [C|R]):-
 generateAllMoves([StartColumn|StartRow], EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
     
     % Get Path that starts on the northwest
-    NWC is StartColumn - 1,   
-    NWR is StartRow - 1,
-    generateNWMoves([StartColumn|StartRow], [NWC|NWR], NWCoords, [0| 0], Board, NWDiagonalMoves),
+    getNWMoves([StartColumn|StartRow], [StartColumn|StartRow], NWCoords, [0| 0], Board, NWDiagonalMoves),
 
     % Get Path that starts on the northeast
     NEC is StartColumn + 1,   
@@ -38,19 +36,70 @@ generateAllMoves([StartColumn|StartRow], EndCoords, Board, NWDiagonalMoves, NEDi
     SWC is StartColumn - 1,   
     SWR is StartRow + 1,
     generateSWMoves([StartColumn|StartRow], [SWC|SWR], SWCoords, [0| 0], Board, NEDiagonalMoves).
-    
+
+/*
+    getNWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+*/
+
+getNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
+    NewColumn is CurrentColumn - 1,
+    NewRow is CurrentRow - 1,
+    isValidPosition([NewColumn|NewRow], Board, StartCoords, PreviousCoords),
+    NewNrMoves is NrMoves - 1,
+    generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
+
+getNWMoves(_, _, [], _, _, _).
+
 /*
     generateNWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
 */
 
-generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], [CurrentColumn|CurrentRow], PreviousCoords, Board, 1):-
+generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], [CurrentColumn|CurrentRow], PreviousCoords, Board, 0):-
         isValidPosition([CurrentColumn|CurrentRow], Board, StartCoords, PreviousCoords).
 
-
+% Get the next move in the NorthWest direction
 generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
-    isValidPosition([CurrentColumn|CurrentRow], Board, StartCoords, PreviousCoords),
     NewColumn is CurrentColumn - 1,
     NewRow is CurrentRow - 1,
+    isValidPosition([NewColumn|NewRow], Board, StartCoords, PreviousCoords),
+    NewNrMoves is NrMoves - 1,
+    generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
+
+% Get the next move in the NorthEast direction
+generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
+    NewColumn is CurrentColumn + 1,
+    NewRow is CurrentRow - 1,
+    isValidPosition([NewColumn|NewRow], Board, StartCoords, PreviousCoords),
+    NewNrMoves is NrMoves - 1,
+    generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
+
+% Get the next move in the West direction
+generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
+    NewColumn is CurrentColumn - 1,
+    isValidPosition([NewColumn|CurrentRow], Board, StartCoords, PreviousCoords),
+    NewNrMoves is NrMoves - 1,
+    generateNWMoves(StartCoords, [NewColumn|CurrentRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
+
+% Get the next move in the East direction
+generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
+    NewColumn is CurrentColumn + 1,
+    isValidPosition([NewColumn|CurrentRow], Board, StartCoords, PreviousCoords),
+    NewNrMoves is NrMoves - 1,
+    generateNWMoves(StartCoords, [NewColumn|CurrentRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
+
+% Get the next move in the SouthWest direction
+generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
+    NewColumn is CurrentColumn - 1,
+    NewRow is CurrentRow + 1,
+    isValidPosition([NewColumn|NewRow], Board, StartCoords, PreviousCoords),
+    NewNrMoves is NrMoves - 1,
+    generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
+
+% Get the next move in the SouthEast direction
+generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
+    NewColumn is CurrentColumn + 1,
+    NewRow is CurrentRow + 1,
+    isValidPosition([NewColumn|NewRow], Board, StartCoords, PreviousCoords),
     NewNrMoves is NrMoves - 1,
     generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
