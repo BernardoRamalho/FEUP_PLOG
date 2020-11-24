@@ -48,6 +48,11 @@ letterToNumber(9, 9).
 letterToNumber(10, 10).
 letterToNumber(11, 11).
 
+% Upper case to Lower case Conversion of Piece Color
+
+pieceColorLower('Red', 'red').
+pieceColorLower('Green', 'green').
+
 % Gets the element at the position in the list getElementAt(Position, Array, Element)
 getElementAt(1, [H|_], H).
 
