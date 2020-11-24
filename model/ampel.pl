@@ -1,5 +1,4 @@
 :-include('../control/gameController.pl').
-:-include('../display/ui.pl').
 
 
 % For now just display the initial boardstate
