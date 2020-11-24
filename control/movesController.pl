@@ -5,9 +5,19 @@
 */
 
 
-test(Column, Row):-
-    initial(Board),
-    checkValidMove([Column|Row], Board).
+
+/*
+    getValidMove(Move, Board)
+    Uses the ui module to ask the user for a move.
+    Checks if the move given is valid.
+*/
+getValidMove(Coords, Board):-
+    askForMove(Coords),
+    checkValidMove(Coords, Board).
+
+getValidMove(Coords, Board):-
+    askForMoveAgainMessage,
+    getValidMove(Coords, Board).
 
 /*
     checkValidMove(Move, Board)
@@ -20,11 +30,6 @@ checkValidMove([Column|Row], Board):-
     getEndColumn(Row, EndColumn),
     Column < (EndColumn + 1),
     checkValidPiece(Column, Row, Board).
-
-
-checkValidMove(_, Board):-
-    askForMoveAgain([NewColumn|NewRow]),
-    checkValidMove([NewColumn|NewRow], Board).
 
 /* 
     checkValidPiece(Column, Row, Board).
@@ -42,6 +47,7 @@ checkValidPiece(Column, Row, Board):-
     And places a piece of the Player in the Board at the coords given.
 */
 move(Board, Player, NewBoard):-
-    askForMove(Coords),
-    checkValidMove(Coords, Board),
-    setPieceAt(Coords, Board, Player, NewBoard).
+    printBoard(Board),
+    getValidMove(Coords, Board),
+    setPieceAt(Coords, Board, Player, NewBoard),
+    printBoard(NewBoard).

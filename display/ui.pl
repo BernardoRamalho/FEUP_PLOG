@@ -1,4 +1,5 @@
 :-include('../utils.pl').
+:-include('display.pl').
 
 /**
     This file is where we make all the function that interact with the user.
@@ -33,6 +34,5 @@ askForMove([Column|Row]):-
 askForMove([Column|Row]):-
     askForMoveAgain([Column|Row]).
 
-askForMoveAgain([Column|Row]):-
-    write('Invalid Input. Be sure to write capital letters or numbers.\n'),
-    askForMove([Column|Row]).
+askForMoveAgainMessage:-
+    write('Invalid Input. Be sure to write capital letters or numbers.\n').
