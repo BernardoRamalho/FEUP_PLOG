@@ -35,7 +35,7 @@ letterToNumber('G', L) :- L = 7.
 letterToNumber('H', L) :- L = 8.
 letterToNumber('I', L) :- L = 9.
 letterToNumber('J', L) :- L = 10.
-letterToNumber('G', L) :- L = 11.
+letterToNumber('g', L) :- L = 11.
 letterToNumber(1, 1).
 letterToNumber(2, 2).
 letterToNumber(3, 3).

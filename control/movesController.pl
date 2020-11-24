@@ -5,49 +5,70 @@
 */
 
 
+/*
+    move(Board, Player)
+    Player move has 3 stages.
+    First the player moves one of its pieces.
+    Then it moves one of the enemy pieces.
+    And it places one piece.
+*/
+move(Board, Player, NewBoard, UpdatedPlayer):-
+    printBoard(Board),
+    moveDisc(Board, Player, BoardMoved),
+    %printBoard(BoardMoved),
+    %moveEnemyDisc(BoardMoved, Player, BoardEnemyMoved),
+    %printBoard(BoardEnemyMoved),
+    placeDisc(Board, Player, NewBoard, UpdatedPlayer),
+    printBoard(NewBoard).
 
 /*
-    getValidMove(Move, Board)
+    placeDisc(Board, Player, NewBoard)
+    Asks where to place the piece.
+    Checks if the place is valid.
+    And places a piece of the Player in the Board at the coords given.
+*/
+placeDisc(Board, [PieceColor | NrPieces], NewBoard, [PieceColor | NewNrPieces]):-
+    NrPieces > 0,
+    getValidPosition(Coords, Board, 'empty'),
+    setPieceAt(Coords, Board, PieceColor, NewBoard),
+    NewNrPieces is NrPieces - 1.
+
+placeDisc(_, Player, _, Player).
+
+moveDisc(Board, [PieceColor|_], BoardMoved):-
+    getValidPosition(Coords, Board, PieceColor),
+    write(Coords).
+
+/*
+    getValidPosition(Move, Board, PieceType)
     Uses the ui module to ask the user for a move.
-    Checks if the move given is valid.
+    Checks if the position given as a piece equals to PieceType.
 */
-getValidMove(Coords, Board):-
+getValidPosition(Coords, Board, PieceType):-
     askForMove(Coords),
-    checkValidMove(Coords, Board).
+    checkValidPosition(Coords, Board, PieceType).
 
-getValidMove(Coords, Board):-
+getValidPosition(Coords, Board, PieceType):-
     askForMoveAgainMessage,
-    getValidMove(Coords, Board).
+    getValidPosition(Coords, Board, PieceType).
 
 /*
-    checkValidMove(Move, Board)
+    checkValidPosition(Move, Board, PieceType)
     Checks if the move is valid. 
-    Starts by checking if the column is in the correct range and checks if the spot is empty.
+    Starts by checking if the column is in the correct range and checks if the spot has a piece of PieceType.
 */
-checkValidMove([Column|Row], Board):-
+checkValidPosition([Column|Row], Board, PieceType):-
     getStartColumn(Row, StartColumn),
     Column > (StartColumn - 1),
     getEndColumn(Row, EndColumn),
     Column < (EndColumn + 1),
-    checkValidPiece(Column, Row, Board).
+    checkPiece(Column, Row, Board, PieceType).
 
 /* 
-    checkValidPiece(Column, Row, Board).
+    checkPiece(Column, Row, Board, PieceType).
     Gets the piece of the board at the row and column given.
-    Checks if the spot is empty.
+    Checks if the spot is equal to PieceType.
 */    
-checkValidPiece(Column, Row, Board):-
+checkPiece(Column, Row, Board, PieceType):-
     getPieceAt([Column|Row], Board, Piece),
-    Piece = 'empty'.
-
-/*
-    move(Board, Player)
-    Asks the move to be done.
-    Checks if the move is valid.
-    And places a piece of the Player in the Board at the coords given.
-*/
-move(Board, Player, NewBoard):-
-    printBoard(Board),
-    getValidMove(Coords, Board),
-    setPieceAt(Coords, Board, Player, NewBoard),
-    printBoard(NewBoard).
+    Piece = PieceType.

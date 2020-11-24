@@ -31,8 +31,5 @@ askForMove([Column|Row]):-
     skip_line,
     letterToNumber(Letter,Row).
 
-askForMove([Column|Row]):-
-    askForMoveAgain([Column|Row]).
-
 askForMoveAgainMessage:-
     write('Invalid Input. Be sure to write capital letters or numbers.\n').
