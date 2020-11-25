@@ -46,7 +46,7 @@ askOption(SelectOption, MaxOption):-
     write('Please select one of the option above by typing the number of the option you desire: '),
     read(SelectOption),
     skip_line,
-    SelectOption > -1,
+    SelectOption >= -1,
     SelectOption < MaxOption.
 
 askOption(SelectOption, MaxOption):-

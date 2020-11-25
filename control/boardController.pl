@@ -138,6 +138,10 @@ createNewBoard([ChangedRow|T], [], ChangedRow, BoardRemaining):-
 createNewBoard([H|T], [H|Z], ChangedRow, BoardRemaining):-
     createNewBoard(T, Z, ChangedRow, BoardRemaining).
 
+
+
+
+
 % Calculates the number of moves in each direction for a piece
 getNumberMoves(Board, PieceCoords, [MovesNW, MovesNE, MovesE]):-
     getNumberMovesNWDiagonal(Board, PieceCoords, MovesNW),

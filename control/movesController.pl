@@ -15,7 +15,7 @@
 move(Board, Player, NewBoard, UpdatedPlayer):-
     printBoard(Board),
     movePlayerDisc(Board, Player, BoardMoved),
-    %printBoard(BoardMoved),
+    printBoard(BoardMoved),
     %moveEnemyDisc(BoardMoved, Player, BoardEnemyMoved),
     %printBoard(BoardEnemyMoved),
     placeDisc(Board, Player, NewBoard, UpdatedPlayer),
@@ -46,9 +46,17 @@ movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     % Generate all possible Moves
     getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
     generateAllMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
+
+    % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
-    write(SelectedMove).
+    nth0(SelectedMove, EndCoords, MoveSelected, _),
+    movePiece(Coords, MoveSelected, Board, BoardMoved).
 
 
 movePlayerDisc(Board, _, Board).
+
+movePiece(Coords, MoveSelected, Board, NewBoard):-
+    getPieceAt(Coords, Board, Piece),
+    setPieceAt(Coords, Board, 'empty', IntermidiateBoard),
+    setPieceAt(MoveSelected, IntermidiateBoard, Piece, NewBoard).
 
