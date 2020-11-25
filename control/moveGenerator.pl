@@ -1,51 +1,31 @@
 :-include('boardController.pl').
 :- use_module(library(lists)).
 
-display:-
-    initial(Board),
-    printBoard(Board).
-
-test(Moves, Start, X):-
-    initial(Board),
-    getAllMoves(Start, Coords, Board, Moves, Moves, Moves),
-    formateShit(Coords, X),
-    write(X).
-
-getAllMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
-    generateAllMoves(StartCoords, EndCoords, [0|0], Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves).
-
-generateAllMoves(StartCoords, [NWCoords, NECoords, ECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
+/*
+    generateAllMoves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
+    This function generates all moves from the StartCoords. Saves all the ending coords in EndCoords.
+    NWDDiagonalMoves, NEDDiagonalMoves, ElineMoves are the number of moves that the piece can do along the
+    NorthWest Diagonal, North Eas Diagonal and horizontally, respectively.
+*/
+generateAllMoves(StartCoords, [NWCoords, NECoords, ECoords, WCoords, SECoords, SWCoords], Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
     
     % Get Path that starts on the northwest
-    getNWMoves(StartCoords, StartCoords, NWCoords, PreviousCoords, Board, NWDiagonalMoves),
-    write('NW\n'),
-    write(NWCoords),
-    write('\n'),
+    getNWMoves(StartCoords, StartCoords, NWCoords, [0|0], Board, NWDiagonalMoves),
+
     % Get Path that starts on the northeast
-    getNEMoves(StartCoords, StartCoords, NECoords, PreviousCoords, Board, NEDiagonalMoves),
-    write('NE\n'),
-    write(NECoords),
-    write('\n'),
+    getNEMoves(StartCoords, StartCoords, NECoords, [0|0], Board, NEDiagonalMoves),
+
     % Get Path that starts on the east
-    getEMoves(StartCoords, StartCoords, ECoords, PreviousCoords, Board, ELineMoves),
-    write('E\n'),
-    write(ECoords),
-    write('\n'),
+    getEMoves(StartCoords, StartCoords, ECoords, [0|0], Board, ELineMoves),
+
     % Get Path that starts on the west 
-    getWMoves(StartCoords, StartCoords, WCoords, PreviousCoords, Board, ELineMoves),
-    write('W\n'),
-    write(WCoords),
-    write('\n'),
+    getWMoves(StartCoords, StartCoords, WCoords, [0|0], Board, ELineMoves),
+
     % Get Path that starts on the southeast
-    getSEMoves(StartCoords, StartCoords, SECoords, PreviousCoords, Board, NWDiagonalMoves),
-    write('SE\n'),
-    write(SECoords),
-    write('\n'),
+    getSEMoves(StartCoords, StartCoords, SECoords, [0|0], Board, NWDiagonalMoves),
+
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, StartCoords, SWCoords, PreviousCoords, Board, NEDiagonalMoves),
-    write('SW\n'),
-    write(SWCoords),
-    write('\n').
+    getSWMoves(StartCoords, StartCoords, SWCoords, [0|0], Board, NEDiagonalMoves).
 /*
 
 
@@ -82,7 +62,7 @@ generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
     NewNrMoves is NrMoves - 1,
     generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
-% Get the next move in the NorthEast direction
+% This is called when it encounters an obstacle. So it tries to go in every direction
 generateNWMoves(StartCoords, CurrentCoords, [NECoords, ECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNEMoves(StartCoords, CurrentCoords, NECoords, PreviousCoords, Board, NrMoves),
@@ -137,7 +117,7 @@ generateNEMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
     NewNrMoves is NrMoves - 1,
     generateNEMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
-% Get the next move in the NorthEast direction
+% This is called when it encounters an obstacle. So it tries to go in every direction
 generateNEMoves(StartCoords, CurrentCoords, [NWCoords, ECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
@@ -189,6 +169,7 @@ generateEMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoord
     NewNrMoves is NrMoves - 1,
     generateEMoves(StartCoords, [NewColumn|CurrentRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
+% This is called when it encounters an obstacle. So it tries to go in every direction
 generateEMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
@@ -242,6 +223,7 @@ generateWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoord
     NewNrMoves is NrMoves - 1,
     generateWMoves(StartCoords, [NewColumn|CurrentRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
+% This is called when it encounters an obstacle. So it tries to go in every direction
 generateWMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, ECoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
@@ -298,7 +280,7 @@ generateSEMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
     NewNrMoves is NrMoves - 1,
     generateSEMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
-% Get the next move in the West direction
+% This is called when it encounters an obstacle. So it tries to go in every direction
 generateSEMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, ECoords, WCoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
@@ -354,7 +336,7 @@ generateSWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
     NewNrMoves is NrMoves - 1,
     generateSWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
-
+% This is called when it encounters an obstacle. So it tries to go in every direction
 generateSWMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, ECoords, WCoords, SECoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
@@ -388,54 +370,111 @@ isValidPosition([CurrentColumn|CurrentRow], Board, StartCoords, PreviousCoords):
 
 /*
 
-    Checks if a list is a list of lists and appends it
+    formateAllCoords(OldCoords, NewCoords).
+    Old Coords is a List that can have lists that can have other lists. So we need to make it so it is only one list.
+    It also removes all duplicates from the Old Coords
 
 */
 
-formateShit(OldCoords, NewCoords):-
+formateAllCoords(OldCoords, NewCoords):-
+    % Makes sure everything is a List so we can use append function without worrying
     formateCoords(OldCoords, FormattedCoords),
-    appendAllLists(FormattedCoords, NewCoords, _, 2).
 
-appendAllLists([H|T], NewCoords, PlaceHolder, 1):-
-    append([H], PlaceHolder),
-    appendAllLists(T, NewCoords, PlaceHolder, 2).
+    % Appends all the lists into a single one (No lists of lists)
+    appendAllLists(FormattedCoords, Coords, _),
 
-appendAllLists([], NewCoords, NewCoords, 2).
+    % Removes all duplicates
+    remove_dups(Coords, NoDupsCoords),
 
-appendAllLists([[H|Z] | T], NewCoords, PlaceHolder, 2):-
+    % Removes a [] if it exits since it wont be neeeded
+    delete(NoDupsCoords, [], NewCoords).
+
+/*
+    
+    appendAllLists(Old Coords, NewCoords, PlaceHolder).
+    Appends all the lists from Old Coords into a single one in New Coords
+    PlaceHolder serves as an auxiliary list to move around the lists that are inside lists.
+
+*/
+
+appendAllLists([], NewCoords, NewCoords).
+
+appendAllLists([[H|Z] | T], NewCoords, PlaceHolder):-
+    % Check if the first element is a list of lists
     listIsListOfLists([H|Z]),
+
+    % Checks if the first element inside the first element is also a list
     listIsListOfLists(H),
-    appendAllLists([H|Z], NormalH, [], 2),
+
+    % Appends all the lists from the first element into one
+    appendAllLists([H|Z], NormalH, []),
+
+    % Appends the list that we got from the first element with the placeHolder
     append([PlaceHolder,NormalH], NewNewCoords),
-    appendAllLists(T, NewCoords, NewNewCoords, 2).
 
-appendAllLists([H | T], NewCoords, PlaceHolder, 2):-
+    % Calls the function to the remaining part of the Old Coords
+    appendAllLists(T, NewCoords, NewNewCoords).
+
+% This function is called when the first element is a list of lists with no more Lists of Lists inside it
+appendAllLists([H | T], NewCoords, PlaceHolder):-
+    /*
+    Checks if H is a List, if it is we know that it doesnt have any more lists of lists inside of it.
+    This is because it would run the predicate above and not this.
+    */
     listIsListOfLists(H),
+    
+    % Appends all the elements of H into one list
     append(H, Appended),
+
+    % Appends the list with all the H element into PlaceHolder
     append([PlaceHolder,Appended], NewNewCoords),
-    appendAllLists(T, NewCoords, NewNewCoords, 2).
 
-appendAllLists([H|T], NewCoords, PlaceHolder, 2):-
+    % Calls the function to the remaining part of the Old Coords
+    appendAllLists(T, NewCoords, NewNewCoords).
+
+% This is called when the first element is a simple List
+appendAllLists([H|T], NewCoords, PlaceHolder):-
+    % Appends the first element with PlaceHolder
     append([PlaceHolder, H], NewNewCoords),
-    appendAllLists(T, NewCoords, NewNewCoords, 2).
 
+    % Calls the function to the remaining part of the Old Coords
+    appendAllLists(T, NewCoords, NewNewCoords).
+
+/*
+    
+    formateCoords(OldCoords, NewCoords).
+    This function makes sure everything inside the OldCoords is a list. I.e., all number are inside lists.
+    This is to make sure we can use append, without any problems, in the functions above.
+
+*/
 
 formateCoords([],[]).
+
 formateCoords([H|T], [X|Y]):-
     is_list(H),
-    formateListOfLists(H, X, 1),
-    formateCoords(T, Y).
-formateCoords([H|T], [X|Y]):-
-    formateListOfLists(H, X, 2),
+    % Makes sure everything inside the list is a list
+    formateList(H, X),
+
+    % Format the rest of the list
     formateCoords(T, Y).
 
-formateListOfLists([], [], _).
+% This is called when H is a single number, so just put it inside a list and formate the rest
+formateCoords([H|T], [ [H]|Y]):-
+    formateCoords(T, Y).
 
-formateListOfLists([H | T], [H | X], 1):-
+/*
+    
+    formateList(OldList, NewList).
+    Makes sure everythin inside OldList is a List and saves it into NewList
+
+*/
+formateList([], [], _).
+
+formateList([H | T], [H | X]):-
+    % Check if the first element is a single element or a list of lists. If it is, it doesnt need any alteration.
     listIsListOfLists([H|T]),
-    formateListOfLists(T, X).
+    formateList(T, X).
 
-formateListOfLists([H | T], [ [H] | X ], 1):-
-    formateListOfLists(T, X).
-
-formateListOfLists(H, [H], 2).
+% This is called when H is a single number, puts it inside a list.
+formateList([H | T], [ [H] | X ]):-
+    formateList(T, X).
