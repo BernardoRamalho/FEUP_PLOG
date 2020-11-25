@@ -7,8 +7,9 @@ display:-
 
 test(Moves, Start, X):-
     initial(Board),
-    getAllMoves(Start, X, Board, Moves, Moves, Moves)
-    .
+    getAllMoves(Start, Coords, Board, Moves, Moves, Moves),
+    formateShit(Coords, X),
+    write(X).
 
 getAllMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
     generateAllMoves(StartCoords, EndCoords, [0|0], Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves).
@@ -82,26 +83,21 @@ generateNWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
     generateNWMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
 % Get the next move in the NorthEast direction
-generateNWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves):-
+generateNWMoves(StartCoords, CurrentCoords, [NECoords, ECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNEMoves(StartCoords, CurrentCoords, NECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NECoords, EndCoords),
 
     % Get Path that starts on the east
     getEMoves(StartCoords, CurrentCoords, ECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(ECoords, EndCoords),
 
     % Get Path that starts on the west 
     getWMoves(StartCoords, CurrentCoords, WCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(WCoords, EndCoords),
 
     % Get Path that starts on the southeast
     getSEMoves(StartCoords, CurrentCoords, SECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SECoords, EndCoords),
 
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SWCoords, EndCoords).
+    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves).
 
 generateNWMoves(_, _, [], _, _, _).
 
@@ -142,26 +138,21 @@ generateNEMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
     generateNEMoves(StartCoords, [NewColumn|NewRow], EndCoords, [CurrentColumn|CurrentRow], Board, NewNrMoves).
 
 % Get the next move in the NorthEast direction
-generateNEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves):-
+generateNEMoves(StartCoords, CurrentCoords, [NWCoords, ECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NWCoords, EndCoords),
 
     % Get Path that starts on the east
     getEMoves(StartCoords, CurrentCoords, ECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(ECoords, EndCoords),
 
     % Get Path that starts on the west 
     getWMoves(StartCoords, CurrentCoords, WCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(WCoords, EndCoords),
 
     % Get Path that starts on the southeast
     getSEMoves(StartCoords, CurrentCoords, SECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SECoords, EndCoords),
 
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SWCoords, EndCoords).
+    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves).
 
 generateNEMoves(_, _, [], _, _, _).
 
@@ -201,23 +192,18 @@ generateEMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoord
 generateEMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, WCoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NWCoords, EndCoords),
 
     % Get Path that starts on the east
     getNEMoves(StartCoords, CurrentCoords, NECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NECoords, EndCoords),
 
     % Get Path that starts on the west 
     getWMoves(StartCoords, CurrentCoords, WCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(WCoords, EndCoords),
 
     % Get Path that starts on the southeast
     getSEMoves(StartCoords, CurrentCoords, SECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SECoords, EndCoords),
 
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SWCoords, EndCoords).
+    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves).
 
 generateEMoves(_, _, [], _, _, _).
 
@@ -259,23 +245,18 @@ generateWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoord
 generateWMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, ECoords, SECoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NWCoords, EndCoords),
 
     % Get Path that starts on the east
     getNEMoves(StartCoords, CurrentCoords, NECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NECoords, EndCoords),
 
     % Get Path that starts on the west 
     getEMoves(StartCoords, CurrentCoords, ECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(ECoords, EndCoords),
 
     % Get Path that starts on the southeast
     getSEMoves(StartCoords, CurrentCoords, SECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SECoords, EndCoords),
 
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SWCoords, EndCoords).
+    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves).
 
 
 generateWMoves(_, _, [], _, _, _).
@@ -321,23 +302,18 @@ generateSEMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
 generateSEMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, ECoords, WCoords, SWCoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NWCoords, EndCoords),
 
     % Get Path that starts on the east
     getNEMoves(StartCoords, CurrentCoords, NECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NECoords, EndCoords),
 
     % Get Path that starts on the west 
     getEMoves(StartCoords, CurrentCoords, ECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(ECoords, EndCoords),
 
     % Get Path that starts on the southeast
     getWMoves(StartCoords, CurrentCoords, WCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(WCoords, EndCoords),
 
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SWCoords, EndCoords).
+    getSWMoves(StartCoords, CurrentCoords, SWCoords, PreviousCoords, Board, NrMoves).
 
 generateSEMoves(_, _, [], _, _, _).
 
@@ -382,23 +358,18 @@ generateSWMoves(StartCoords, [CurrentColumn|CurrentRow], EndCoords, PreviousCoor
 generateSWMoves(StartCoords, CurrentCoords, [NWCoords, NECoords, ECoords, WCoords, SECoords], PreviousCoords, Board, NrMoves):-
     % Get Path that starts on the northeast
     getNWMoves(StartCoords, CurrentCoords, NWCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NWCoords, EndCoords),
 
     % Get Path that starts on the east
     getNEMoves(StartCoords, CurrentCoords, NECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(NECoords, EndCoords),
 
     % Get Path that starts on the west 
     getEMoves(StartCoords, CurrentCoords, ECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(ECoords, EndCoords),
 
     % Get Path that starts on the southeast
     getWMoves(StartCoords, CurrentCoords, WCoords, PreviousCoords, Board, NrMoves),
-    formateCoords(WCoords, EndCoords),
 
     % Get Path that starts on the southwest
-    getSEMoves(StartCoords, CurrentCoords, SECoords, PreviousCoords, Board, NrMoves),
-    formateCoords(SECoords, EndCoords).
+    getSEMoves(StartCoords, CurrentCoords, SECoords, PreviousCoords, Board, NrMoves).
 
 generateSWMoves(_, _, [], _, _, _).
 
@@ -423,13 +394,20 @@ isValidPosition([CurrentColumn|CurrentRow], Board, StartCoords, PreviousCoords):
 
 formateShit(OldCoords, NewCoords):-
     formateCoords(OldCoords, FormattedCoords),
-    appendAllLists(FormattedCoords, NewCoords, _, 1).
+    appendAllLists(FormattedCoords, NewCoords, _, 2).
 
 appendAllLists([H|T], NewCoords, PlaceHolder, 1):-
     append([H], PlaceHolder),
     appendAllLists(T, NewCoords, PlaceHolder, 2).
 
 appendAllLists([], NewCoords, NewCoords, 2).
+
+appendAllLists([[H|Z] | T], NewCoords, PlaceHolder, 2):-
+    listIsListOfLists([H|Z]),
+    listIsListOfLists(H),
+    appendAllLists([H|Z], NormalH, [], 2),
+    append([PlaceHolder,NormalH], NewNewCoords),
+    appendAllLists(T, NewCoords, NewNewCoords, 2).
 
 appendAllLists([H | T], NewCoords, PlaceHolder, 2):-
     listIsListOfLists(H),
