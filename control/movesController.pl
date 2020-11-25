@@ -36,8 +36,13 @@ placeDisc(Board, [PieceColor | NrPieces], NewBoard, [PieceColor | NewNrPieces]):
 placeDisc(_, Player, _, Player).
 
 movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
+    % There must be pieces on the board
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
-    getValidPiece(Coords, Board, LowerColer).
+    % Ask for a piece to move
+    getValidPiece(Coords, Board, LowerColer),
+    getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
+    write([MovesNW, MovesNE, MovesE]).
 
 movePlayerDisc(Board, _, Board).
+

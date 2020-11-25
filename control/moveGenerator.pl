@@ -7,7 +7,9 @@
     NWDDiagonalMoves, NEDDiagonalMoves, ElineMoves are the number of moves that the piece can do along the
     NorthWest Diagonal, North Eas Diagonal and horizontally, respectively.
 */
-generateAllMoves(StartCoords, [NWCoords, NECoords, ECoords, WCoords, SECoords, SWCoords], Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
+generateAllMoves(_, [], _, 0, 0, 0).
+
+generateAllMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
     
     % Get Path that starts on the northwest
     getNWMoves(StartCoords, StartCoords, NWCoords, [0|0], Board, NWDiagonalMoves),
@@ -25,7 +27,9 @@ generateAllMoves(StartCoords, [NWCoords, NECoords, ECoords, WCoords, SECoords, S
     getSEMoves(StartCoords, StartCoords, SECoords, [0|0], Board, NWDiagonalMoves),
 
     % Get Path that starts on the southwest
-    getSWMoves(StartCoords, StartCoords, SWCoords, [0|0], Board, NEDiagonalMoves).
+    getSWMoves(StartCoords, StartCoords, SWCoords, [0|0], Board, NEDiagonalMoves),
+
+    formatAllCoords([NWCoords, NECoords, ECoords, WCoords, SECoords, SWCoords], EndCoords).
 /*
 
 
@@ -370,13 +374,13 @@ isValidPosition([CurrentColumn|CurrentRow], Board, StartCoords, PreviousCoords):
 
 /*
 
-    formateAllCoords(OldCoords, NewCoords).
+    formatAllCoords(OldCoords, NewCoords).
     Old Coords is a List that can have lists that can have other lists. So we need to make it so it is only one list.
     It also removes all duplicates from the Old Coords
 
 */
 
-formateAllCoords(OldCoords, NewCoords):-
+formatAllCoords(OldCoords, NewCoords):-
     % Makes sure everything is a List so we can use append function without worrying
     formateCoords(OldCoords, FormattedCoords),
 
