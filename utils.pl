@@ -1,3 +1,5 @@
+:- use_module(library(lists)).
+
 % Get Start collumn of a specific row getStartColumn(Row, Column)
 getStartColumn(11, 1).
 getStartColumn(10, 2).
@@ -95,3 +97,7 @@ listIsDifferent([X|_], [Y|_]):-
 
 listIsDifferent([_|Z], [_|T]):-
     Z \= T.
+
+% Check if a list is a list of lists
+listIsListOfLists([H|_]):-
+    is_list(H).
