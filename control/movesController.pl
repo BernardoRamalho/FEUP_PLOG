@@ -42,7 +42,7 @@ movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     % Ask for a piece to move
     getValidPiece(Coords, Board, LowerColer),
     getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
-    write([MovesNW, MovesNE, MovesE]).
+    generateAllMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE)..
 
 movePlayerDisc(Board, _, Board).
 
