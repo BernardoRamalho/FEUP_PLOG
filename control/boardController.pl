@@ -29,12 +29,26 @@ initial([
     Checks if the position given as a piece equals to PieceType.
 */
 getValidPosition(Coords, Board, PieceType):-
-    askForMove(Coords),
+    askPlacePiece(Coords),
     checkValidPosition(Coords, Board, PieceType).
 
 getValidPosition(Coords, Board, PieceType):-
-    askForMoveAgainMessage,
+    invalidInputMessage,
     getValidPosition(Coords, Board, PieceType).
+
+/*
+    getValidPiece(PieceCoords, Board, PieceType)
+    Uses the ui module to ask the user for the position of a piece.
+    Checks if the position given as a piece equals to PieceType.
+*/
+getValidPiece(Coords, Board, PieceType):-
+    askPiece(Coords, PieceType),
+    checkValidPosition(Coords, Board, PieceType).
+
+getValidPiece(Coords, Board, PieceType):-
+    invalidInputMessage,
+    getValidPiece(Coords, Board, PieceType).
+
 
 /*
     checkValidPosition(Move, Board, PieceType)

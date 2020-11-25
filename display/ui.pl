@@ -19,9 +19,9 @@ displayGameTypeOptions:-
     write('3 - Player vs Ai.\n'),
     write('Enter your option (number): ').
 
-% askForMove(Move), ask the player for a askForMove
+% askPlacePiece(Move), ask the player for a place to put a piece
 
-askForMove([Column|Row]):-
+askPlacePiece([Column|Row]):-
     write('Enter the column and row where you want to place a piece.\n'),
     write('Column: '),
     read(Column),
@@ -31,5 +31,19 @@ askForMove([Column|Row]):-
     skip_line,
     letterToNumber(Letter,Row).
 
-askForMoveAgainMessage:-
+% askPiece(Move), ask the player for a place to put a piece
+
+askPiece([Column|Row], Color):-
+    write('Enter the column and row of the '),
+    write(Color),
+    write(' piece you want to move.\n'),
+    write('Column: '),
+    read(Column),
+    skip_line,
+    write('Row: '),
+    read(Letter),
+    skip_line,
+    letterToNumber(Letter,Row).
+
+invalidInputMessage:-
     write('Invalid Input. Be sure to write capital letters or numbers.\n').

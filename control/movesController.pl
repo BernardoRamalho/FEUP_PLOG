@@ -1,4 +1,4 @@
-:-include('../control/boardController.pl').
+:-include('moveGenerator.pl').
 
 /**
     This file is where we make all the function that move the pieces.
@@ -38,8 +38,6 @@ placeDisc(_, Player, _, Player).
 movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
-    getValidPosition(Coords, Board, LowerColer),
-    moveDisc(Board, Coords).
-    write(Coords).
+    getValidPiece(Coords, Board, LowerColer).
 
 movePlayerDisc(Board, _, Board).
