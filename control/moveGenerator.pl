@@ -1,6 +1,7 @@
 :-include('boardController.pl').
 :- use_module(library(lists)).
 
+
 /*
     generateAllMoves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
     This function generates all moves from the StartCoords. Saves all the ending coords in EndCoords.

@@ -17,8 +17,8 @@ initial([
     [o, o, o, o, o, o, empty, o, empty, o, empty, o, red, o, empty, o, o, o, o, o, o],
     [o, o, o, o, o, empty, o, empty, o, red, o, red, o, empty, o, empty, o, o, o, o, o],
     [o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
-    [o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
-    [o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
+    [o, o, o, empty, o, green, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
+    [o, o, empty, o, empty, o, empty, o, green, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
     [o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).

@@ -57,6 +57,10 @@ pieceColorLower('red', 'red').
 pieceColorLower('Green', 'green').
 pieceColorLower('green', 'green').
 
+% Returns the enemy Color
+enemyColor('red', 'green').
+enemyColor('green', 'red').
+
 % Gets the element at the position in the list getElementAt(Position, Array, Element)
 getElementAt(1, [H|_], H).
 

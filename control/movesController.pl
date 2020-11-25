@@ -12,13 +12,13 @@
     Then it moves one of the enemy pieces.
     And it places one piece.
 */
-move(Board, Player, NewBoard, UpdatedPlayer):-
+move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     printBoard(Board),
     movePlayerDisc(Board, Player, BoardMoved),
     printBoard(BoardMoved),
-    %moveEnemyDisc(BoardMoved, Player, BoardEnemyMoved),
-    %printBoard(BoardEnemyMoved),
-    placeDisc(Board, Player, NewBoard, UpdatedPlayer),
+    moveEnemyDisc(BoardMoved, EnemyPlayer, BoardEnemyMoved),
+    printBoard(BoardEnemyMoved),
+    placeDisc(BoardEnemyMoved, Player, NewBoard, UpdatedPlayer),
     printBoard(NewBoard).
 
 /*
@@ -35,6 +35,12 @@ placeDisc(Board, [PieceColor | NrPieces], NewBoard, [PieceColor | NewNrPieces]):
 
 placeDisc(_, Player, _, Player).
 
+
+/*
+    movePlayerDisc(Board, Player, BoardMoved)
+    Asks the player for a piece to move and where to place it.
+    Moves that piece to the desired place, leaving the spot empty.
+*/
 movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     % There must be pieces on the board
     PlayerPieces < 20,
@@ -53,8 +59,44 @@ movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     movePiece(Coords, MoveSelected, Board, BoardMoved).
 
 
-movePlayerDisc(Board, _, Board).
+movePlayerDisc(Board, [PieceColor| _], Board):-
+    write('There are no '),
+    write(PieceColor),
+    write(' pieces with valid moves.\n').
 
+/*
+    moveEnemyDisc(Board, EnemyPlayer, BoardMoved)
+    Asks the player for a piece to move and where to place it.
+    Moves that piece to the desired place, leaving the spot empty.
+*/
+moveEnemyDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
+    % There must be pieces on the board
+    PlayerPieces < 20,
+    pieceColorLower(PieceColor, LowerColer),
+
+    % Ask for a piece to move
+    getValidPiece(Coords, Board, LowerColer),
+    
+    % Generate all possible Moves
+    getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
+    generateAllMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
+
+    % Ask for a play and do it
+    selectMove(EndCoords, SelectedMove),
+    nth0(SelectedMove, EndCoords, MoveSelected, _),
+    movePiece(Coords, MoveSelected, Board, BoardMoved).
+
+
+moveEnemyDisc(Board, [PieceColor| _], Board):-
+    write('There are no '),
+    write(PieceColor),
+    write(' pieces with valid moves.\n').
+
+/*
+    movePiece(Coords, MoveSelected, Board, NewBoard).
+    Moves the piece at Coords into MoveSelected.
+    The change is saved in NewBoard.
+*/
 movePiece(Coords, MoveSelected, Board, NewBoard):-
     getPieceAt(Coords, Board, Piece),
     setPieceAt(Coords, Board, 'empty', IntermidiateBoard),
