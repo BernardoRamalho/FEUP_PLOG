@@ -75,3 +75,36 @@ displayFinalBoard:-
 % Displays a GameState
 displayGame(GameState):-
     printBoard(GameState).
+
+displayGameTypeOptions:-
+    write('Which type of game would you like to play?\n'),
+    write('1 - Player vs Player;\n'),
+    write('2 - Ai vs Ai;\n'),
+    write('3 - Player vs Ai.\n'),
+    write('Enter your option (number): ').
+
+displayMovesHeader:-
+    write('-----------------------------------\n'),
+    write('|   |     Column   |      Row     |\n'),
+    write('-----------------------------------\n').
+
+displayMoves(Coords, NumberMoves, StartMove):-
+    displayMovesHeader,
+    displayMovesBody(Coords, NumberMoves, StartMove).
+
+displayMovesBody([], NumberMoves, NumberMoves).
+
+displayMovesBody([[Column|Row]|T], NumberMoves, StartMove):-
+    write('  '),
+    write(StartMove),
+    write(' -->'),
+    write('       '),
+    write(Column),
+    write('             '),
+    write(Row),
+    write('\n'),
+    NewStartMove is StartMove + 1,
+    displayMovesBody(T, NumberMoves, NewStartMove).
+
+
+

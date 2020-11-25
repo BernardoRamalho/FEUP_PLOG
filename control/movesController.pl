@@ -39,10 +39,16 @@ movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     % There must be pieces on the board
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
+
     % Ask for a piece to move
     getValidPiece(Coords, Board, LowerColer),
+    
+    % Generate all possible Moves
     getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
-    generateAllMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE)..
+    generateAllMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
+    selectMove(EndCoords, SelectedMove),
+    write(SelectedMove).
+
 
 movePlayerDisc(Board, _, Board).
 
