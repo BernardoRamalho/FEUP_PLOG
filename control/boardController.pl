@@ -42,7 +42,7 @@ checkValidCoords([Column,Row]):-
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     askPlacePiece(Coords),
     checkValidPosition(Coords, Board, PieceType),
-    \+ checkForSemaphore(Coords, Board, PieceColor).
+    \+ checkForSemaphore(Coords, Board, PieceColor, _).
 
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     invalidInputMessage,
@@ -293,29 +293,29 @@ getNumberEMoves(_, _, 0).
     Checks if a semaphore exists starting from Coords.
 */  
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor), NrSemaphores:-
     enemyColor(PlayerColor, EnemyColor),
-    checkForNESemaphore(Coords, EnemyColor, Board, _, _).
+    checkForNESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
 checkForSemaphore(Coords, Board, PlayerColor):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForNWSemaphore(Coords, EnemyColor, Board, _, _).
+    checkForNWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
 checkForSemaphore(Coords, Board, PlayerColor):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForSESemaphore(Coords, EnemyColor, Board, _, _).
+    checkForSESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
 checkForSemaphore(Coords, Board, PlayerColor):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForSWSemaphore(Coords, EnemyColor, Board, _, _).
+    checkForSWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
 checkForSemaphore(Coords, Board, PlayerColor):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForESemaphore(Coords, EnemyColor, Board, _, _).
+    checkForESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
 checkForSemaphore(Coords, Board, PlayerColor):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForWSemaphore(Coords, EnemyColor, Board, _, _).
+    checkForWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
     
 getSemaphores(Coords, PlayerColor, Board, NrSemaphores, NewBoard):-
     enemyColor(PlayerColor, EnemyColor),

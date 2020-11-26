@@ -42,6 +42,4 @@ getAllMoves([H|T], Board, [EndCoords | X]):-
     % Generate all possible Moves
     getNumberMoves(Board, H, [MovesNW, MovesNE, MovesE]),
     validMoves(H, EndCoords, Board, MovesNW, MovesNE, MovesE),
-    write('\n'),
-    write(EndCoords),
     getAllMoves(T, Board, X).
