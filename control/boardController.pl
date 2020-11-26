@@ -39,6 +39,7 @@ checkValidCoords([Column,Row]):-
     Uses the ui module to ask the user for a move.
     Checks if the position given as a piece equals to PieceType.
 */
+<<<<<<< HEAD
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     askPlacePiece(Coords),
     checkValidPosition(Coords, Board, PieceType),
@@ -47,6 +48,15 @@ getValidPosition(Coords, Board, PieceType, PieceColor):-
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     invalidInputMessage,
     getValidPosition(Coords, Board, PieceType, PieceColor).
+=======
+getValidPosition(Coords, Board, PieceType):-
+    askPlacePiece(Coords),
+    checkValidPosition(Coords, Board, PieceType).
+
+getValidPosition(Coords, Board, PieceType):-
+    invalidInputMessage,
+    getValidPosition(Coords, Board, PieceType).
+>>>>>>> main
 
 /*
     getValidPiece(PieceCoords, Board, PieceType)
@@ -64,6 +74,10 @@ getValidPiece(Coords, Board, PieceType):-
 
 /*
     checkValidPosition(Move, Board, PieceType)
+<<<<<<< HEAD
+=======
+    Checks if the move is valid. 
+>>>>>>> main
     Starts by checking if the column is in the correct range and checks if the spot has a piece of PieceType.
 */
 checkValidPosition([Column,Row], Board, PieceType):-
@@ -273,6 +287,7 @@ getNumberEMoves(_, _, 0).
     Checks if a semaphore exists starting from Coords.
 */  
 
+<<<<<<< HEAD
 checkForSemaphore(Coords, Board, PlayerColor):-
     enemyColor(PlayerColor, EnemyColor),
     checkForNESemaphore(Coords, EnemyColor, Board, _, _).
@@ -410,11 +425,109 @@ checkForSWSemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,YellowRo
     getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
     pieceColorLower(Piece, LowerPiece),
     LowerPiece = EnemyColor.
+=======
+getSemaphores(Coords, PlayerColor, Board, NrSemaphores, NewBoard):-
+    enemyColor(PlayerColor, EnemyColor),
+    checkForSemaphore(Coords, EnemyColor, Board, NrSemaphores, NewBoard).
+
+checkForSemaphore(Coords, EnemyColor, Board, NrSemaphores, NewBoard):-
+    checkForNWSemaphore(Coords, EnemyColor, Board, NWSemaphores, NWBoard),
+    checkForNESemaphore(Coords, EnemyColor, NWBoard, NESemaphores, NEBoard),
+    checkForSWSemaphore(Coords, EnemyColor, NEBoard, SWSemaphores, SWBoard),
+    checkForSESemaphore(Coords, EnemyColor, SWBoard, SESemaphores, SEBoard),
+    checkForESemaphore(Coords, EnemyColor, SEBoard, ESemaphores, EBoard),
+    checkForWSemaphore(Coords, EnemyColor, EBoard, WSemaphores, NewBoard),
+    sumlist([NWSemaphores, NESemaphores, SWSemaphores, SESemaphores, ESemaphores, WSemaphores], NrSemaphores).
+
+/*
+    Checks if there is a semaphore in the North West direction
+*/
+checkForNWSemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column - 1,
+    YellowRow is Row - 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column - 2,
+    EnemyRow is Row - 2,
+
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForNWSemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the North East direction
+*/
+checkForNESemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column + 1,
+    YellowRow is Row - 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column + 2,
+    EnemyRow is Row - 2,
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForNESemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the South West direction
+*/
+checkForSWSemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column - 1,
+    YellowRow is Row + 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column - 2,
+    EnemyRow is Row + 2,
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForSWSemaphore(_, _, Board, 0, Board).
+>>>>>>> main
 
 /*
     Checks if there is a semaphore in the South East direction
 */
+<<<<<<< HEAD
 checkForSESemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,YellowRow], [EnemyColumn,EnemyRow]]):-
+=======
+checkForSESemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+>>>>>>> main
     /* Check for a Yellow Piece*/
     % Get Yellow Piece Position
     YellowColumn is Column + 1,
@@ -431,12 +544,24 @@ checkForSESemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,YellowRo
     % Check if the piece is Enemy
     getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
     pieceColorLower(Piece, LowerPiece),
+<<<<<<< HEAD
     LowerPiece = EnemyColor.
+=======
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForSESemaphore(_, _, Board, 0, Board).
+>>>>>>> main
 
 /*
     Checks if there is a semaphore in the East direction
 */
+<<<<<<< HEAD
 checkForESemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,Row], [EnemyColumn,Row]]):-
+=======
+checkForESemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+>>>>>>> main
     /* Check for a Yellow Piece*/
     % Get Yellow Piece Position
     YellowColumn is Column + 2,
@@ -451,12 +576,24 @@ checkForESemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,Row], [En
     % Check if the piece is Enemy
     getPieceAt([EnemyColumn,Row], Board, Piece),
     pieceColorLower(Piece, LowerPiece),
+<<<<<<< HEAD
     LowerPiece = EnemyColor.
+=======
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,Row], [EnemyColumn,Row], Board, NewBoard).
+
+checkForESemaphore(_, _, Board, 0, Board).
+>>>>>>> main
 
 /*
     Checks if there is a semaphore in the West direction
 */
+<<<<<<< HEAD
 checkForWSemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,Row], [EnemyColumn,Row]]):-
+=======
+checkForWSemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+>>>>>>> main
     /* Check for a Yellow Piece*/
     % Get Yellow Piece Position
     YellowColumn is Column - 2,
@@ -473,7 +610,15 @@ checkForWSemaphore([Column, Row], EnemyColor, Board, 1, [[YellowColumn,Row], [En
     % Check if the piece is Enemy
     getPieceAt([EnemyColumn,Row], Board, Piece),
     pieceColorLower(Piece, LowerPiece),
+<<<<<<< HEAD
     LowerPiece = EnemyColor.
+=======
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,Row], [EnemyColumn,Row], Board, NewBoard).
+
+checkForWSemaphore(_, _, Board, 0, Board).
+>>>>>>> main
 
 /*
     deleteSemaphore(PlayerPos, YellowPos, EnemyPos, Board, NewBoard).
