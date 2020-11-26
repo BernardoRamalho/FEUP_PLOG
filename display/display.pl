@@ -139,26 +139,31 @@ displayPlayerTurn('Red'):-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('\n').
 
-displayWinner('Red'):-
+displayWinner(['Red', PlayerPieces, PlayerSemaphores, _]):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |              //////             !! RED PLAYER WINS !!           //////                |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n').
+       displayPlayerStats(['Red', PlayerPieces, PlayerSemaphores, _]).
+.
  
-displayWinner('Green'):-
+displayWinner(['Green', PlayerPieces, PlayerSemaphores, _]):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |              //////            !! GREEN PLAYER WINS !!           //////               |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n').
+    displayPlayerStats(['Green', PlayerPieces, PlayerSemaphores, _]).
 
-displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
+displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, _]):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                                      PLAYER STATS                                     |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
-    write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |         '),
+    write('   |       Colour       |     '), write(PlayerColour), write('\n'),
+    write('   ----------------------\n'),
+    write('   |   Pieces in Hand   |     '), write(PlayerPieces), write('\n'),
+    write('   ----------------------'),
+    write('   |     Semaphores     |     '), write(PlayerSemaphores), write('\n'),
+    write('   ----------------------'),
+
     
