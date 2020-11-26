@@ -18,7 +18,8 @@ initiateGame(GameState):-
     3 -> the game is Player vs AI (PvE)
 */
 play(GameState, 1):-
-    playPvP(GameState, ['Red', 20, 0, []], ['Green', 20, 0, []]).
+    playPvP(GameState, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner),
+    gameOver(Winner).
 
 play(GameState, 2):-
     playEvE(GameState).
@@ -29,10 +30,14 @@ play(GameState, 3):-
 /*
     Group of function that run the game based on the type of game.
 */
-playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer):-
+
+PlayPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], _, PlayerColor):-
+    PlayerSemaphores > 2.
+
+playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Winner):-
     displayPlayerTurn(PlayerColor),
     move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
-    playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
+    playPvP(NewBoard, NewEnemyPlayer, NewPlayer, Winner).
 
 
 playEvE(GameState):-
@@ -40,3 +45,11 @@ playEvE(GameState):-
 
 playPvE(GameState):-
     write('PvE\n').
+
+/*
+    Group of function that are responsible for the GameOver.
+*/
+
+gameOver(Winner, Board):-
+    displayWinner(Winner),
+    printBoard(Board).
