@@ -12,16 +12,9 @@ askForGameType(GameType):-
     read(GameType),
     skip_line.
 
-displayGameTypeOptions:-
-    write('Which type of game would you like to play?\n'),
-    write('1 - Player vs Player;\n'),
-    write('2 - Ai vs Ai;\n'),
-    write('3 - Player vs Ai.\n'),
-    write('Enter your option (number): ').
+% askPlacePiece(Move), ask the player for a place to put a piece
 
-% askForMove(Move), ask the player for a askForMove
-
-askForMove([Column|Row]):-
+askPlacePiece([Column,Row]):-
     write('Enter the column and row where you want to place a piece.\n'),
     write('Column: '),
     read(Column),
@@ -31,8 +24,35 @@ askForMove([Column|Row]):-
     skip_line,
     letterToNumber(Letter,Row).
 
-askForMove([Column|Row]):-
-    askForMoveAgain([Column|Row]).
+% askPiece(Move), ask the player for a place to put a piece
 
-askForMoveAgainMessage:-
+askPiece([Column,Row], Color):-
+    write('Enter the column and row of the '),
+    write(Color),
+    write(' piece you want to move.\n'),
+    write('Column: '),
+    read(Column),
+    skip_line,
+    write('Row: '),
+    read(Letter),
+    skip_line,
+    letterToNumber(Letter,Row).
+    
+selectMove(PossibleMoves, SelectedMove):-
+    displayMoves(PossibleMoves, NumberMoves, 0),
+    askOption(SelectedMove, NumberMoves).
+
+askOption(SelectOption, MaxOption):-
+    write('Please select one of the option above by typing the number of the option you desire: '),
+    read(SelectOption),
+    skip_line,
+    SelectOption >= -1,
+    SelectOption < MaxOption.
+
+askOption(SelectOption, MaxOption):-
+    write('Invalid option given.\n'),
+    askOption(SelectOption, MaxOption).
+
+
+invalidInputMessage:-
     write('Invalid Input. Be sure to write capital letters or numbers.\n').

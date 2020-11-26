@@ -18,7 +18,7 @@ initiateGame(GameState):-
     3 -> the game is Player vs AI (PvE)
 */
 play(GameState, 1):-
-    playPvP(GameState, 'red').
+    playPvP(GameState, ['Red', 18, 0], ['Green', 18, 0]).
 
 play(GameState, 2):-
     playEvE(GameState).
@@ -29,8 +29,8 @@ play(GameState, 3):-
 /*
     Group of function that run the game based on the type of game.
 */
-playPvP(GameState, Player):-
-    move(GameState, Player, NewBoard).
+playPvP(GameState, Player, EnemyPlayer):-
+    move(GameState, Player, EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer).
 
 playEvE(GameState):-
     write('EvE\n').

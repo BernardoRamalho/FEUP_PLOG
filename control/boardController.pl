@@ -12,23 +12,78 @@
 initial([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o],
-    [o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
-    [o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
-    [o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
-    [o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
-    [o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
+    [o, o, o, o, o, o, o, o, empty, o, red, o, red, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, empty, o, red, o, red, o, red, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, empty, o, empty, o, empty, o, red, o, empty, o, o, o, o, o, o],
+    [o, o, o, o, o, empty, o, empty, o, red, o, empty, o, empty, o, empty, o, o, o, o, o],
+    [o, o, o, o, empty, o, yellow, o, yellow, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
+    [o, o, o, empty, o, green, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
+    [o, o, empty, o, empty, o, yellow, o, green, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
+    [o, empty, o, empty, o, red, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).
 
+/*
+    checkValidCoords(Coords);
+    Checks if the coords are inside the coorct intervel
+*/
+checkValidCoords([Column,Row]):-
+    getStartColumn(Row, StartColumn),
+    Column > (StartColumn - 1),
+    getEndColumn(Row, EndColumn),
+    Column < (EndColumn + 1).
+
+
+/*
+    getValidPosition(Move, Board, PieceType)
+    Uses the ui module to ask the user for a move.
+    Checks if the position given as a piece equals to PieceType.
+*/
+getValidPosition(Coords, Board, PieceType):-
+    askPlacePiece(Coords),
+    checkValidPosition(Coords, Board, PieceType).
+
+getValidPosition(Coords, Board, PieceType):-
+    invalidInputMessage,
+    getValidPosition(Coords, Board, PieceType).
+
+/*
+    getValidPiece(PieceCoords, Board, PieceType)
+    Uses the ui module to ask the user for the position of a piece.
+    Checks if the position given as a piece equals to PieceType.
+*/
+getValidPiece(Coords, Board, PieceType):-
+    askPiece(Coords, PieceType),
+    checkValidPosition(Coords, Board, PieceType).
+
+getValidPiece(Coords, Board, PieceType):-
+    invalidInputMessage,
+    getValidPiece(Coords, Board, PieceType).
+
+
+/*
+    checkValidPosition(Move, Board, PieceType)
+    Checks if the move is valid. 
+    Starts by checking if the column is in the correct range and checks if the spot has a piece of PieceType.
+*/
+checkValidPosition([Column,Row], Board, PieceType):-
+    checkValidCoords([Column,Row]),
+    checkPiece(Column, Row, Board, PieceType).
+
+/* 
+    checkPiece(Column, Row, Board, PieceType).
+    Gets the piece of the board at the row and column given.
+    Checks if the spot is equal to Piece.
+*/    
+checkPiece(Column, Row, Board, PieceType):-
+    getPieceAt([Column,Row], Board, Piece),
+    Piece = PieceType.
 
 /*
     getPieceAt(Coords, Board, Piece).
     This function goes through the board until it gets to the Piece at the coordinates given.
 */ 
-getPieceAt([Column|Row], Board, Piece):-
+getPieceAt([Column,Row], Board, Piece):-
     getElementAt(Row, Board, PieceRow),
     getElementAt(Column, PieceRow, Piece).
 
@@ -37,7 +92,7 @@ getPieceAt([Column|Row], Board, Piece):-
     This function goes through the board and changes the piece at Coords to the piece given.
     The new board state is saved in the NewBoard variable.
 */ 
-setPieceAt([Column|Rows], Board, PlayerPiece, NewBoard):-
+setPieceAt([Column,Rows], Board, PlayerPiece, NewBoard):-
     getPieceRow(Rows, Board, FirstRows, PieceRow, BoardRemaining),
     changePieceAt(Column, PieceRow, PlayerPiece, ChangedRow),
     createNewBoard(NewBoard, FirstRows, ChangedRow, BoardRemaining).
@@ -82,4 +137,317 @@ createNewBoard([ChangedRow|T], [], ChangedRow, BoardRemaining):-
 % Add the FirstRows
 createNewBoard([H|T], [H|Z], ChangedRow, BoardRemaining):-
     createNewBoard(T, Z, ChangedRow, BoardRemaining).
+
+
+
+% Calculates the number of moves in each direction for a piece
+getNumberMoves(Board, PieceCoords, [MovesNW, MovesNE, MovesE]):-
+    getNumberMovesNWDiagonal(Board, PieceCoords, MovesNW),
+    getNumberMovesNEDiagonal(Board, PieceCoords, MovesNE),
+    getNumberMovesEDiagonal(Board, PieceCoords, MovesE).
+
+
+/*
+
+    Get number of moves in each direction
+
+*/
+
+getNumberMovesNWDiagonal(Board, Start, Moves):-
+    getNumberNWMoves(Board, Start, MovesNW),
+    getNumberSEMoves(Board, Start, MovesSE),
+    MovesCalculated is MovesNW + MovesSE,
+    Moves is MovesCalculated + 1.
+
+getNumberMovesNEDiagonal(Board, Start, Moves):-
+    getNumberNEMoves(Board, Start, MovesNE),
+    getNumberSWMoves(Board, Start, MovesSW),
+    MovesCalculated is MovesNE + MovesSW,
+    Moves is MovesCalculated + 1.
+
+getNumberMovesEDiagonal(Board, Start, Moves):-
+    getNumberEMoves(Board, Start, MovesE),
+    getNumberWMoves(Board, Start, MovesW),
+    MovesCalculated is MovesE + MovesW,
+    Moves is MovesCalculated + 1.
+
+/*
+
+    Get number of moves in each way
+
+*/
+% Calculates the number of moves in the North West direction
+getNumberNWMoves(Board, [Column,Row], MovesNW):-
+    NewColumn is Column - 1,
+    NewRow is Row - 1,
+    checkValidPosition([NewColumn,NewRow], Board, 'empty'),
+    getNumberNWMoves(Board,[NewColumn,NewRow], MovesNW).
+
+getNumberNWMoves(Board, [Column,Row], MovesNW):-
+    NewColumn is Column - 1,
+    NewRow is Row - 1,
+    checkValidCoords([NewColumn,NewRow]),
+    getNumberNWMoves(Board,[NewColumn,NewRow], Moves),
+    MovesNW is Moves + 1.
+
+getNumberNWMoves(_, _, 0).
+
+% Calculates the number of moves in the North East direction
+getNumberNEMoves(Board, [Column,Row], MovesNE):-
+    NewColumn is Column + 1,
+    NewRow is Row - 1,
+    checkValidPosition([NewColumn,NewRow], Board, 'empty'),
+    getNumberNEMoves(Board,[NewColumn,NewRow], MovesNE).
+
+getNumberNEMoves(Board, [Column,Row], MovesNE):-
+    NewColumn is Column + 1,
+    NewRow is Row - 1,
+    checkValidCoords([NewColumn,NewRow]),
+    getNumberNEMoves(Board,[NewColumn,NewRow], Moves),
+    MovesNE is Moves + 1.
+
+getNumberNEMoves(_, _, 0).
+
+% Calculates the number of moves in the South West direction
+getNumberSWMoves(Board, [Column,Row], MovesSW):-
+    NewColumn is Column - 1,
+    NewRow is Row + 1,
+    checkValidPosition([NewColumn,NewRow], Board, 'empty'),
+    getNumberSWMoves(Board,[NewColumn,NewRow], MovesSW).
+
+getNumberSWMoves(Board, [Column,Row], MovesSW):-
+    NewColumn is Column - 1,
+    NewRow is Row + 1,
+    checkValidCoords([NewColumn,NewRow]),
+    getNumberSWMoves(Board,[NewColumn,NewRow], Moves),
+    MovesSW is Moves + 1.
+
+getNumberSWMoves(_, _, 0).
+
+% Calculates the number of moves in the South East direction
+getNumberSEMoves(Board, [Column,Row], MovesSE):-
+    NewColumn is Column + 1,
+    NewRow is Row + 1,
+    checkValidPosition([NewColumn,NewRow], Board, 'empty'),
+    getNumberSEMoves(Board,[NewColumn,NewRow], MovesSE).
+
+getNumberSEMoves(Board, [Column,Row], MovesSE):-
+    NewColumn is Column + 1,
+    NewRow is Row + 1,
+    checkValidCoords([NewColumn,NewRow]),
+    getNumberSEMoves(Board,[NewColumn,NewRow], Moves),
+    MovesSE is Moves + 1.
+
+getNumberSEMoves(_, _, 0).
+
+% Calculates the number of moves in the West direction
+getNumberWMoves(Board, [Column,Row], MovesW):-
+    NewColumn is Column - 2,
+    checkValidPosition([NewColumn,Row], Board, 'empty'),
+    getNumberWMoves(Board,[NewColumn,Row], MovesW).
+
+getNumberWMoves(Board, [Column,Row], MovesW):-
+    NewColumn is Column - 2,
+    checkValidCoords([NewColumn,Row]),
+    getNumberWMoves(Board,[NewColumn,Row], Moves),
+    MovesW is Moves + 1.
+
+getNumberWMoves(_, _, 0).
+
+% Calculates the number of moves in the East direction
+getNumberEMoves(Board, [Column,Row], MovesE):-
+    NewColumn is Column + 2,
+    checkValidPosition([NewColumn,Row], Board, 'empty'),
+    getNumberEMoves(Board,[NewColumn,Row], MovesE).
+
+getNumberEMoves(Board, [Column,Row], MovesE):-
+    NewColumn is Column + 2,
+    checkValidCoords([NewColumn,Row]),
+    getNumberEMoves(Board,[NewColumn,Row], Moves),
+    MovesE is Moves + 1.
+
+getNumberEMoves(_, _, 0).
+
+/*
+    checkForSemaphore(Coords, Board)
+    Checks if a semaphore exists starting from Coords.
+*/  
+
+getSemaphores(Coords, PlayerColor, Board, NrSemaphores, NewBoard):-
+    enemyColor(PlayerColor, EnemyColor),
+    checkForSemaphore(Coords, EnemyColor, Board, NrSemaphores, NewBoard).
+
+checkForSemaphore(Coords, EnemyColor, Board, NrSemaphores, NewBoard):-
+    checkForNWSemaphore(Coords, EnemyColor, Board, NWSemaphores, NWBoard),
+    checkForNESemaphore(Coords, EnemyColor, NWBoard, NESemaphores, NEBoard),
+    checkForSWSemaphore(Coords, EnemyColor, NEBoard, SWSemaphores, SWBoard),
+    checkForSESemaphore(Coords, EnemyColor, SWBoard, SESemaphores, SEBoard),
+    checkForESemaphore(Coords, EnemyColor, SEBoard, ESemaphores, EBoard),
+    checkForWSemaphore(Coords, EnemyColor, EBoard, WSemaphores, NewBoard),
+    sumlist([NWSemaphores, NESemaphores, SWSemaphores, SESemaphores, ESemaphores, WSemaphores], NrSemaphores).
+
+/*
+    Checks if there is a semaphore in the North West direction
+*/
+checkForNWSemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column - 1,
+    YellowRow is Row - 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column - 2,
+    EnemyRow is Row - 2,
+
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
     
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForNWSemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the North East direction
+*/
+checkForNESemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column + 1,
+    YellowRow is Row - 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column + 2,
+    EnemyRow is Row - 2,
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForNESemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the South West direction
+*/
+checkForSWSemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column - 1,
+    YellowRow is Row + 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column - 2,
+    EnemyRow is Row + 2,
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForSWSemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the South East direction
+*/
+checkForSESemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column + 1,
+    YellowRow is Row + 1,
+    checkValidCoords([YellowColumn,YellowRow]),
+    checkPiece(YellowColumn, YellowRow, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column + 2,
+    EnemyRow is Row + 2,
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,EnemyRow]),
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,EnemyRow], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,YellowRow], [EnemyColumn,EnemyRow], Board, NewBoard).
+
+checkForSESemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the East direction
+*/
+checkForESemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column + 2,
+    checkValidCoords([YellowColumn,Row]),
+    checkPiece(YellowColumn, Row, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column + 4,
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,Row]),
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,Row], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,Row], [EnemyColumn,Row], Board, NewBoard).
+
+checkForESemaphore(_, _, Board, 0, Board).
+
+/*
+    Checks if there is a semaphore in the West direction
+*/
+checkForWSemaphore([Column, Row], EnemyColor, Board, 1, NewBoard):-
+    /* Check for a Yellow Piece*/
+    % Get Yellow Piece Position
+    YellowColumn is Column - 2,
+    checkValidCoords([YellowColumn,Row]),
+    checkPiece(YellowColumn, Row, Board, 'yellow'),
+
+    /* Check for an Enemy Piece*/
+    % Get Enemy piece positon
+    EnemyColumn is Column - 4,
+
+    % Check if the position is valid
+    checkValidCoords([EnemyColumn,Row]),
+
+    % Check if the piece is Enemy
+    getPieceAt([EnemyColumn,Row], Board, Piece),
+    pieceColorLower(Piece, LowerPiece),
+    LowerPiece = EnemyColor,
+    
+    deleteSemaphore([Column, Row], [YellowColumn,Row], [EnemyColumn,Row], Board, NewBoard).
+
+checkForWSemaphore(_, _, Board, 0, Board).
+
+/*
+    deleteSemaphore(PlayerPos, YellowPos, EnemyPos, Board, NewBoard).
+    Deletes a Semaphore.
+*/
+deleteSemaphore(PlayerPos, YellowPos, EnemyPos, Board, NewBoard):-
+    setPieceAt(PlayerPos, Board, 'empty', NoPlayerBoard),
+    setPieceAt(YellowPos, NoPlayerBoard, 'empty', NoEnemyBoard),
+    setPieceAt(EnemyPos, NoEnemyBoard, 'empty', NewBoard).
+

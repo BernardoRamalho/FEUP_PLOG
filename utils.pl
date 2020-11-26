@@ -1,3 +1,5 @@
+:- use_module(library(lists)).
+
 % Get Start collumn of a specific row getStartColumn(Row, Column)
 getStartColumn(11, 1).
 getStartColumn(10, 2).
@@ -35,7 +37,7 @@ letterToNumber('G', L) :- L = 7.
 letterToNumber('H', L) :- L = 8.
 letterToNumber('I', L) :- L = 9.
 letterToNumber('J', L) :- L = 10.
-letterToNumber('G', L) :- L = 11.
+letterToNumber('g', L) :- L = 11.
 letterToNumber(1, 1).
 letterToNumber(2, 2).
 letterToNumber(3, 3).
@@ -48,6 +50,17 @@ letterToNumber(9, 9).
 letterToNumber(10, 10).
 letterToNumber(11, 11).
 
+% Upper case to Lower case Conversion of Piece Color
+
+pieceColorLower('Red', 'red').
+pieceColorLower('red', 'red').
+pieceColorLower('Green', 'green').
+pieceColorLower('green', 'green').
+
+% Returns the enemy Color
+enemyColor('red', 'green').
+enemyColor('green', 'red').
+
 % Gets the element at the position in the list getElementAt(Position, Array, Element)
 getElementAt(1, [H|_], H).
 
@@ -55,3 +68,45 @@ getElementAt(Position, [_|T], Element):-
     Position > 0,
     NewPosition is Position - 1,
     getElementAt(NewPosition, T, Element).
+
+% Counts the number os pieces in a row
+
+countAllRowPieces([], 0).
+countAllRowPieces([H|T], Count):-
+    H = 'Red',
+    NewCount is Count + 1,
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
+    H = 'red',
+    NewCount is Count + 1,
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
+    H = 'Green',
+    NewCount is Count + 1,
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
+    H = 'green',
+    NewCount is Count + 1,
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([H|T], Count):-
+    H = 'yellow',
+    NewCount is Count + 1,
+    countAllRowPieces(T, NewCount).
+countAllRowPieces([_|T], Count):-
+    countAllRowPieces(T, Count).
+
+% Checks if two lists with length 2 are diferent
+listIsDifferent([X|_], [Y|_]):-
+    X \= Y.
+
+listIsDifferent([_|Z], [_|T]):-
+    Z \= T.
+
+% Check if a list is a list of lists
+listIsListOfLists([H|_]):-
+    is_list(H).
+
+listIsListOfLists([_|T]):-
+    listIsListOfLists(T).
+
+isEmpty([]).

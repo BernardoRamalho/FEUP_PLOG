@@ -2,9 +2,11 @@
 % yellow, red and green representing the colours of a 
 % traffic light
 pieceSymbol(empty, P) :- P = 'x'.
-pieceSymbol(red, P) :- P = 'R'.
-pieceSymbol(yellow, P) :- P = 'Y'.
-pieceSymbol(green, P) :- P = 'G'.
+pieceSymbol(red, P) :- P = 'r'.
+pieceSymbol(yellow, P) :- P = 'y'.
+pieceSymbol(green, P) :- P = 'g'.
+pieceSymbol('Green', P) :- P = 'G'.
+pieceSymbol('Red', P) :- P = 'R'.
 pieceSymbol(o, P) :- P = ' '.
 
 % Conversion of number to letter
@@ -23,12 +25,16 @@ letter(11, L) :- L = 'G'.
 % Printing fuctions
 
 printHeader:-
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                                     B O A R D                                         |\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n').
 
 printFooter:-
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n'),
-    write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n').
+    write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
+    write('   -----------------------------------------------------------------------------------------\n').
 
 printBoard(X) :-
     printHeader,
@@ -73,3 +79,36 @@ displayFinalBoard:-
 % Displays a GameState
 displayGame(GameState):-
     printBoard(GameState).
+
+displayGameTypeOptions:-
+    write('Which type of game would you like to play?\n'),
+    write('1 - Player vs Player;\n'),
+    write('2 - Ai vs Ai;\n'),
+    write('3 - Player vs Ai.\n'),
+    write('Enter your option (number): ').
+
+displayMovesHeader:-
+    write('-----------------------------------\n'),
+    write('|   |     Column   |      Row     |\n'),
+    write('-----------------------------------\n').
+
+displayMoves(Coords, NumberMoves, StartMove):-
+    displayMovesHeader,
+    displayMovesBody(Coords, NumberMoves, StartMove).
+
+displayMovesBody([], NumberMoves, NumberMoves).
+
+displayMovesBody([[Column,Row]|T], NumberMoves, StartMove):-
+    write('  '),
+    write(StartMove),
+    write(' -->'),
+    write('       '),
+    write(Column),
+    write('             '),
+    write(Row),
+    write('\n'),
+    NewStartMove is StartMove + 1,
+    displayMovesBody(T, NumberMoves, NewStartMove).
+
+
+
