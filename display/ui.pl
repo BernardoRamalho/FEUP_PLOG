@@ -14,7 +14,7 @@ askForGameType(GameType):-
 
 % askPlacePiece(Move), ask the player for a place to put a piece
 
-askPlacePiece([Column|Row]):-
+askPlacePiece([Column,Row]):-
     write('Enter the column and row where you want to place a piece.\n'),
     write('Column: '),
     read(Column),
@@ -26,7 +26,7 @@ askPlacePiece([Column|Row]):-
 
 % askPiece(Move), ask the player for a place to put a piece
 
-askPiece([Column|Row], Color):-
+askPiece([Column,Row], Color):-
     write('Enter the column and row of the '),
     write(Color),
     write(' piece you want to move.\n'),

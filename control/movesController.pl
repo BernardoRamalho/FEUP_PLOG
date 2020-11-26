@@ -13,10 +13,15 @@
     And it places one piece.
 */
 move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
+    % Stage 1: Move Player Piece
     printBoard(Board),
     movePlayerDisc(Board, Player, BoardMoved),
+
+    % Stage 2: Move Enemy Piece
     printBoard(BoardMoved),
     moveEnemyDisc(BoardMoved, EnemyPlayer, BoardEnemyMoved),
+    
+    % Stage 3: Place a New Piece
     printBoard(BoardEnemyMoved),
     placeDisc(BoardEnemyMoved, Player, NewBoard, UpdatedPlayer),
     printBoard(NewBoard).
@@ -27,7 +32,7 @@ move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     Checks if the place is valid.
     And places a piece of the Player in the Board at the coords given.
 */
-placeDisc(Board, [PieceColor | NrPieces], NewBoard, [PieceColor | NewNrPieces]):-
+placeDisc(Board, [PieceColor, NrPieces, _], NewBoard, [PieceColor, NewNrPieces, _]):-
     NrPieces > 0,
     getValidPosition(Coords, Board, 'empty'),
     setPieceAt(Coords, Board, PieceColor, NewBoard),
@@ -35,13 +40,12 @@ placeDisc(Board, [PieceColor | NrPieces], NewBoard, [PieceColor | NewNrPieces]):
 
 placeDisc(_, Player, _, Player).
 
-
 /*
     movePlayerDisc(Board, Player, BoardMoved)
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */
-movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
+movePlayerDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
     % There must be pieces on the board
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
@@ -56,7 +60,9 @@ movePlayerDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
     nth0(SelectedMove, EndCoords, MoveSelected, _),
-    movePiece(Coords, MoveSelected, Board, BoardMoved).
+    movePiece(Coords, MoveSelected, Board, BoardMoved),
+    getSemaphores(MoveSelected, LowerColer, Board, NrSemaphores),
+    write(NrSemaphores).
 
 
 movePlayerDisc(Board, [PieceColor| _], Board):-
@@ -69,7 +75,7 @@ movePlayerDisc(Board, [PieceColor| _], Board):-
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */
-moveEnemyDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
+moveEnemyDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
     % There must be pieces on the board
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
@@ -84,7 +90,9 @@ moveEnemyDisc(Board, [PieceColor| PlayerPieces], BoardMoved):-
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
     nth0(SelectedMove, EndCoords, MoveSelected, _),
-    movePiece(Coords, MoveSelected, Board, BoardMoved).
+    movePiece(Coords, MoveSelected, Board, BoardMoved),
+    getSemaphores(MoveSelected, LowerColer, Board, NrSemaphores),
+    write(NrSemaphores).
 
 
 moveEnemyDisc(Board, [PieceColor| _], Board):-

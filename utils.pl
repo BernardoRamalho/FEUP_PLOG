@@ -105,3 +105,8 @@ listIsDifferent([_|Z], [_|T]):-
 % Check if a list is a list of lists
 listIsListOfLists([H|_]):-
     is_list(H).
+
+listIsListOfLists([_|T]):-
+    listIsListOfLists(T).
+
+isEmpty([]).

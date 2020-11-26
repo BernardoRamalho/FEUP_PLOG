@@ -18,7 +18,7 @@ initiateGame(GameState):-
     3 -> the game is Player vs AI (PvE)
 */
 play(GameState, 1):-
-    playPvP(GameState, ['Red', 18], ['Green', 18]).
+    playPvP(GameState, ['Red', 18, 0], ['Green', 18, 0]).
 
 play(GameState, 2):-
     playEvE(GameState).

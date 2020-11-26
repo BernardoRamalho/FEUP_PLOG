@@ -98,7 +98,7 @@ displayMoves(Coords, NumberMoves, StartMove):-
 
 displayMovesBody([], NumberMoves, NumberMoves).
 
-displayMovesBody([[Column|Row]|T], NumberMoves, StartMove):-
+displayMovesBody([[Column,Row]|T], NumberMoves, StartMove):-
     write('  '),
     write(StartMove),
     write(' -->'),
