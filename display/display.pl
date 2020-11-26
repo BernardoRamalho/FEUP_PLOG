@@ -160,5 +160,4 @@ displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |         '),
-    
+    write('   |      |         ').
