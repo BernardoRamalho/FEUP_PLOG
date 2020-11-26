@@ -138,6 +138,16 @@ createNewBoard([ChangedRow|T], [], ChangedRow, BoardRemaining):-
 createNewBoard([H|T], [H|Z], ChangedRow, BoardRemaining):-
     createNewBoard(T, Z, ChangedRow, BoardRemaining).
 
+/*
+    lastMoveToLowerCase(LastMove, NewBoard, NextTurnBoard)
+    Converts the last Move made to a lower case piece, representing removing the cylinder.
+*/
+
+lastMoveToLowerCase([], Board, Board, _).
+
+lastMoveToLowerCase(LastMove, Board, NextTurnBoard, PieceColor):-
+    pieceColorLower(PieceColor, LowerCaseColor),
+    setPieceAt(LastMove, Board, LowerCaseColor, NextTurnBoard).
 
 
 % Calculates the number of moves in each direction for a piece
@@ -267,6 +277,16 @@ getNumberEMoves(Board, [Column,Row], MovesE):-
     MovesE is Moves + 1.
 
 getNumberEMoves(_, _, 0).
+
+/*
+
+
+                    SEMAPHORES
+
+
+*/
+
+
 
 /*
     checkForSemaphore(Coords, Board)
@@ -483,4 +503,3 @@ deleteSemaphore(PlayerPos, YellowPos, EnemyPos, Board, NewBoard):-
     setPieceAt(PlayerPos, Board, 'empty', NoPlayerBoard),
     setPieceAt(YellowPos, NoPlayerBoard, 'empty', NoEnemyBoard),
     setPieceAt(EnemyPos, NoEnemyBoard, 'empty', NewBoard).
-

@@ -120,7 +120,7 @@ displayMoveEnemyPieceHead:-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                              STAGE 2 : MOVE ENEMY PIECE                               |\n').
 
-displayMoveEnemyPieceHead:-
+displayPlacePieceHead:-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                               STAGE 3 : PLACE A PIECE                                 |\n').
