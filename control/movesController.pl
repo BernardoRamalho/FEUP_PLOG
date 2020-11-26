@@ -34,7 +34,8 @@ move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
 */
 placeDisc(Board, [PieceColor, NrPieces, _], NewBoard, [PieceColor, NewNrPieces, _]):-
     NrPieces > 0,
-    getValidPosition(Coords, Board, 'empty'),
+    pieceColorLower(PieceColor, LowerColor),
+    getValidPosition(Coords, Board, 'empty', LowerColor),
     setPieceAt(Coords, Board, PieceColor, NewBoard),
     NewNrPieces is NrPieces - 1.
 
