@@ -24,33 +24,33 @@ letter(11, L) :- L = 'G'.
 
 % Printing fuctions
 
-printHeader:-
+printBoardHeader:-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                                     B O A R D                                         |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n').
 
-printFooter:-
+printBoardFooter:-
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n'),
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
     write('   -----------------------------------------------------------------------------------------\n').
 
 printBoard(X) :-
-    printHeader,
-    printPlayArea(X, 1),
-    printFooter.
+    printBoardHeader,
+    printBoardPlayArea(X, 1),
+    printBoardFooter.
 
-printPlayArea([], 12).
+printBoardPlayArea([], 12).
 
-printPlayArea([Head|Tail], N):-
+printBoardPlayArea([Head|Tail], N):-
     letter(N, L),
     write(' '),
     write(L),
     write(' | '),
     printLine(Head),
     N1 is N + 1,
-    printPlayArea(Tail, N1).
+    printBoardPlayArea(Tail, N1).
 
 printLine([]):-
     write('  |\n').
@@ -110,5 +110,60 @@ displayMovesBody([[Column,Row]|T], NumberMoves, StartMove):-
     NewStartMove is StartMove + 1,
     displayMovesBody(T, NumberMoves, NewStartMove).
 
+displayMovePieceHead:-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                              STAGE 1 : MOVE YOUR PIECE                                |\n').
 
+displayMoveEnemyPieceHead:-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                              STAGE 2 : MOVE ENEMY PIECE                               |\n').
 
+displayPlacePieceHead:-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                               STAGE 3 : PLACE A PIECE                                 |\n').
+
+displayPlayerTurn('Green'):-
+    write('\n\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                                   GREEN PLAYER TURN                                    |\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('\n\n').
+
+displayPlayerTurn('Red'):-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                                    RED PLAYER TURN                                     |\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('\n').
+
+displayWinner(['Red', PlayerPieces, PlayerSemaphores, _]):-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |              //////             !! RED PLAYER WINS !!           //////                |\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+       displayPlayerStats(['Red', PlayerPieces, PlayerSemaphores, _]).
+.
+ 
+displayWinner(['Green', PlayerPieces, PlayerSemaphores, _]):-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |              //////            !! GREEN PLAYER WINS !!           //////               |\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    displayPlayerStats(['Green', PlayerPieces, PlayerSemaphores, _]).
+
+displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, _]):-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                                      PLAYER STATS                                     |\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |       Colour       |     '), write(PlayerColour), write('\n'),
+    write('   ----------------------\n'),
+    write('   |   Pieces in Hand   |     '), write(PlayerPieces), write('\n'),
+    write('   ----------------------'),
+    write('   |     Semaphores     |     '), write(PlayerSemaphores), write('\n'),
+    write('   ----------------------'),
+
+    
