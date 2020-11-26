@@ -60,9 +60,12 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
     nth0(SelectedMove, EndCoords, MoveSelected, _),
-    movePiece(Coords, MoveSelected, Board, BoardMoved),
-    getSemaphores(MoveSelected, LowerColer, Board, NrSemaphores),
-    write(NrSemaphores).
+    movePiece(Coords, MoveSelected, Board, BoardPieceMoved),
+
+    % Check for Sempahores
+    write('Checking for Semaphores!\n'),
+    getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
+    write('SEMAPHORE!\n').
 
 
 movePlayerDisc(Board, [PieceColor| _], Board):-
@@ -90,9 +93,11 @@ moveEnemyDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
     nth0(SelectedMove, EndCoords, MoveSelected, _),
-    movePiece(Coords, MoveSelected, Board, BoardMoved),
-    getSemaphores(MoveSelected, LowerColer, Board, NrSemaphores),
-    write(NrSemaphores).
+    movePiece(Coords, MoveSelected, Board, BoardPieceMoved),
+
+    % Check for Sempahores
+    getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
+    write('SEMAPHORE!\n').
 
 
 moveEnemyDisc(Board, [PieceColor| _], Board):-

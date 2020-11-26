@@ -2,11 +2,6 @@
 :- use_module(library(lists)).
 
 
-test:-
-    initial(Board),
-    generateAllMoves([10, 6], EndCoords, Board, 1, 4, 1),
-    write(EndCoords).
-
 /*
     generateAllMoves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
     This function generates all moves from the StartCoords. Saves all the ending coords in EndCoords.
