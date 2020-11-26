@@ -26,8 +26,7 @@ move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     % Stage 3: Place a New Piece
     displayMoveEnemyPieceHead,
     printBoard(BoardEnemyMoved),
-    placeDisc(BoardEnemyMoved, PlayerEnemyMove, NewBoard, UpdatedPlayer),
-    printBoard(NewBoard).
+    placeDisc(BoardEnemyMoved, PlayerEnemyMove, NewBoard, UpdatedPlayer).
 
 /*
     placeDisc(Board, Player, NewBoard)
@@ -50,9 +49,10 @@ placeDisc(_, Player, _, Player).
     Moves that piece to the desired place, leaving the spot empty.
 */
 movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores], [EnemyColor, EnemyPieces, EnemySemaphores], BoardMoved, UpdatedPlayer, UpdatedEnemy):-
-    % There must be pieces on the board
+    % There must be pieces on the board that as not been put there in the last play
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
+    existsInListofLists(Board, LowerColer),
 
     % Ask for a piece to move
     getValidPiece(Coords, Board, LowerColer),
@@ -82,9 +82,10 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores], EnemyPlayer,
     Moves that piece to the desired place, leaving the spot empty.
 */
 moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores], [PlayerColor, PlayerPieces, PlayerSemaphores], BoardMoved, UpdatedEnemy, UpdatedPlayer):-
-    % There must be pieces on the board
+    % There must be pieces on the board that as not been put there in the last play
     EnemyPieces < 20,
     pieceColorLower(EnemyPieceColor, LowerColer),
+    existsInListofLists(Board, LowerColer),
 
     % Ask for a piece to move
     getValidPiece(Coords, Board, LowerColer),

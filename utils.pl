@@ -110,3 +110,9 @@ listIsListOfLists([_|T]):-
     listIsListOfLists(T).
 
 isEmpty([]).
+
+existsInListofLists([H|_], X):-
+    select(X, H, _).
+
+existsInListofLists([_|T], X):-
+    existsInListofLists(T, X).

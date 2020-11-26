@@ -29,8 +29,10 @@ play(GameState, 3):-
 /*
     Group of function that run the game based on the type of game.
 */
-playPvP(GameState, Player, EnemyPlayer):-
-    move(GameState, Player, EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer).
+playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores], EnemyPlayer):-
+    displayPlayerTurn(PlayerColor),
+    move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 playEvE(GameState):-
     write('EvE\n').
