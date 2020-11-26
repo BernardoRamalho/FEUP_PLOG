@@ -68,7 +68,7 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores], [EnemyColor,
     updatePlayers([PieceColor, PlayerPieces, PlayerSemaphores], [EnemyColor, EnemyPieces, EnemySemaphores], NrSemaphores, UpdatedPlayer, UpdatedEnemy, 'player').
 
 
-movePlayerDisc(Board, [PieceColor| _], Board):-
+movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores], EnemyPlayer, Board, [PieceColor, PlayerPieces, PlayerSemaphores], EnemyPlayer):-
     write('There are no '),
     write(PieceColor),
     write(' pieces with valid moves.\n').
@@ -99,9 +99,9 @@ moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores], [PlayerCol
     getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
     updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores], [EnemyPieceColor, EnemyPieces, EnemySemaphores], NrSemaphores, UpdatedPlayer, UpdatedEnemy, 'enemy').
 
-moveEnemyDisc(Board, [PieceColor| _], Board):-
+moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores], Player, Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores], Player):-
     write('There are no '),
-    write(PieceColor),
+    write(EnemyPieceColor),
     write(' pieces with valid moves.\n').
 
 /*
