@@ -15,15 +15,15 @@
 move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     % Stage 1: Move Player Piece
     printBoard(Board),
-    movePlayerDisc(Board, Player, BoardMoved),
+    movePlayerDisc(Board, Player, EnemyPlayer, BoardMoved, PlayerAfterMove, EnemyAfterMove),
 
     % Stage 2: Move Enemy Piece
     printBoard(BoardMoved),
-    moveEnemyDisc(BoardMoved, EnemyPlayer, BoardEnemyMoved),
+    moveEnemyDisc(BoardMoved, EnemyAfterMove, PlayerAfterMove, BoardEnemyMoved, NewEnemyPlayer, PlayerEnemyMove),
     
     % Stage 3: Place a New Piece
     printBoard(BoardEnemyMoved),
-    placeDisc(BoardEnemyMoved, Player, NewBoard, UpdatedPlayer),
+    placeDisc(BoardEnemyMoved, PlayerEnemyMove, NewBoard, UpdatedPlayer),
     printBoard(NewBoard).
 
 /*
@@ -45,7 +45,7 @@ placeDisc(_, Player, _, Player).
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */
-movePlayerDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
+movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores], [EnemyColor, EnemyPieces, EnemySemaphores], BoardMoved, UpdatedPlayer, UpdatedEnemy):-
     % There must be pieces on the board
     PlayerPieces < 20,
     pieceColorLower(PieceColor, LowerColer),
@@ -63,9 +63,8 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
     movePiece(Coords, MoveSelected, Board, BoardPieceMoved),
 
     % Check for Sempahores
-    write('Checking for Semaphores!\n'),
     getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
-    write('SEMAPHORE!\n').
+    updatePlayers([PieceColor, PlayerPieces, PlayerSemaphores], [EnemyColor, EnemyPieces, EnemySemaphores], NrSemaphores, UpdatedPlayer, UpdatedEnemy, 'player').
 
 
 movePlayerDisc(Board, [PieceColor| _], Board):-
@@ -78,10 +77,10 @@ movePlayerDisc(Board, [PieceColor| _], Board):-
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */
-moveEnemyDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
+moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores], [PlayerColor, PlayerPieces, PlayerSemaphores], BoardMoved, UpdatedEnemy, UpdatedPlayer):-
     % There must be pieces on the board
-    PlayerPieces < 20,
-    pieceColorLower(PieceColor, LowerColer),
+    EnemyPieces < 20,
+    pieceColorLower(EnemyPieceColor, LowerColer),
 
     % Ask for a piece to move
     getValidPiece(Coords, Board, LowerColer),
@@ -97,8 +96,7 @@ moveEnemyDisc(Board, [PieceColor, PlayerPieces, _], BoardMoved):-
 
     % Check for Sempahores
     getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
-    write('SEMAPHORE!\n').
-
+    updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores], [EnemyPieceColor, EnemyPieces, EnemySemaphores], NrSemaphores, UpdatedPlayer, UpdatedEnemy, 'enemy').
 
 moveEnemyDisc(Board, [PieceColor| _], Board):-
     write('There are no '),
@@ -114,4 +112,27 @@ movePiece(Coords, MoveSelected, Board, NewBoard):-
     getPieceAt(Coords, Board, Piece),
     setPieceAt(Coords, Board, 'empty', IntermidiateBoard),
     setPieceAt(MoveSelected, IntermidiateBoard, Piece, NewBoard).
+
+/*
+    updatePlayers(Player, EnemyPlayer, NrSemaphores, UpdatedPlayer, UpdatedEnemy, MovedPiece)
+*/ 
+
+updatePlayers(Player, Enemy, 0, Player, Enemy, _).
+
+updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores], [EnemyPieceColor, EnemyPieces, EnemySemaphores], 1, [PlayerColor, UpdatedPlayerPieces, UpdatedPlayerSemaphores], [EnemyPieceColor, UpdatedEnemyPieces, EnemySemaphores], _):-
+    UpdatedPlayerSemaphores is PlayerSemaphores + 1,
+    UpdatedPlayerPieces is PlayerPieces + 1,
+    UpdatedEnemyPieces is EnemyPieces + 1.
+
+updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores], [EnemyPieceColor, EnemyPieces, EnemySemaphores], NrSemaphores, [PlayerColor, UpdatedPlayerPieces, UpdatedPlayerSemaphores], [EnemyPieceColor, UpdatedEnemyPieces, EnemySemaphores], 'player'):-
+    UpdatedPlayerSemaphores is PlayerSemaphores + NrSemaphores,
+    PiecesUsed is NrSemaphores - 1,
+    UpdatedPlayerPieces is PlayerPieces + PiecesUsed,
+    UpdatedEnemyPieces is EnemyPieces + NrSemaphores.
+
+updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores], [EnemyPieceColor, EnemyPieces, EnemySemaphores], NrSemaphores, [PlayerColor, UpdatedPlayerPieces, UpdatedPlayerSemaphores], [EnemyPieceColor, UpdatedEnemyPieces, EnemySemaphores], 'enemy'):-
+    UpdatedPlayerSemaphores is PlayerSemaphores + NrSemaphores,
+    PiecesUsed is NrSemaphores - 1,
+    UpdatedPlayerPieces is PlayerPieces + NrSemaphores,
+    UpdatedEnemyPieces is EnemyPieces + PiecesUsed.
 
