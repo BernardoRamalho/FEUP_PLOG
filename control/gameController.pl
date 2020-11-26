@@ -18,7 +18,8 @@ initiateGame(GameState):-
     3 -> the game is Player vs AI (PvE)
 */
 play(GameState, 1):-
-    playPvP(GameState, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner),
+	placeYellowDisc(1,GameState,'Red',NewGameState),
+	playPvP(NewGameState, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner),
     gameOver(Winner).
 
 play(GameState, 2):-
@@ -31,7 +32,7 @@ play(GameState, 3):-
     Group of function that run the game based on the type of game.
 */
 
-PlayPvP(GameState, _, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor):-
+playPvP(GameState, _ , [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor):-
     PlayerSemaphores > 2.
 
 playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Winner):-

@@ -27,16 +27,16 @@ getEndColumn(2, 12).
 getEndColumn(1, 11).
 
 % Conversion of letter to number
-letterToNumber('A', L) :- L = 1.
-letterToNumber('B', L) :- L = 2.
-letterToNumber('C', L) :- L = 3.
-letterToNumber('D', L) :- L = 4.
-letterToNumber('E', L) :- L = 5.
-letterToNumber('F', L) :- L = 6.
-letterToNumber('G', L) :- L = 7.
-letterToNumber('H', L) :- L = 8.
-letterToNumber('I', L) :- L = 9.
-letterToNumber('J', L) :- L = 10.
+letterToNumber('a', L) :- L = 1.
+letterToNumber('b', L) :- L = 2.
+letterToNumber('c', L) :- L = 3.
+letterToNumber('d', L) :- L = 4.
+letterToNumber('e', L) :- L = 5.
+letterToNumber('f', L) :- L = 6.
+letterToNumber('g', L) :- L = 7.
+letterToNumber('h', L) :- L = 8.
+letterToNumber('i', L) :- L = 9.
+letterToNumber('j', L) :- L = 10.
 letterToNumber('g', L) :- L = 11.
 letterToNumber(1, 1).
 letterToNumber(2, 2).
@@ -60,6 +60,9 @@ pieceColorLower('green', 'green').
 % Returns the enemy Color
 enemyColor('red', 'green').
 enemyColor('green', 'red').
+
+enemyColor('Red', 'Green').
+enemyColor('Green', 'Red').
 
 % Gets the element at the position in the list getElementAt(Position, Array, Element)
 getElementAt(1, [H|_], H).
