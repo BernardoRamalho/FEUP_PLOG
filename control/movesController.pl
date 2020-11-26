@@ -14,14 +14,17 @@
 */
 move(Board, Player, EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     % Stage 1: Move Player Piece
+    displayMovePieceHead,
     printBoard(Board),
     movePlayerDisc(Board, Player, EnemyPlayer, BoardMoved, PlayerAfterMove, EnemyAfterMove),
 
     % Stage 2: Move Enemy Piece
+    displayMoveEnemyPieceHead,
     printBoard(BoardMoved),
     moveEnemyDisc(BoardMoved, EnemyAfterMove, PlayerAfterMove, BoardEnemyMoved, NewEnemyPlayer, PlayerEnemyMove),
     
     % Stage 3: Place a New Piece
+    displayMoveEnemyPieceHead,
     printBoard(BoardEnemyMoved),
     placeDisc(BoardEnemyMoved, PlayerEnemyMove, NewBoard, UpdatedPlayer),
     printBoard(NewBoard).
