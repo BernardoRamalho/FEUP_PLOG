@@ -17,13 +17,23 @@ generatePlays(Board, PlayerColor, EnemyPlayerColor):-
 
 
 
-% generateAllMovePlayerPieceBoards(Board, Moves, AllMoves).
+/*
+    generateAllMovePlayerPieceBoards(Board, Moves, AllMoves).
+    Goes through all the possible moves and creates a board state for each of them.
+    Moves is a list of type [ Move1, Move2, ..., MoveX], in which each MoveX is [StartCoords, EndCoords].
+    AllMoves will be  a list of type [BoardState1, Boardstate2, ..., BoardstateX], in which each BoardstateX is [[StartCoord, EndCoord], FinalBoard]
+*/ 
 generateAllMovePlayerPieceBoards(_, [], []).
 generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves]] | Moves], [ FirstMoveBoard | RemainingBoards]):-    
     generateMovePlayerPieceBoards(Board, [StartCoords, [FirstMove|RemainingMoves]], FirstMoveBoard),
     generateAllMovePlayerPieceBoards(Board, Moves, RemainingBoards).
 
-% generateMovePlayerPieceBoards(Board, Moves, BoardsMoves)
+/*
+    generateMovePlayerPieceBoards(Board, PieceMoves, FinalBoardStates).
+    Goes through all the possible piece moves and creates a board state for each of them.
+    Moves is a list of type [StartCoords, EndCoords], in which EndCoords are the places where the piece can go.
+    AllFinalBoardStatesMoves will be  a list of type  [[StartCoord, EndCoord], FinalBoard].
+*/ 
 
 generateMovePlayerPieceBoards(_, [_, []], []).
 
