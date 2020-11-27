@@ -293,27 +293,27 @@ getNumberEMoves(_, _, 0).
     Checks if a semaphore exists starting from Coords.
 */  
 
-checkForSemaphore(Coords, Board, PlayerColor), NrSemaphores:-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForNESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForNWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForSESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForSWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
     

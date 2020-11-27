@@ -161,3 +161,11 @@ displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
     write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |      |         ').
+displayAllMoves([]).
+displayAllMoves([Move| RemainingMove]):-
+    displayGeneratedMoves(Move),
+    displayAllMoves(RemainingMove).
+displayGeneratedMoves([_,[]]).
+displayGeneratedMoves([StartCoords, [Move|RemainingMove]]):-
+    write(StartCoords), write(' --> '), write(Move), write('\n'),
+    displayGeneratedMoves([StartCoords, RemainingMove]).
