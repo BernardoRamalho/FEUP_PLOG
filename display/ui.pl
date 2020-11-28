@@ -37,7 +37,9 @@ askPiece([Column,Row], Color):-
     read(Letter),
     skip_line,
     letterToNumber(Letter,Row).
-    
+
+selectMove([], _):-
+    fail.
 selectMove(PossibleMoves, SelectedMove):-
     displayMoves(PossibleMoves, NumberMoves, 0),
     askOption(SelectedMove, NumberMoves).

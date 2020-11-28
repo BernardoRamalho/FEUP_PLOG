@@ -1,14 +1,15 @@
 :-include('movesController.pl').
 test(Move):-
     initial(Board),
-    printBoard(Board),
-    chooseMove(Board, ['red', 18, 0, []], 0, Move).
+    %chooseMove(Board, ['red', 18, 0, []], 0, Move).
+    generatePlacePlayerPieces(Board, 'red', 18, _).
 
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
     enemyColor(PlayerColor, EnemyColor),
     controlSemaphores(FirstMove, EnemyColor, BoardState, NrSemaphores, _),
     Value is PlayerSemaphores + NrSemaphores.
+
 
 % chooseMove(GameState, Player, Level, Move)
 chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove]):-
@@ -50,24 +51,6 @@ compareMoves(Move1, Value1, _, Value2, Move1, Value1):-
 
 compareMoves(_, Value1, Move2, Value2, Move2, Value2):-
     Value2 >= Value1.
-
-
-
-
-
-/*
-    generatePlacePlayerPieces(Board, PlayerColor, Gamestates).
-    Gets all the boardstates that the playe with PlayerColor can get if he places a piece on all the empty spaces.
-*/ 
-generatePlacePlayerPieces(Board, PlayerColor, PlayerPieces, GameStates):-
-    PlayerPieces > 0,
-    getAllMovablePieces(Board, 'empty', emptyPieces, 1),
-    getAllPlacePieces(Board, emptyPieces, PlayerColor, GameStates).
-
-getAllPlacePieces(_, [], _, []).
-getAllPlacePieces(Board, [PiecePos | RestPos], PlayerColor, [[PiecePos, GameState] | RemainingGameStates]):-
-    setPieceAt(PiecePos, Board, PieceColor, GameState),
-    getAllPlacePieces(Board, RestPos, PlayerColor, RemainingGameStates).
     
 
 /*
@@ -123,6 +106,7 @@ getAllMovablePieces([], _, [], _).
 getAllMovablePieces([H|T], PieceColor, Pieces, Row):-   
     getAllRowMovablePieces(H, PieceColor, RowPieces, Row, 1),
     NewRow is Row + 1,
+    !,
     getAllMovablePieces(T, PieceColor, RemainingPieces, NewRow),
     append([RowPieces, RemainingPieces], Pieces).
     
@@ -134,10 +118,12 @@ getAllRowMovablePieces([], _, [], _, _).
 
 getAllRowMovablePieces([H|T], Player, [[Column,Row]|X], Row, Column):-
     H = Player,
+    !,
     NewColumn is Column + 1,
     getAllRowMovablePieces(T, Player, X, Row, NewColumn).
 
 getAllRowMovablePieces([_|T], Player, Pieces, Row, Column):-
+    !,
     NewColumn is Column + 1,
     getAllRowMovablePieces(T, Player, Pieces, Row, NewColumn).
 
@@ -152,3 +138,50 @@ getAllMoves([H|T], Board, [[H, EndCoords] | X]):-
     getNumberMoves(Board, H, [MovesNW, MovesNE, MovesE]),
     validMoves(H, EndCoords, Board, MovesNW, MovesNE, MovesE),
     getAllMoves(T, Board, X).
+
+/*
+    generatePlacePlayerPieces(Board, PlayerColor, Gamestates).
+    Gets all the boardstates that the playe with PlayerColor can get if he places a piece on all the empty spaces.
+*/ 
+generatePlacePlayerPieces(Board, PlayerColor, PlayerPieces, GameStates):-
+    PlayerPieces > 0,
+    getAllPlaceablePieces(Board, PlayerColor, EmptyPieces, 1, Board),
+    write(EmptyPieces),
+    getAllPlacePieces(Board, PlayerColor, PlayerColor, GameStates).
+
+getAllPlacePieces(_, [], _, []).
+getAllPlacePieces(Board, [PiecePos | RestPos], PlayerColor, [[PiecePos, GameState] | RemainingGameStates]):-
+    setPieceAt(PiecePos, Board, PlayerColor, GameState),
+    getAllPlacePieces(Board, RestPos, PlayerColor, RemainingGameStates).
+
+/*
+    getAllMovablePieces(Board, PieceColor, PiecesCoords, CurentRowNumber).
+    Returns all the pieces of the Board that can be chosen to be moved.
+*/
+
+getAllPlaceablePieces([], _, [], _, _).
+
+getAllPlaceablePieces([H|T], PieceColor, Pieces, Row, Board):-   
+    getAllRowPlaceablePieces(H, PieceColor, RowPieces, Row, 1, Board),
+    NewRow is Row + 1,
+    !,
+    getAllPlaceablePieces(T, PieceColor, RemainingPieces, NewRow, Board),
+    append([RowPieces, RemainingPieces], Pieces).
+    
+/*
+    getAllRowPlaceablePieces(Row, PieceColor, PiecesCoords, CurentRowNumber, ColumnNumber).
+    Returns all the pieces of a row that can be chosen to be moved. 
+*/
+getAllRowPlaceablePieces([], _, [], _, _, _).
+
+getAllRowPlaceablePieces([H|T], PieceColor, [[Column,Row]|X], Row, Column, Board):-
+    H = 'empty',
+    \+ checkForSemaphore([Column,Row], Board, PieceColor, _),
+    !,
+    NewColumn is Column + 1,
+    getAllRowPlaceablePieces(T, PieceColor, X, Row, NewColumn, Board).
+
+getAllRowPlaceablePieces([_|T], PieceColor, Pieces, Row, Column, Board):-
+    !,
+    NewColumn is Column + 1,
+    getAllRowPlaceablePieces(T, PieceColor, Pieces, Row, NewColumn, Board).
