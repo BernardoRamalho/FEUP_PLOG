@@ -3,7 +3,7 @@
 
 test(Move):-
     initial(Board),
-    chooseMove(Board, ['red', 18, 0, []], 0, Move).
+    chooseMove(Board, ['red', 18, 0, []], 1, Move).
 
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
@@ -19,12 +19,12 @@ chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], L
     % Generate Move Player Pieces
     generateMovePlayerPieces(GameState, PlayerColor, MovePieceGamestates),
     !,
-    getBestMovePiece(MovePieceGamestates, [FirstMove, MovePieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
+    getBestMovePiece(MovePieceGamestates, [FirstMove, MovePieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level),
 
     % Generate Move Enemy Pieces
     generateMovePlayerPieces(MovePieceBoardState, EnemyPlayerColor, MoveEnemyPieceGamestates),
     !,
-    getBestMovePiece(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
+    getBestMovePiece(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level),
 
     % Generate Place Piece
     generatePlacePlayerPieces(MoveEnemyPieceBoardState, PlayerColor, PlayerPieces, PlacePositions),
@@ -32,9 +32,13 @@ chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], L
     getRandomMove(PlacePositions, ThirdMove).
 
 
-getBestMovePiece([], BestMove, BestMove, _, _).
+getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1):-
+    getRandomMove(Moves, RandomMove),
+    getRandomMove(RandomMove, [FirstMove, BoardState]).    
 
-getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player):-
+getBestMovePiece([], BestMove, BestMove, _, _, 3).
+
+getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player, 3):-
     getBestCoordsMove(CoordsMove, BestCoordMove, MoveValue, -1, _, Player),
     compareMoves(BestCoordMove, MoveValue, CurrentBestMove, CurrentBestMoveValue, BestMove, BestValue),
     getBestMovePiece(Rest, BestCoordsMove, BestMove, BestValue, Player).
