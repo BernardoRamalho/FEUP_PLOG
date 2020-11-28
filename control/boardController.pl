@@ -68,6 +68,7 @@ getValidPiece(Coords, Board, PieceType):-
 */
 checkValidPosition([Column,Row], Board, PieceType):-
     checkValidCoords([Column,Row]),
+    !,
     checkPiece(Column, Row, Board, PieceType).
 
 /* 

@@ -31,7 +31,7 @@ play(GameState, 3):-
     Group of function that run the game based on the type of game.
 */
 
-PlayPvP(GameState, _, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor):-
+playPvP(GameState, _, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor):-
     PlayerSemaphores > 2.
 
 playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Winner):-

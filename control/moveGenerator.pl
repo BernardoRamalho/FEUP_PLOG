@@ -365,10 +365,10 @@ generateSWMoves(_, _, [], _, _, _).
 isValidPosition([CurrentColumn,CurrentRow], Board, StartCoords, PreviousCoords):-
     % Position must be diferent then start position
     listIsDifferent([CurrentColumn,CurrentRow], StartCoords),
-
+    !,
     % Position must be diferent then previous position
     listIsDifferent([CurrentColumn,CurrentRow], PreviousCoords),
-
+    !,
     % Position must be empty
     checkValidPosition([CurrentColumn,CurrentRow], Board, 'empty').
 
