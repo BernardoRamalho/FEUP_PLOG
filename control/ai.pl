@@ -1,8 +1,9 @@
 :-include('movesController.pl').
+:-use_module(library(random)).
+
 test(Move):-
     initial(Board),
-    %chooseMove(Board, ['red', 18, 0, []], 0, Move).
-    generatePlacePlayerPieces(Board, 'red', 18, _).
+    chooseMove(Board, ['red', 18, 0, []], 0, Move).
 
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
@@ -12,7 +13,7 @@ value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value
 
 
 % chooseMove(GameState, Player, Level, Move)
-chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove]):-
+chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove, ThirdMove]):-
     enemyColor(PlayerColor, EnemyPlayerColor),
     
     % Generate Move Player Pieces
@@ -23,7 +24,12 @@ chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], L
     % Generate Move Enemy Pieces
     generateMovePlayerPieces(MovePieceBoardState, EnemyPlayerColor, MoveEnemyPieceGamestates),
     !,
-    getBestMovePiece(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]).
+    getBestMovePiece(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
+
+    % Generate Place Piece
+    generatePlacePlayerPieces(MoveEnemyPieceBoardState, PlayerColor, PlayerPieces, PlacePositions),
+    !,
+    getRandomMove(PlacePositions, ThirdMove).
 
 
 getBestMovePiece([], BestMove, BestMove, _, _).
@@ -42,15 +48,10 @@ getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBes
     getBestCoordsMove(RemainingGameStates, BestMove, BestValue, BetterValue, BetterMove, Player).
 
 
-/*
-    compareMoves(Move1, Value1, Move2, Value2, BetterMove, BetterValue).
-    Compares the value of the two moves and returns in BetterMove the move that has the biggest value. Saves that value into BetterValue
-*/
-compareMoves(Move1, Value1, _, Value2, Move1, Value1):-
-    Value1 > Value2.
-
-compareMoves(_, Value1, Move2, Value2, Move2, Value2):-
-    Value2 >= Value1.
+getRandomMove(Moves, RandomMove):-
+    length(Moves, Length), 
+    random(0, Length, RandomNumber), 
+    nth0(RandomNumber, Moves, RandomMove).
     
 
 /*
@@ -143,20 +144,13 @@ getAllMoves([H|T], Board, [[H, EndCoords] | X]):-
     generatePlacePlayerPieces(Board, PlayerColor, Gamestates).
     Gets all the boardstates that the playe with PlayerColor can get if he places a piece on all the empty spaces.
 */ 
-generatePlacePlayerPieces(Board, PlayerColor, PlayerPieces, GameStates):-
+generatePlacePlayerPieces(Board, PlayerColor, PlayerPieces, EmptyPieces):-
     PlayerPieces > 0,
-    getAllPlaceablePieces(Board, PlayerColor, EmptyPieces, 1, Board),
-    write(EmptyPieces),
-    getAllPlacePieces(Board, PlayerColor, PlayerColor, GameStates).
-
-getAllPlacePieces(_, [], _, []).
-getAllPlacePieces(Board, [PiecePos | RestPos], PlayerColor, [[PiecePos, GameState] | RemainingGameStates]):-
-    setPieceAt(PiecePos, Board, PlayerColor, GameState),
-    getAllPlacePieces(Board, RestPos, PlayerColor, RemainingGameStates).
+    getAllPlaceablePieces(Board, PlayerColor, EmptyPieces, 1, Board).
 
 /*
     getAllMovablePieces(Board, PieceColor, PiecesCoords, CurentRowNumber).
-    Returns all the pieces of the Board that can be chosen to be moved.
+    Returns all the positions of the Board that can be chosen to be placed a piece onto.
 */
 
 getAllPlaceablePieces([], _, [], _, _).
@@ -170,7 +164,7 @@ getAllPlaceablePieces([H|T], PieceColor, Pieces, Row, Board):-
     
 /*
     getAllRowPlaceablePieces(Row, PieceColor, PiecesCoords, CurentRowNumber, ColumnNumber).
-    Returns all the pieces of a row that can be chosen to be moved. 
+    Returns all the positon of the row where it is possible to place a piece. 
 */
 getAllRowPlaceablePieces([], _, [], _, _, _).
 
@@ -185,3 +179,13 @@ getAllRowPlaceablePieces([_|T], PieceColor, Pieces, Row, Column, Board):-
     !,
     NewColumn is Column + 1,
     getAllRowPlaceablePieces(T, PieceColor, Pieces, Row, NewColumn, Board).
+
+/*
+    compareMoves(Move1, Value1, Move2, Value2, BetterMove, BetterValue).
+    Compares the value of the two moves and returns in BetterMove the move that has the biggest value. Saves that value into BetterValue
+*/
+compareMoves(Move1, Value1, _, Value2, Move1, Value1):-
+    Value1 > Value2.
+
+compareMoves(_, Value1, Move2, Value2, Move2, Value2):-
+    Value2 >= Value1.
