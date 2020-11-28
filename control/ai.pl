@@ -3,7 +3,7 @@
 
 test(Move):-
     initial(Board),
-    chooseMove(Board, ['red', 18, 0, []], 1, Move).
+    chooseMove(Board, ['red', 18, 0, []], 2, Move).
 
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
@@ -34,7 +34,11 @@ chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], L
 
 getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1):-
     getRandomMove(Moves, RandomMove),
-    getRandomMove(RandomMove, [FirstMove, BoardState]).    
+    getRandomMove(RandomMove, [FirstMove, BoardState]). 
+
+getBestMovePiece(Moves, BestCoordsMove, _, _, Player, 2):-
+    getRandomMove(Moves, RandomMove),
+    getBestCoordsMove(RandomMove, BestCoordsMove, _, -1, _, Player).    
 
 getBestMovePiece([], BestMove, BestMove, _, _, 3).
 
