@@ -1,4 +1,5 @@
 
+
 :-include('../control/movesController.pl').
 
 /**
@@ -8,6 +9,8 @@
 
 % Initializes the game variables
 initiateGame(GameState):-
+    displayInitialScreen;
+	
     initial(GameState).
 
 /*  

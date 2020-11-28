@@ -24,6 +24,44 @@ letter(11, L) :- L = 'g'.
 
 % Printing fuctions
 
+
+
+displayInitialScreen:-
+	write(' ------------------------------------------------------------------------ \n'),
+    write('|                                                                        |\n'),
+	write('|                                                                        |\n'),
+	write('|                                                                        |\n'),
+    write('|                       _    __   ______ ________                        |\n'),
+	write('|                      / \\   | \\_/ |  _ \\| ____| |                       |\n'),
+    write('|                     / _ \\  |  _  |  _) |  _| | |                       |\n'),
+	write('|                    / ___ \\ | | | |  __/| |___| |___                    |\n'),
+    write('|                   /_|   |_\\|_| |_|_|   |_____|_____|                   |\n'),
+	write('|                                                                        |\n'),
+    write('|                                                                        |\n'),
+	write(' ------------------------------------------------------------------------ \n') ,
+	write('\n'),
+	write('\n'),
+	write('\n'),
+	write('\n'),
+	write('\n').
+
+displayDifficultyMenu:-
+	write(' ------------------------------------------------------- \n'),
+	write('|                CHOOSE YOUR DIFFICULTY                 |\n'),
+    write('|              ___________________________              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              |  1. EASY                |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              |  2. MEDIUM              |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              |  3. HARD                |              |\n'),
+    write('|              |_________________________|              |\n'), 
+    write('|                                                       |\n'),
+    write('|                                                       |\n'),
+	write(' ------------------------------------------------------- \n').
+
 printBoardHeader:-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                                     B O A R D                                         |\n'),
@@ -81,12 +119,21 @@ displayGame(GameState):-
     printBoard(GameState).
 
 displayGameTypeOptions:-
-    write('Which type of game would you like to play?\n'),
-    write('1 - Player vs Player;\n'),
-    write('2 - Ai vs Ai;\n'),
-    write('3 - Player vs Ai.\n'),
-    write('Enter your option (number): ').
-
+	write(' ------------------------------------------------------- \n'),
+	write('|      WHICH TYPE OF GAME WOULD YOU LIKE TO PLAY?       |\n'),
+	write('|               _ _ _ _ _ _ _ _ _ _ _ _ _               |\n'),
+    write('|              |                         |              |\n'),
+    write('|              | 1. PLAYER VS PLAYER     |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              | 2. AI VS AI             |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              | 3. PLAYER VS AI         |              |\n'),
+    write('|              |_ _ _ _ _ _ _ _ _ _ _ _ _|              |\n'),
+    write('|                                                       |\n'),
+    write('|                                                       |\n').
+	write(' -------------------------------------------------------\n'),
 displayMovesHeader:-
     write('-----------------------------------\n'),
     write('|   |     Column   |      Row     |\n'),
@@ -109,6 +156,7 @@ displayMovesBody([[Column,Row]|T], NumberMoves, StartMove):-
     write('\n'),
     NewStartMove is StartMove + 1,
     displayMovesBody(T, NumberMoves, NewStartMove).
+	
 	
 displayPlaceYellowPieces:-
     write('\n'),

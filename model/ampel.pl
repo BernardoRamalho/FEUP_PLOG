@@ -3,6 +3,7 @@
 
 % For now just display the initial boardstate
 ampel:-
+	
     initiateGame(GameState),
     askForGameType(GameType),
     play(GameState, GameType).

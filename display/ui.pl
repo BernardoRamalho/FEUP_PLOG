@@ -8,6 +8,7 @@
 
 % Function used to let the player choose which game type he wants (Player vs Player, Ai vs Ai or Player vs Ai).
 askForGameType(GameType):-
+	
     displayGameTypeOptions,
     read(GameType),
     skip_line.
