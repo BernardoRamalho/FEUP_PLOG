@@ -10,17 +10,17 @@ pieceSymbol('Red', P) :- P = 'R'.
 pieceSymbol(o, P) :- P = ' '.
 
 % Conversion of number to letter
-letter(1, L) :- L = 'A'.
-letter(2, L) :- L = 'B'.
-letter(3, L) :- L = 'C'.
-letter(4, L) :- L = 'D'.
-letter(5, L) :- L = 'E'.
-letter(6, L) :- L = 'F'.
-letter(7, L) :- L = 'G'.
-letter(8, L) :- L = 'H'.
-letter(9, L) :- L = 'I'.
-letter(10, L) :- L = 'J'.
-letter(11, L) :- L = 'G'.
+letter(1, L) :- L = 'a'.
+letter(2, L) :- L = 'b'.
+letter(3, L) :- L = 'c'.
+letter(4, L) :- L = 'd'.
+letter(5, L) :- L = 'e'.
+letter(6, L) :- L = 'f'.
+letter(7, L) :- L = 'g'.
+letter(8, L) :- L = 'h'.
+letter(9, L) :- L = 'i'.
+letter(10, L) :- L = 'j'.
+letter(11, L) :- L = 'g'.
 
 % Printing fuctions
 
@@ -109,6 +109,12 @@ displayMovesBody([[Column,Row]|T], NumberMoves, StartMove):-
     write('\n'),
     NewStartMove is StartMove + 1,
     displayMovesBody(T, NumberMoves, NewStartMove).
+	
+displayPlaceYellowPieces:-
+    write('\n'),
+    write('   -----------------------------------------------------------------------------------------\n'),
+    write('   |                              STAGE 0 : PLACE YELLOW PIECES                            |\n'),
+	write('   -----------------------------------------------------------------------------------------\n').
 
 displayMovePieceHead:-
     write('\n'),
@@ -161,11 +167,3 @@ displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
     write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |      |         ').
-displayAllMoves([]).
-displayAllMoves([Move| RemainingMove]):-
-    displayGeneratedMoves(Move),
-    displayAllMoves(RemainingMove).
-displayGeneratedMoves([_,[]]).
-displayGeneratedMoves([StartCoords, [Move|RemainingMove]]):-
-    write(StartCoords), write(' --> '), write(Move), write('\n'),
-    displayGeneratedMoves([StartCoords, RemainingMove]).

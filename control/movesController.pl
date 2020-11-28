@@ -10,8 +10,9 @@
     Player move has 3 stages.
     First the player moves one of its pieces.
     Then it moves one of the enemy pieces.
-    And it places one piece.
+    And it places one piece. 
 */
+
 move(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     % Stage 1: Move Player Piece
     displayMovePieceHead,
@@ -46,6 +47,30 @@ placeDisc(Board, [PieceColor, NrPieces, PlayerSemaphores, LastMove], NextTurnBoa
     lastMoveToLowerCase(LastMove, Board, NextTurnBoard, PieceColor).
 
 
+/*
+    setup(Board, Player, NewBoard)
+    Asks where to place the yellowpiece.
+    Checks if the place is valid.
+    And places a piece in the Board at the coords given. Does this until five pieces have been putted.
+*/
+setup(5,Board,_,Board).
+
+setup(Counter,Board, PieceColor, NewTurnBoard):-
+	% Display Information
+    displayPlayerTurn(PieceColor),
+    displayPlaceYellowPieces,
+	printBoard(Board),
+
+    % Ask for Valid position and put a piece there
+    getValidYellowPosition(Coords, Board, 'empty'),
+    setPieceAt(Coords, Board, 'yellow', NewBoard),
+	
+    % Ask the other player to put another yellow piece
+    Counter1 is Counter+1,
+	enemyColor(PieceColor,EnemyPieceColor),
+	setup(Counter1,NewBoard,EnemyPieceColor,NewTurnBoard).
+
+setup(_, Player, _, Player).
 /*
     movePlayerDisc(Board, Player, BoardMoved)
     Asks the player for a piece to move and where to place it.

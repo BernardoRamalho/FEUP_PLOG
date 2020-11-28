@@ -10,28 +10,43 @@
     consists of a pyramid with 11 levels
 */
 initial([
-    [o, o, o, o, o, o, o, o, o, o, red, o, o, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, empty, o, empty, o, yellow, o, empty, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, empty, o, red, o, green, o, red, o, empty, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o],
     [o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
-    [o, o, o, o, red, o, yellow, o, empty, o, empty, o, red, o, empty, o, empty, o, o, o, o],
-    [o, o, o, empty, o, empty, o, empty, o, green, o, empty, o, yellow, o, empty, o, empty, o, o, o],
-    [o, o, empty, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
-    [o, empty, o, red, o, empty, o, empty, o, empty, o, yellow, o, empty, o, empty, o, green, o, empty, o],
+    [o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
+    [o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
+    [o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
+    [o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).
 
 /*
     checkValidCoords(Coords);
-    Checks if the coords are inside the coorct intervel
+    Checks if the coords are inside the correct interval
 */
 checkValidCoords([Column,Row]):-
     getStartColumn(Row, StartColumn),
     Column > (StartColumn - 1),
     getEndColumn(Row, EndColumn),
     Column < (EndColumn + 1).
+	
+	
+	
+/*
+    checkValidCoordsInside(Coords);
+    Checks if the coords are inside the correct interval for 
+	a yellow disc
+*/
+checkValidCoordsInside([Column,Row]):-
+    getStartColumn(Row, StartColumn1),
+	StartColumn is StartColumn1 + 2,
+    Column > (StartColumn - 1),
+    getEndColumn(Row, EndColumn1),
+	EndColumn is EndColumn1 - 2,
+    Column < (EndColumn + 1).	
 
 
 /*
@@ -47,6 +62,21 @@ getValidPosition(Coords, Board, PieceType, PieceColor):-
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     invalidInputMessage,
     getValidPosition(Coords, Board, PieceType, PieceColor).
+	
+	
+	
+/*
+    getValidYellowPosition(Move, Board, PieceType)
+    Uses the ui module to ask the user for a move.
+    Checks if the position given as a piece equals to PieceType.
+*/
+getValidYellowPosition(Coords, Board, PieceType):-
+    askPlacePiece(Coords),
+    checkValidYellowPosition(Coords, Board, PieceType).
+   
+getValidYellowPosition(Coords, Board, PieceType):-
+    invalidInputMessage,
+    getValidYellowPosition(Coords, Board, PieceType).	
 
 /*
     getValidPiece(PieceCoords, Board, PieceType)
@@ -69,6 +99,16 @@ getValidPiece(Coords, Board, PieceType):-
 checkValidPosition([Column,Row], Board, PieceType):-
     checkValidCoords([Column,Row]),
     !,
+    checkPiece(Column, Row, Board, PieceType).
+	
+	
+
+/*
+    checkValidYellowPosition(Move, Board, PieceType)
+    Starts by checking if the column is in the correct range(not outside the board and not in the edges or corners) and checks if the spot is empty
+*/
+checkValidYellowPosition([Column,Row], Board,PieceType):-
+    checkValidCoordsInside([Column,Row]),
     checkPiece(Column, Row, Board, PieceType).
 
 /* 
