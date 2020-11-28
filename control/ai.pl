@@ -1,20 +1,61 @@
 :-include('movesController.pl').
-
-%choose_move(GameState, Player, Level, Move).
-
-%value(GameState, Player, Value).
-
-test:-
+test(Move):-
     initial(Board),
     printBoard(Board),
-    generatePlays(Board, 'red', 'green').
+    chooseMove(Board, ['red', 18, 0, []], 0, Move).
 
-generatePlays(Board, PlayerColor, EnemyPlayerColor):-
+% value(Move, Value, Player)
+value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
+    enemyColor(PlayerColor, EnemyColor),
+    controlSemaphores(FirstMove, EnemyColor, BoardState, NrSemaphores, _),
+    Value is PlayerSemaphores + NrSemaphores.
+
+% chooseMove(GameState, Player, Level, Move)
+chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, BestPlayerMove):-
+    enemyColor(PlayerColor, EnemyPlayerColor),
+    
+    % Generate Move Player Pieces
+    generateMovePlayerPieces(GameState, PlayerColor, MovePieceGamestates),
+    !,
+    getBestMove(MovePieceGamestates, BestPlayerMove, _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]).
+
+
+getBestMove([], BestMove, BestMove, _, _).
+
+getBestMove([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player):-
+    getBestCoordsMove(CoordsMove, BestCoordMove, MoveValue, -1, _, Player),
+    compareMoves(BestCoordMove, MoveValue, CurrentBestMove, CurrentBestMoveValue, BestMove, BestValue),
+    getBestMove(Rest, BestCoordsMove, BestMove, BestValue, Player).
+
+
+getBestCoordsMove([], BestMove, BestValue, BestValue, BestMove, _).
+
+getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBestValue, CurrentBestMove, Player):-
+    value(Move, Player, MoveValue),
+    compareMoves(Move, MoveValue, CurrentBestMove, CurrentBestValue, BetterMove, BetterValue),
+    getBestCoordsMove(RemainingGameStates, BestMove, BestValue, BetterValue, BetterMove, Player).
+
+
+compareMoves(Move1, Value1, _, Value2, Move1, Value1):-
+    Value1 > Value2.
+
+compareMoves(_, Value1, Move2, Value2, Move2, Value2):-
+    Value2 >= Value1.
+
+
+
+
+
+
+
+
+
+
+
+generateMovePlayerPieces(Board, PlayerColor, Gamestates):-
     getAllMovablePieces(Board, PlayerColor, MovablePieces, 1),
     getAllMoves(MovablePieces, Board, Moves),
-    generateAllMovePlayerPieceBoards(Board, Moves, PlayerMovedBoard),
-    write(PlayerMovedBoard).
-
+    generateAllMovePlayerPieceBoards(Board, Moves, Gamestates).
 
 
 /*
