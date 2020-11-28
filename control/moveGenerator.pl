@@ -3,14 +3,14 @@
 
 
 /*
-    generateAllMoves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
+    validMoves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
     This function generates all moves from the StartCoords. Saves all the ending coords in EndCoords.
     NWDDiagonalMoves, NEDDiagonalMoves, ElineMoves are the number of moves that the piece can do along the
     NorthWest Diagonal, North Eas Diagonal and horizontally, respectively.
 */
-generateAllMoves(_, [], _, 0, 0, 0).
+validMoves(_, [], _, 0, 0, 0).
 
-generateAllMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
+validMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
     % Get Path that starts on the northwest
     getNWMoves(StartCoords, StartCoords, NWCoords, [0,0], Board, NWDiagonalMoves),
 
@@ -365,10 +365,10 @@ generateSWMoves(_, _, [], _, _, _).
 isValidPosition([CurrentColumn,CurrentRow], Board, StartCoords, PreviousCoords):-
     % Position must be diferent then start position
     listIsDifferent([CurrentColumn,CurrentRow], StartCoords),
-
+    !,
     % Position must be diferent then previous position
     listIsDifferent([CurrentColumn,CurrentRow], PreviousCoords),
-
+    !,
     % Position must be empty
     checkValidPosition([CurrentColumn,CurrentRow], Board, 'empty').
 

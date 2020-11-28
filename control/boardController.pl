@@ -13,25 +13,40 @@ initial([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, empty, o, empty, o, yellow, o, empty, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o],
     [o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
-    [o, o, o, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
-    [o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, yellow, o, empty, o, empty, o, o, o],
-    [o, o, empty, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
-    [o, empty, o, empty, o, empty, o, empty, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o],
+    [o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
+    [o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
+    [o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
+    [o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
     [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
 ]).
 
 /*
     checkValidCoords(Coords);
-    Checks if the coords are inside the coorct intervel
+    Checks if the coords are inside the correct interval
 */
 checkValidCoords([Column,Row]):-
     getStartColumn(Row, StartColumn),
     Column > (StartColumn - 1),
     getEndColumn(Row, EndColumn),
     Column < (EndColumn + 1).
+	
+	
+	
+/*
+    checkValidCoordsInside(Coords);
+    Checks if the coords are inside the correct interval for 
+	a yellow disc
+*/
+checkValidCoordsInside([Column,Row]):-
+    getStartColumn(Row, StartColumn1),
+	StartColumn is StartColumn1 + 2,
+    Column > (StartColumn - 1),
+    getEndColumn(Row, EndColumn1),
+	EndColumn is EndColumn1 - 2,
+    Column < (EndColumn + 1).	
 
 
 /*
@@ -42,11 +57,26 @@ checkValidCoords([Column,Row]):-
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     askPlacePiece(Coords),
     checkValidPosition(Coords, Board, PieceType),
-    \+ checkForSemaphore(Coords, Board, PieceColor).
+    \+ checkForSemaphore(Coords, Board, PieceColor, _).
 
 getValidPosition(Coords, Board, PieceType, PieceColor):-
     invalidInputMessage,
     getValidPosition(Coords, Board, PieceType, PieceColor).
+	
+	
+	
+/*
+    getValidYellowPosition(Move, Board, PieceType)
+    Uses the ui module to ask the user for a move.
+    Checks if the position given as a piece equals to PieceType.
+*/
+getValidYellowPosition(Coords, Board, PieceType):-
+    askPlacePiece(Coords),
+    checkValidYellowPosition(Coords, Board, PieceType).
+   
+getValidYellowPosition(Coords, Board, PieceType):-
+    invalidInputMessage,
+    getValidYellowPosition(Coords, Board, PieceType).	
 
 /*
     getValidPiece(PieceCoords, Board, PieceType)
@@ -68,6 +98,17 @@ getValidPiece(Coords, Board, PieceType):-
 */
 checkValidPosition([Column,Row], Board, PieceType):-
     checkValidCoords([Column,Row]),
+    !,
+    checkPiece(Column, Row, Board, PieceType).
+	
+	
+
+/*
+    checkValidYellowPosition(Move, Board, PieceType)
+    Starts by checking if the column is in the correct range(not outside the board and not in the edges or corners) and checks if the spot is empty
+*/
+checkValidYellowPosition([Column,Row], Board,PieceType):-
+    checkValidCoordsInside([Column,Row]),
     checkPiece(Column, Row, Board, PieceType).
 
 /* 
@@ -293,29 +334,29 @@ getNumberEMoves(_, _, 0).
     Checks if a semaphore exists starting from Coords.
 */  
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForNESemaphore(Coords, EnemyColor, Board, _, _).
+    checkForNESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForNWSemaphore(Coords, EnemyColor, Board, _, _).
+    checkForNWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForSESemaphore(Coords, EnemyColor, Board, _, _).
+    checkForSESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForSWSemaphore(Coords, EnemyColor, Board, _, _).
+    checkForSWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForESemaphore(Coords, EnemyColor, Board, _, _).
+    checkForESemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
 
-checkForSemaphore(Coords, Board, PlayerColor):-
+checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
-    checkForWSemaphore(Coords, EnemyColor, Board, _, _).
+    checkForWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
     
 getSemaphores(Coords, PlayerColor, Board, NrSemaphores, NewBoard):-
     enemyColor(PlayerColor, EnemyColor),
