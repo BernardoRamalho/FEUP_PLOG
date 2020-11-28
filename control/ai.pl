@@ -11,21 +11,26 @@ value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value
     Value is PlayerSemaphores + NrSemaphores.
 
 % chooseMove(GameState, Player, Level, Move)
-chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, BestPlayerMove):-
+chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove]):-
     enemyColor(PlayerColor, EnemyPlayerColor),
     
     % Generate Move Player Pieces
     generateMovePlayerPieces(GameState, PlayerColor, MovePieceGamestates),
     !,
-    getBestMove(MovePieceGamestates, BestPlayerMove, _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]).
+    getBestMovePiece(MovePieceGamestates, [FirstMove, MovePieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
+
+    % Generate Move Enemy Pieces
+    generateMovePlayerPieces(MovePieceBoardState, EnemyPlayerColor, MoveEnemyPieceGamestates),
+    !,
+    getBestMovePiece(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]).
 
 
-getBestMove([], BestMove, BestMove, _, _).
+getBestMovePiece([], BestMove, BestMove, _, _).
 
-getBestMove([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player):-
+getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player):-
     getBestCoordsMove(CoordsMove, BestCoordMove, MoveValue, -1, _, Player),
     compareMoves(BestCoordMove, MoveValue, CurrentBestMove, CurrentBestMoveValue, BestMove, BestValue),
-    getBestMove(Rest, BestCoordsMove, BestMove, BestValue, Player).
+    getBestMovePiece(Rest, BestCoordsMove, BestMove, BestValue, Player).
 
 
 getBestCoordsMove([], BestMove, BestValue, BestValue, BestMove, _).
@@ -36,6 +41,10 @@ getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBes
     getBestCoordsMove(RemainingGameStates, BestMove, BestValue, BetterValue, BetterMove, Player).
 
 
+/*
+    compareMoves(Move1, Value1, Move2, Value2, BetterMove, BetterValue).
+    Compares the value of the two moves and returns in BetterMove the move that has the biggest value. Saves that value into BetterValue
+*/
 compareMoves(Move1, Value1, _, Value2, Move1, Value1):-
     Value1 > Value2.
 
@@ -46,12 +55,25 @@ compareMoves(_, Value1, Move2, Value2, Move2, Value2):-
 
 
 
+/*
+    generatePlacePlayerPieces(Board, PlayerColor, Gamestates).
+    Gets all the boardstates that the playe with PlayerColor can get if he places a piece on all the empty spaces.
+*/ 
+generatePlacePlayerPieces(Board, PlayerColor, PlayerPieces, GameStates):-
+    PlayerPieces > 0,
+    getAllMovablePieces(Board, 'empty', emptyPieces, 1),
+    getAllPlacePieces(Board, emptyPieces, PlayerColor, GameStates).
 
+getAllPlacePieces(_, [], _, []).
+getAllPlacePieces(Board, [PiecePos | RestPos], PlayerColor, [[PiecePos, GameState] | RemainingGameStates]):-
+    setPieceAt(PiecePos, Board, PieceColor, GameState),
+    getAllPlacePieces(Board, RestPos, PlayerColor, RemainingGameStates).
+    
 
-
-
-
-
+/*
+    generateMovePlayerPieces(Board, PlayerColor, Gamestates).
+    Gets all the possible boardstates that the playe with PlayerColor can get if he moves a piece of it's color.
+*/ 
 generateMovePlayerPieces(Board, PlayerColor, Gamestates):-
     getAllMovablePieces(Board, PlayerColor, MovablePieces, 1),
     getAllMoves(MovablePieces, Board, Moves),
@@ -92,16 +114,16 @@ generateMoveEnemyPlayerPieceBoards(Board, StartCoords, [FirstMove | RemainingMov
 
 
 /*
-    getAllMovablePieces(Board, Player, PiecesCoords, CurentRowNumber).
+    getAllMovablePieces(Board, PieceColor, PiecesCoords, CurentRowNumber).
     Returns all the pieces of the Board that can be chosen to be moved.
 */
 
 getAllMovablePieces([], _, [], _).
 
-getAllMovablePieces([H|T], Player, Pieces, Row):-   
-    getAllRowMovablePieces(H, Player, RowPieces, Row, 1),
+getAllMovablePieces([H|T], PieceColor, Pieces, Row):-   
+    getAllRowMovablePieces(H, PieceColor, RowPieces, Row, 1),
     NewRow is Row + 1,
-    getAllMovablePieces(T, Player, RemainingPieces, NewRow),
+    getAllMovablePieces(T, PieceColor, RemainingPieces, NewRow),
     append([RowPieces, RemainingPieces], Pieces).
     
 /*
