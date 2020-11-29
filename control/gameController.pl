@@ -41,7 +41,7 @@ playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Enem
     displayPlayerTurn(PlayerColor),
     displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
 
-    move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    takeTurn(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
     playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 

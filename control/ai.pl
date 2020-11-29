@@ -91,7 +91,7 @@ moveAIDisc(Board, [], [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMov
     write(' pieces with valid moves.\n').
 
 moveAIDisc(Board, [StartCoords, EndCoords], [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], EnemyPlayer, BoardMoved, UpdatedPlayer, UpdatedEnemy):-
-    movePiece(StartCoords, EndCoords, Board, BoardPieceMoved),
+    move(Board, [StartCoords, EndCoords],  BoardPieceMoved),
     displayAIMovePiece(StartCoords, EndCoords, PieceColor),
 
     % Check for Sempahores
@@ -112,7 +112,7 @@ moveAIEnemyDisc(Board, [], [EnemyPieceColor, EnemyPieces, EnemySemaphores, Enemy
 
 moveAIEnemyDisc(Board, [StartCoords, EndCoords], [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], Player, BoardMoved, UpdatedEnemy, UpdatedPlayer):-
     % Move tha piece
-    movePiece(StartCoords, EndCoords, Board, BoardPieceMoved),
+    move(Board, [StartCoords, EndCoords],  BoardPieceMoved),
     displayAIMovePiece(StartCoords, EndCoords, EnemyPieceColor),
 
     % Check for Sempahores

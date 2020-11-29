@@ -8,14 +8,14 @@
 
 
 /*
-    move(Board, Player)
+    takeTurn(Board, Player)
     Player move has 3 stages.
     First the player moves one of its pieces.
     Then it moves one of the enemy pieces.
     And it places one piece. 
 */
 
-move(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
+takeTurn(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     % Stage 1: Move Player Piece
     displayMovePieceHead,
     printBoard(Board),
@@ -119,7 +119,7 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMov
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
     nth0(SelectedMove, EndCoords, MoveSelected, _),
-    movePiece(Coords, MoveSelected, Board, BoardPieceMoved),
+    move(Board, [Coords, MoveSelected],  BoardPieceMoved),
 
     % Check for Sempahores
     getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
@@ -153,7 +153,7 @@ moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMo
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
     nth0(SelectedMove, EndCoords, MoveSelected, _),
-    movePiece(Coords, MoveSelected, Board, BoardPieceMoved),
+    move(Board, [Coords, MoveSelected],  BoardPieceMoved),
 
     % Check for Sempahores
     getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
@@ -166,14 +166,14 @@ moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMo
     sleep(1).
 
 /*
-    movePiece(Coords, MoveSelected, Board, NewBoard).
-    Moves the piece at Coords into MoveSelected.
-    The change is saved in NewBoard.
+    move(GameState, Move, NewGameState).
+    Applies the move into GameState
+    The change is saved in NewGameState.
 */
-movePiece(Coords, MoveSelected, Board, NewBoard):-
-    getPieceAt(Coords, Board, Piece),
-    setPieceAt(Coords, Board, 'empty', IntermidiateBoard),
-    setPieceAt(MoveSelected, IntermidiateBoard, Piece, NewBoard).
+move(GameState, [Coords, MoveSelected], NewGameState):-
+    getPieceAt(Coords, GameState, Piece),
+    setPieceAt(Coords, GameState, 'empty', IntermidiateGameState),
+    setPieceAt(MoveSelected, IntermidiateGameState, Piece, NewGameState).
 
 /*
     updatePlayers(Player, EnemyPlayer, NrSemaphores, UpdatedPlayer, UpdatedEnemy, MovedPiece)
