@@ -46,7 +46,7 @@ setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
     yellowAI(AICoords, Board),
     setPieceAt(AICoords, Board, 'yellow', NewBoard),
     displayAIPlacePiece(AICoords, 'yellow'),
-    sleep(1.5),
+    sleep(2),
 
     % Ask the other player to put another yellow piece
     PiecesPlaced is Counter+1,
@@ -75,7 +75,7 @@ moveAI(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlay
     displayPlacePieceHead,
     printBoard(BoardEnemyMoved),
     !,
-    placeAIDisc(BoardEnemyMoved, PlaceDisc, PlayerEnemyMove, NewBoard, UpdatedPlayer).
+    placeAIDisc(BoardEnemyMoved, PlaceDisc, PlayerEnemyMove, NewBoard, UpdatedPlayer),
     sleep(1).
 
 

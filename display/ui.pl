@@ -1,6 +1,7 @@
 :-include('../utils.pl').
 :-include('display.pl').
 
+
 /**
     This file is where we make all the function that interact with the user.
     If we need to ask something or get the input, the fucntion is in this file.
