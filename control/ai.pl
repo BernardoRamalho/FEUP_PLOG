@@ -62,21 +62,21 @@ moveAI(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlay
     printBoard(Board),
     !,
     moveAIDisc(Board, MovePlayerDisc, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, BoardMoved, PlayerAfterMove, EnemyAfterMove),
-    %sleep(1),
+    sleep(1),
 
     % Stage 2: Move Enemy Piece
     displayMoveEnemyPieceHead,
     printBoard(BoardMoved),
     !,
     moveAIEnemyDisc(BoardMoved, MoveEnemyDisc, EnemyAfterMove, PlayerAfterMove, BoardEnemyMoved, NewEnemyPlayer, PlayerEnemyMove),
-    %sleep(1),
+    sleep(1),
 
     % Stage 3: Place a New Piece
     displayPlacePieceHead,
     printBoard(BoardEnemyMoved),
     !,
     placeAIDisc(BoardEnemyMoved, PlaceDisc, PlayerEnemyMove, NewBoard, UpdatedPlayer).
-    %sleep(1).
+    sleep(1).
 
 
 /*

@@ -371,7 +371,7 @@ checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
 checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
-
+    
 getSemaphores(Coords, PlayerColor, Board, NrSemaphores, NewBoard):-
     enemyColor(PlayerColor, EnemyColor),
     controlSemaphores(Coords, EnemyColor, Board, NrSemaphores, NewBoard).
