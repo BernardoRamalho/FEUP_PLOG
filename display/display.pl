@@ -32,7 +32,6 @@ printBoardHeader:-
     write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n').
 
 printBoardFooter:-
-    write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n'),
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
     write('   -----------------------------------------------------------------------------------------\n').
 
@@ -49,6 +48,7 @@ printBoardPlayArea([Head|Tail], N):-
     write(L),
     write(' | '),
     printLine(Head),
+    write('   |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n'),
     N1 is N + 1,
     printBoardPlayArea(Tail, N1).
 
@@ -136,7 +136,7 @@ displayPlayerTurn('Green'):-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                                   GREEN PLAYER TURN                                    |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n\n').
+    write('\n').
 
 displayPlayerTurn('Red'):-
     write('\n'),
@@ -149,21 +149,33 @@ displayWinner('Red'):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |              //////             !! RED PLAYER WINS !!           //////                |\n'),
-    write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n').
+    write('   -----------------------------------------------------------------------------------------\n').
  
 displayWinner('Green'):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |              //////            !! GREEN PLAYER WINS !!           //////               |\n'),
-    write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n').
+    write('   -----------------------------------------------------------------------------------------\n').
 
-displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
-    write('\n'),
+displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, _]):-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                                      PLAYER STATS                                     |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
+    write('   |            |       Colour       |   Pieces in Hand   |     Semaphores     |           |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |         ').
+    write('                        '), write(PlayerColor), write('                   '), write(PlayerPieces), write('                   '), write(PlayerSemaphores), write('\n').
+
+displayAIPlacePiece([Column, Row], Colour):-
+    write('The AI decided to place a '), write(Colour), write(' piece at position:\n'),
+    write('Column: '), write(Column), write('\n'),
+    write('Row: '), write(Row), write('\n').
+
+displayAIMovePiece([StartColumn, StartRow], [Column, Row], Colour):-
+    write('The AI decided to move a '), write(Colour), write(' piece:\n'),
+    write('-----------------------------------\n'),
+    write('|          |   From   |     To    |\n'),
+    write('-----------------------------------\n'),
+    write('|  Column  |   '), write(StartColumn), write('   -->   '), write(Column), write('\n'),
+    write('------------\n'),
+    write('|    Row   |   '), write(StartRow), write('   -->   '), write(Row), write('\n'),
+    write('------------\n').

@@ -119,3 +119,8 @@ existsInListofLists([H|_], X):-
 
 existsInListofLists([_|T], X):-
     existsInListofLists(T, X).
+
+greater(X, Y, X):-
+    X > Y.
+greater(X, Y, Y):-
+    Y >= X.
