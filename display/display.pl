@@ -149,24 +149,21 @@ displayWinner('Red'):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |              //////             !! RED PLAYER WINS !!           //////                |\n'),
-    write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n').
+    write('   -----------------------------------------------------------------------------------------\n').
  
 displayWinner('Green'):-
     write('\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |              //////            !! GREEN PLAYER WINS !!           //////               |\n'),
-    write('   -----------------------------------------------------------------------------------------\n'),
-    write('\n').
+    write('   -----------------------------------------------------------------------------------------\n').
 
-displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
-    write('\n'),
+displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, _]):-
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |                                      PLAYER STATS                                     |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
+    write('   |            |       Colour       |   Pieces in Hand   |     Semaphores     |           |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
-    write('   |      |         ').
+    write('                        '), write(PlayerColor), write('                   '), write(PlayerPieces), write('                   '), write(PlayerSemaphores), write('\n').
 
 displayAIPlacePiece([Column, Row], Colour):-
     write('The AI decided to place a '), write(Colour), write(' piece at position:\n'),

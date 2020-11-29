@@ -19,7 +19,7 @@ initiateGame(GameState):-
 */
 play(GameState, 1):-
 	setupPvP(0, GameState,'Red',NewGameState),
-	playPvP(NewGameState, ['Red', 20, 0, []], ['Green', 20, 0, []]).
+	playPvP(NewGameState, ['Red', 13, 1, []], ['Green', 13, 0, []]).
 
 play(GameState, 2):-
     setupEvE(0, GameState, 'Red', NewGameState),
@@ -34,25 +34,30 @@ play(GameState, 3):-
     Group of function that run the game based on the type of game.
 */
 
-playPvP(GameState, _, Player):-
-    gameOver(Player, GameState).
+playPvP(_, _, Player):-
+    gameOver(Player).
 
 playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer):-
     displayPlayerTurn(PlayerColor),
+    displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
+
     move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
     playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 
-playEvE(GameState, _, _, Player):-
-    gameOver(Player, GameState).
+playEvE(_, _, _, Player):-
+    gameOver(Player).
     
 playEvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer):-
     displayPlayerTurn(PlayerColor),
+    displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
+    
     moveAI(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Level, NewBoard, UpdatedPlayer, NewEnemyPlayer),
+    
     playEvE(NewBoard, Level, NewEnemyPlayer, UpdatedPlayer).
 
-playPvE(GameState, _, _, Player, _):-
-    gameOver(Player, GameState).
+playPvE(_, _, _, Player, _):-
+    gameOver(Player).
 
 playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay],  EnemyPlayer, 'player'):-
     displayPlayerTurn(PlayerColor),
@@ -68,8 +73,7 @@ playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay
     Group of function that are responsible for the GameOver.
 */
 
-gameOver([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Board):-
-    !,
+gameOver([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
     PlayerSemaphores > 2,
-    displayWinner([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
-    printBoard(Board).
+    displayWinner(PlayerColor),
+    displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]).

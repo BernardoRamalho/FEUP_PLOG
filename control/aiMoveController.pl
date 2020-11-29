@@ -3,7 +3,7 @@
 :-use_module(library(random)).
 
 test(Move):-
-    initial(Board),
+    expe(Board),
     printBoard(Board),
     chooseMove(Board, ['Red', 20, 0, []], 2, Move).
 
@@ -34,23 +34,28 @@ chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], L
     getRandomMove(PlacePositions, ThirdMove).
 
 bestMove([], [[] , Board], _, _, Board).
-bestMove(Moves, BestMove, Player, Level, _):-
-    getBestMovePiece(Moves, BestMove, _, -1, Player, Level).
+bestMove(Moves, BestMove, Player, 3, _):-
+    getBestMovePiece(Moves, Move, _, -1, Player, 3, MoveValue),
+    !,
+    checkNeedForRandom(Moves, Move, MoveValue, BestMove, Player).
 
-getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1):-
+bestMove(Moves, BestMove, Player, Level, _):-
+    getBestMovePiece(Moves, BestMove, _, -1, Player, Level, _).
+
+getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1, _):-
     getRandomMove(Moves, RandomMove),
     getRandomMove(RandomMove, [FirstMove, BoardState]). 
 
-getBestMovePiece(Moves, BestCoordsMove, _, _, Player, 2):-
+getBestMovePiece(Moves, BestCoordsMove, _, _, Player, 2, _):-
     getRandomMove(Moves, RandomMove),
     getBestCoordsMove(RandomMove, BestCoordsMove, _, -1, _, Player).    
 
-getBestMovePiece([], BestMove, BestMove, _, _, 3).
+getBestMovePiece([], BestMove, BestMove, BestValue, _, 3, BestValue).
 
-getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player, 3):-
+getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player, 3, BestCoordValue):-
     getBestCoordsMove(CoordsMove, BestCoordMove, MoveValue, -1, _, Player),
     compareMoves(BestCoordMove, MoveValue, CurrentBestMove, CurrentBestMoveValue, BestMove, BestValue),
-    getBestMovePiece(Rest, BestCoordsMove, BestMove, BestValue, Player).
+    getBestMovePiece(Rest, BestCoordsMove, BestMove, BestValue, Player, 3, BestCoordValue).
 
 
 getBestCoordsMove([], BestMove, BestValue, BestValue, BestMove, _).
@@ -59,6 +64,12 @@ getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBes
     value(Move, Player, MoveValue),
     compareMoves(Move, MoveValue, CurrentBestMove, CurrentBestValue, BetterMove, BetterValue),
     getBestCoordsMove(RemainingGameStates, BestMove, BestValue, BetterValue, BetterMove, Player).
+
+
+checkNeedForRandom(Moves, _, 0, BestMove, Player):-
+   getBestMovePiece(Moves, BestMove, _, _, Player, 2, _).
+
+checkNeedForRandom(_, Move, _, Move, _).
 
 getRandomMove([], []).
 getRandomMove(Moves, RandomMove):-
@@ -86,7 +97,9 @@ generateMovePlayerPieces(Board, PlayerColor, Gamestates):-
 */ 
 generateAllMovePlayerPieceBoards(_, [], []).
 generateAllMovePlayerPieceBoards(_, [[_, []]], []).
-generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves]] | Moves], [ FirstMoveBoard | RemainingBoards]):- 
+generateAllMovePlayerPieceBoards(Board, [[_, []] | Moves], [ [] | RemainingBoards]):-
+    generateAllMovePlayerPieceBoards(Board, Moves, RemainingBoards).
+generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves]] | Moves], [ FirstMoveBoard | RemainingBoards]):-
     generateMovePlayerPieceBoards(Board, [StartCoords, [FirstMove|RemainingMoves]], FirstMoveBoard),
     generateAllMovePlayerPieceBoards(Board, Moves, RemainingBoards).
 
@@ -218,10 +231,10 @@ yellowAI([5,9], Board):-
     checkPiece(5, 9, Board, 'empty').
 
 yellowAI([15,7], Board):-
-    checkPiece(13, 7, Board, 'empty').
+    checkPiece(15, 7, Board, 'empty').
 
 yellowAI([12, 10], Board):-
-    checkPiece(12, 19, Board, 'empty').
+    checkPiece(12, 10, Board, 'empty').
 
 yellowAI([11, 7], Board):-
     checkPiece(11, 7, Board, 'empty').

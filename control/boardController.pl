@@ -11,16 +11,30 @@
 */
 initial([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, o, o, empty, o, 'Green', o, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, o, yellow, o, yellow, o, yellow, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, yellow, o, red, o, yellow, o, empty, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, empty, o, yellow, o, yellow, o, empty, o, empty, o, o, o, o, o, o],
-    [o, o, o, o, o, empty, o, empty, o, 'Red', o, empty, o, empty, o, empty, o, o, o, o, o],
-    [o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, yellow, o, 'Green', o, o, o, o],
+    [o, o, o, o, o, o, o, o, o, empty, o, empty, o, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, o, empty, o, empty, o, empty, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o, o],
+    [o, o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
+    [o, o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o],
+    [o, o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o],
+    [o, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
+    [o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
+    [empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
+]).
+
+expe([
+    [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, o, o, empty, o, green, o, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, o, green, o, yellow, o, empty, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, empty, o, green, o, empty, o, empty, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, empty, o, green, o, empty, o, red, o, empty, o, o, o, o, o, o],
+    [o, o, o, o, o, red, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
+    [o, o, o, o, red, o, empty, o, green, o, empty, o, empty, o, yellow, o, empty, o, o, o, o],
     [o, o, o, empty, o, empty, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o, o, o],
-    [o, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, o],
-    [o, empty, o, green, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
-    [empty, o, green, o, green, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty]
+    [o, o, red, o, yellow, o, empty, o, empty, o, empty, o, empty, o, 'Red', o, 'Green', o, empty, o, o],
+    [o, red, o, red, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
+    [empty, o, green, o, empty, o, empty, o, empty, o, empty, o, green, o, empty, o, red, o, empty, o, empty]
 ]).
 
 /*
