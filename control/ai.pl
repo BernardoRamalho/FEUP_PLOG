@@ -32,3 +32,21 @@ setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'ai'):-
     PiecesPlaced is Counter+1,
 	enemyColor(PieceColor,EnemyPieceColor),
 	setupPvE(PiecesPlaced,NewBoard,EnemyPieceColor,NewTurnBoard, 'player').
+
+setupEvE(5,Board,_,Board).
+
+setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
+	% Display Information
+    displayPlayerTurn(PieceColor),
+    displayPlaceYellowPieces,
+	printBoard(Board),
+	
+    % Get AI yellow piece and place it
+    yellowAI(AICoords, Board),
+    setPieceAt(AICoords, Board, 'yellow', NewBoard),
+    displayAIPlacePiece(AICoords, 'yellow'),
+
+    % Ask the other player to put another yellow piece
+    PiecesPlaced is Counter+1,
+	enemyColor(PieceColor,EnemyPieceColor),
+	setupEvE(PiecesPlaced,NewBoard,EnemyPieceColor,NewTurnBoard).

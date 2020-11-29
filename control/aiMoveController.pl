@@ -207,6 +207,15 @@ yellowAI([11, 3], Board):-
 yellowAI([10, 8], Board):-
     checkPiece(10, 8, Board, 'empty').
 
+yellowAI([5,9], Board):-
+    checkPiece(5, 9, Board, 'empty').
+
+yellowAI([15,7], Board):-
+    checkPiece(13, 7, Board, 'empty').
+
+yellowAI([12, 10], Board):-
+    checkPiece(12, 19, Board, 'empty').
+
 yellowAI([11, 7], Board):-
     checkPiece(11, 7, Board, 'empty').
 
@@ -216,17 +225,8 @@ yellowAI([12, 6], Board):-
 yellowAI([11,7], Board):-
     checkPiece(11, 7, Board, 'empty').
 
-yellowAI([5,9], Board):-
-    checkPiece(5, 9, Board, 'empty').
-
-yellowAI([12, 10], Board):-
-    checkPiece(12, 19, Board, 'empty').
-
 yellowAI([7, 7], Board):-
     checkPiece(7, 7, Board, 'empty').
-
-yellowAI([13,7], Board):-
-    checkPiece(13, 7, Board, 'empty').
 
 yellowAI([8, 6], Board):-
     checkPiece(8, 6, Board, 'empty').

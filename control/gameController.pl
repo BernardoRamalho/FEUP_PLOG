@@ -23,7 +23,8 @@ play(GameState, 1):-
     gameOver(Winner).
 
 play(GameState, 2):-
-    playEvE(GameState).
+    setupEvE(0, GameState, 'Red', NewGameState),
+    playEvE(NewGameState).
 
 play(GameState, 3):-
     setupPvE(0, GameState, 'Red', NewGameState, 'player'),
