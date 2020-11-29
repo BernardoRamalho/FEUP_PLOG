@@ -28,7 +28,6 @@ validMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELin
 
     % Get Path that starts on the southwest
     getSWMoves(StartCoords, StartCoords, SWCoords, [0,0], Board, NEDiagonalMoves),
-
     formatAllCoords([NWCoords, NECoords, ECoords, WCoords, SECoords, SWCoords], EndCoords).
 /*
 
@@ -390,6 +389,7 @@ formatAllCoords(OldCoords, NewCoords):-
 
     % Removes a [] if it exits since it wont be neeeded
     delete(NoDupsCoords, [], NewCoords).
+
 
 
 /*

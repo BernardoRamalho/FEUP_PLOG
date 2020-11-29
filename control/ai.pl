@@ -46,6 +46,7 @@ setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
     yellowAI(AICoords, Board),
     setPieceAt(AICoords, Board, 'yellow', NewBoard),
     displayAIPlacePiece(AICoords, 'yellow'),
+    sleep(2),
 
     % Ask the other player to put another yellow piece
     PiecesPlaced is Counter+1,

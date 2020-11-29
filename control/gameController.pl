@@ -23,7 +23,8 @@ play(GameState, 1):-
 
 play(GameState, 2):-
     setupEvE(0, GameState, 'Red', NewGameState),
-    playEvE(NewGameState).
+    playEvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []]).
+
 
 play(GameState, 3):-
     setupPvE(0, GameState, 'Red', NewGameState, 'player'),
@@ -42,8 +43,13 @@ playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Enem
     playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 
-playEvE(GameState):-
-    write('EvE\n').
+playEvE(GameState, _, _, Player):-
+    gameOver(Player, GameState).
+    
+playEvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer):-
+    displayPlayerTurn(PlayerColor),
+    moveAI(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Level, NewBoard, UpdatedPlayer, NewEnemyPlayer),
+    playEvE(NewBoard, Level, NewEnemyPlayer, UpdatedPlayer).
 
 playPvE(GameState, _, _, Player, _):-
     gameOver(Player, GameState).

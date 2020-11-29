@@ -4,7 +4,8 @@
 
 test(Move):-
     initial(Board),
-    chooseMove(Board, ['red', 20, 0, []], 2, Move).
+    printBoard(Board),
+    chooseMove(Board, ['Red', 20, 0, []], 2, Move).
 
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
@@ -15,7 +16,7 @@ value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value
 % chooseMove(GameState, Player, Level, Move)
 chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove, ThirdMove]):-
     enemyColor(PlayerColor, EnemyPlayerColor),
-    
+
     % Generate Move Player Pieces
     generateMovePlayerPieces(GameState, PlayerColor, MovePieceGamestates),
     !,
@@ -84,6 +85,7 @@ generateMovePlayerPieces(Board, PlayerColor, Gamestates):-
     AllMoves will be  a list of type [BoardState1, Boardstate2, ..., BoardstateX], in which each BoardstateX is [[StartCoord, EndCoord], FinalBoard]
 */ 
 generateAllMovePlayerPieceBoards(_, [], []).
+generateAllMovePlayerPieceBoards(_, [[_, []]], []).
 generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves]] | Moves], [ FirstMoveBoard | RemainingBoards]):- 
     generateMovePlayerPieceBoards(Board, [StartCoords, [FirstMove|RemainingMoves]], FirstMoveBoard),
     generateAllMovePlayerPieceBoards(Board, Moves, RemainingBoards).
