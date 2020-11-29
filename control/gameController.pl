@@ -19,8 +19,7 @@ initiateGame(GameState):-
 */
 play(GameState, 1):-
 	setupPvP(0, GameState,'Red',NewGameState),
-	playPvP(NewGameState, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner),
-    gameOver(Winner).
+	playPvP(NewGameState, ['Red', 20, 0, []], ['Green', 20, 0, []]).
 
 play(GameState, 2):-
     setupEvE(0, GameState, 'Red', NewGameState),
@@ -28,41 +27,43 @@ play(GameState, 2):-
 
 play(GameState, 3):-
     setupPvE(0, GameState, 'Red', NewGameState, 'player'),
-    playPvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner, 'player').
+    playPvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []], 'player').
 
 /*
     Group of function that run the game based on the type of game.
 */
 
-playPvP(GameState, _, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor):-
-    PlayerSemaphores > 2.
+playPvP(GameState, _, Player):-
+    gameOver(Player, GameState).
 
-playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Winner):-
+playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer):-
     displayPlayerTurn(PlayerColor),
     move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
-    playPvP(NewBoard, NewEnemyPlayer, NewPlayer, Winner).
+    playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 
 playEvE(GameState):-
     write('EvE\n').
 
-playPvE(GameState, _, _, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor, _):-
-    PlayerSemaphores > 2.
+playPvE(GameState, _, _, Player, _):-
+    gameOver(Player, GameState).
 
-playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay],  EnemyPlayer, Winner, 'player'):-
+playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay],  EnemyPlayer, 'player'):-
     displayPlayerTurn(PlayerColor),
     move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
-    playPvE(NewBoard, Level, NewEnemyPlayer, NewPlayer, Winner, 'ai').
+    playPvE(NewBoard, Level, NewEnemyPlayer, NewPlayer, 'ai').
 
-playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Winner, 'ai'):-
+playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, 'ai'):-
     displayPlayerTurn(PlayerColor),
     moveAI(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Level, NewBoard, UpdatedPlayer, NewEnemyPlayer),
-    playPvE(NewBoard, Level, NewEnemyPlayer, UpdatedPlayer, Winner, 'player').
+    playPvE(NewBoard, Level, NewEnemyPlayer, UpdatedPlayer, 'player').
 
 /*
     Group of function that are responsible for the GameOver.
 */
 
-gameOver(Winner, Board):-
-    displayWinner(Winner),
+gameOver([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Board):-
+    !,
+    PlayerSemaphores > 2,
+    displayWinner([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
     printBoard(Board).
