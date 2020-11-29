@@ -58,4 +58,15 @@ askOption(SelectOption, MaxOption):-
 
 
 invalidInputMessage:-
-    write('Invalid Input. Be sure to write capital letters or numbers.\n').
+    write('Invalid Input. Be sure to write lower case letters or numbers.\n').
+
+
+askDifficulty(SelectedOption):-
+    displayDifficultyMenu,
+    read(SelectedOption),
+    SelectedOption > 0,
+    SelectedOption < 4.
+
+askDifficulty(SelectedOption):-
+    write('Option is not available\n\n'),
+    askDifficulty(SelectedOption).
