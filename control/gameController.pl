@@ -1,5 +1,5 @@
 
-:-include('../control/movesController.pl').
+:-include('../control/ai.pl').
 
 /**
     This file is where we make all the function that control the flow of the game.
@@ -18,7 +18,7 @@ initiateGame(GameState):-
     3 -> the game is Player vs AI (PvE)
 */
 play(GameState, 1):-
-	setup(0, GameState,'Red',NewGameState),
+	setupPvP(0, GameState,'Red',NewGameState),
 	playPvP(NewGameState, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner),
     gameOver(Winner).
 
@@ -26,7 +26,8 @@ play(GameState, 2):-
     playEvE(GameState).
 
 play(GameState, 3):-
-    playPvE(GameState).
+    setupPvE(0, GameState, 'Red', NewGameState, 'player'),
+    playPvE(NewGameState).
 
 /*
     Group of function that run the game based on the type of game.

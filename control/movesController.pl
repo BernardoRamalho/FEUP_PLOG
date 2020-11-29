@@ -53,9 +53,9 @@ placeDisc(Board, [PieceColor, NrPieces, PlayerSemaphores, LastMove], NextTurnBoa
     Checks if the place is valid.
     And places a piece in the Board at the coords given. Does this until five pieces have been putted.
 */
-setup(5,Board,_,Board).
+setupPvP(5,Board,_,Board).
 
-setup(Counter,Board, PieceColor, NewTurnBoard):-
+setupPvP(Counter,Board, PieceColor, NewTurnBoard):-
 	% Display Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
@@ -66,11 +66,10 @@ setup(Counter,Board, PieceColor, NewTurnBoard):-
     setPieceAt(Coords, Board, 'yellow', NewBoard),
 	
     % Ask the other player to put another yellow piece
-    Counter1 is Counter+1,
+    PiecesPlaced is Counter+1,
 	enemyColor(PieceColor,EnemyPieceColor),
-	setup(Counter1,NewBoard,EnemyPieceColor,NewTurnBoard).
+	setupPvP(PiecesPlaced,NewBoard,EnemyPieceColor,NewTurnBoard).
 
-setup(_, Player, _, Player).
 /*
     movePlayerDisc(Board, Player, BoardMoved)
     Asks the player for a piece to move and where to place it.

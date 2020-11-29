@@ -167,3 +167,8 @@ displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]):-
     write('   |      |       Colour       |   Pieces in Hand   |     Semaphores     |      Prize      |\n'),
     write('   -----------------------------------------------------------------------------------------\n'),
     write('   |      |         ').
+
+displayAIPlacePiece([Column, Row], Colour):-
+    write('The AI decided to place a '), write(Colour), write(' piece at position:\n'),
+    write('Column: '), write(Column), write('\n'),
+    write('Row: '), write(Row), write('\n').
