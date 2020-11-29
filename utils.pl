@@ -1,4 +1,5 @@
 :- use_module(library(lists)).
+:- use_module(library(system)).
 
 % Get Start collumn of a specific row getStartColumn(Row, Column)
 getStartColumn(11, 1).

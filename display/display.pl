@@ -80,13 +80,6 @@ displayFinalBoard:-
 displayGame(GameState):-
     printBoard(GameState).
 
-displayGameTypeOptions:-
-    write('Which type of game would you like to play?\n'),
-    write('1 - Player vs Player;\n'),
-    write('2 - Ai vs Ai;\n'),
-    write('3 - Player vs Ai.\n'),
-    write('Enter your option (number): ').
-
 displayMovesHeader:-
     write('-----------------------------------\n'),
     write('|   |     Column   |      Row     |\n'),
@@ -172,10 +165,97 @@ displayAIPlacePiece([Column, Row], Colour):-
 
 displayAIMovePiece([StartColumn, StartRow], [Column, Row], Colour):-
     write('The AI decided to move a '), write(Colour), write(' piece:\n'),
-    write('-----------------------------------\n'),
-    write('|          |   From   |     To    |\n'),
-    write('-----------------------------------\n'),
-    write('|  Column  |   '), write(StartColumn), write('   -->   '), write(Column), write('\n'),
-    write('------------\n'),
-    write('|    Row   |   '), write(StartRow), write('   -->   '), write(Row), write('\n'),
-    write('------------\n').
+    write('   -----------------------------------\n'),
+    write('   |          |   From   |     To    |\n'),
+    write('   -----------------------------------\n'),
+    write('   |  Column  |   '), write(StartColumn), write('   -->   '), write(Column), write('\n'),
+    write('   ------------\n'),
+    write('   |    Row   |   '), write(StartRow), write('   -->   '), write(Row), write('\n'),
+    write('   ------------\n').
+
+displayInitialScreen:-
+	write('                  -------------------------------------------------------------------- \n'),
+    write('                  |                                                                   |\n'),
+	write('                  |                                                                   |\n'),
+    write('                  |                      _    __   ______ ________                    |\n'),
+	write('                  |                     / \\   | \\_/ |  _ \\| ____| |                   |\n'),
+    write('                  |                    / _ \\  |  _  |  _) |  _| | |                   |\n'),
+	write('                  |                   / ___ \\ | | | |  __/| |___| |___                |\n'),
+    write('                  |                  /_|   |_\\|_| |_|_|   |_____|_____|               |\n'),
+	write('                  |                                                                   |\n'),
+	write('                  |                                                                   |\n'),
+    write('                  |                                                                   |\n'),
+	write('                   -------------------------------------------------------------------- \n'),
+	write('\n'),
+	write('\n'),
+	write('\n').
+	
+	
+displayInstructions:-
+						    write(' ************************************************************************************************************'), nl,
+							write('|                                                                                                            |'), nl,
+                            write('|                                                                                                            |'), nl,
+                            write('|                                            WELCOME TO AMPEL                                                |'), nl,
+                            write('|                                                                                                            |'), nl,
+                            write('|                                                                                                            |'), nl,
+							write('|      THE OBJECTIVE IS TO FORM AS MANY SEMAPHORES AS YOU CAN.                                               |'), nl,
+                            write('|                                                                                                            |'), nl,                                                 
+							write('|      INICIALLY, YOU WILL HAVE TO PLACE YELLOW PIECES, ALONG WITH YOUR OPPONENT, ALTERNATELY, TO A          |'), nl,
+							write('|      MAXIMUM OF 5 PIECES, BEING THAT ITS FORBIDDEN TO PLACE THEM IN THE EDGES OR CORNERS.                  |'), nl,
+							write('|      EACH TURN IS COMPOSED BY 3 PHASES: MOVING A PIECE OF YOURS, MOVING AN ENEMY PIECE AND PLACING A       |'), nl,
+							write('|      NEW ONE.                                                                                              |'), nl,
+                            write('|                                                                                                            |'), nl,
+                            write('|      YOU CANT FORM A SEMAPHORE ON STAGE 3, STAGE IN WHICH YOU PLACE A NEW PIECE.                           |'), nl,
+                            write('|                                                                                                            |'), nl,
+							write('|      EACH PLAYER CAN ONLY PLACE PIECES OF THE COLOR THAT CORRESPONDS TO HIM.PLAYER ONE IS ALWAYS RED,      |'), nl,   
+							write('|      PLAYER TWO IS GREEN AND AI IS ALWAYS GREEN.                                                           |'), nl,
+                            write('|                                                                                                            |'), nl,
+							write('|      GOOD LUCK :)                                                                                          |'), nl,
+                            write('|                                                                                                            |'), nl,
+                            write('|                                                                                                            |'), nl,
+							write(' ************************************************************************************************************ '), nl.
+	
+
+	
+
+
+
+displayDifficultyMenu:-
+    nl,
+    nl,
+	write(' ------------------------------------------------------- \n'),
+	write('|                CHOOSE YOUR DIFFICULTY                 |\n'),
+    write('|               _________________________               |\n'),
+    write('|              |                         |              |\n'),
+    write('|              |  1. EASY                |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              |  2. MEDIUM              |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              |  3. HARD                |              |\n'),
+    write('|              |_________________________|              |\n'), 
+    write('|                                                       |\n'),
+    write('|                                                       |\n'),
+	write(' ------------------------------------------------------- \n'),
+    write('Enter your option (number): ').
+
+
+displayGameTypeOptions:-
+    nl,
+    nl,
+	write(' ------------------------------------------------------- \n'),
+	write('|      WHICH TYPE OF GAME WOULD YOU LIKE TO PLAY?       |\n'),
+	write('|               _ _ _ _ _ _ _ _ _ _ _ _ _               |\n'),
+    write('|              |                         |              |\n'),
+    write('|              | 1. PLAYER VS PLAYER     |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              | 2. AI VS AI             |              |\n'),
+    write('|              |_________________________|              |\n'),
+    write('|              |                         |              |\n'),
+    write('|              | 3. PLAYER VS AI         |              |\n'),
+    write('|              |_ _ _ _ _ _ _ _ _ _ _ _ _|              |\n'),
+    write('|                                                       |\n'),
+    write(' ------------------------------------------------------- \n'),
+    write('Enter your option (number): ').
