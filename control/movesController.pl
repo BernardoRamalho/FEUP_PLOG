@@ -114,7 +114,7 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMov
     
     % Generate all possible Moves
     getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
-    validMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
+    valid_moves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
 
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),
@@ -148,7 +148,7 @@ moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMo
     
     % Generate all possible Moves
     getNumberMoves(Board, Coords, [MovesNW, MovesNE, MovesE]),
-    validMoves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
+    valid_moves(Coords, EndCoords, Board, MovesNW, MovesNE, MovesE),
 
     % Ask for a play and do it
     selectMove(EndCoords, SelectedMove),

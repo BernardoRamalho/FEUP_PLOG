@@ -3,14 +3,14 @@
 
 
 /*
-    validMoves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
+    valid_moves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves).
     This function generates all moves from the StartCoords. Saves all the ending coords in EndCoords.
     NWDDiagonalMoves, NEDDiagonalMoves, ElineMoves are the number of moves that the piece can do along the
     NorthWest Diagonal, North Eas Diagonal and horizontally, respectively.
 */
-validMoves(_, [], _, 0, 0, 0).
+valid_moves(_, [], _, 0, 0, 0).
 
-validMoves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
+valid_moves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELineMoves):-
     % Get Path that starts on the northwest
     getNWMoves(StartCoords, StartCoords, NWCoords, [0,0], Board, NWDiagonalMoves),
 

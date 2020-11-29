@@ -2,19 +2,14 @@
 
 :-use_module(library(random)).
 
-test(Move):-
-    expe(Board),
-    printBoard(Board),
-    chooseMove(Board, ['Red', 20, 0, []], 2, Move).
-
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
     enemyColor(PlayerColor, EnemyColor),
     controlSemaphores(FirstMove, EnemyColor, BoardState, NrSemaphores, _),
     Value is PlayerSemaphores + NrSemaphores.
 
-% chooseMove(GameState, Player, Level, Move)
-chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove, ThirdMove]):-
+% choose_move(GameState, Player, Level, Move)
+choose_move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove, ThirdMove]):-
     enemyColor(PlayerColor, EnemyPlayerColor),
 
     % Generate Move Player Pieces
@@ -165,7 +160,7 @@ getAllMoves([], _, []).
 getAllMoves([H|T], Board, [[H, EndCoords] | X]):-
     % Generate all possible Moves
     getNumberMoves(Board, H, [MovesNW, MovesNE, MovesE]),
-    validMoves(H, EndCoords, Board, MovesNW, MovesNE, MovesE),
+    valid_moves(H, EndCoords, Board, MovesNW, MovesNE, MovesE),
     getAllMoves(T, Board, X).
 
 /*

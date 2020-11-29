@@ -55,7 +55,7 @@ setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
 
 moveAI(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Level, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
     % Get Moves to be done
-    chooseMove(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [MovePlayerDisc, MoveEnemyDisc, PlaceDisc]),
+    choose_move(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [MovePlayerDisc, MoveEnemyDisc, PlaceDisc]),
 
     % Stage 1: Move Player Piece
     displayMovePieceHead,
