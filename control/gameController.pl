@@ -23,7 +23,7 @@ play(GameState, 1):-
 
 play(GameState, 2):-
     setupEvE(0, GameState, 'Red', NewGameState),
-    playEvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []]).
+    playEvE(NewGameState, 1, ['Red', 20, 0, []], ['Green', 20, 0, []]).
 
 
 play(GameState, 3):-
