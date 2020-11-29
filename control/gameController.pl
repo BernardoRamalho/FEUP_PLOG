@@ -28,7 +28,7 @@ play(GameState, 2):-
 
 play(GameState, 3):-
     setupPvE(0, GameState, 'Red', NewGameState, 'player'),
-    playPvE(NewGameState).
+    playPvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []], Winner, 'player').
 
 /*
     Group of function that run the game based on the type of game.
@@ -46,8 +46,18 @@ playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Enem
 playEvE(GameState):-
     write('EvE\n').
 
-playPvE(GameState):-
-    write('PvE\n').
+playPvE(GameState, _, _, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], PlayerColor, _):-
+    PlayerSemaphores > 2.
+
+playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay],  EnemyPlayer, Winner, 'player'):-
+    displayPlayerTurn(PlayerColor),
+    move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    playPvE(NewBoard, Level, NewEnemyPlayer, NewPlayer, Winner, 'ai').
+
+playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Winner, 'ai'):-
+    displayPlayerTurn(PlayerColor),
+    moveAI(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Level, NewBoard, UpdatedPlayer, NewEnemyPlayer),
+    playPvE(NewBoard, Level, NewEnemyPlayer, UpdatedPlayer, Winner, 'player').
 
 /*
     Group of function that are responsible for the GameOver.

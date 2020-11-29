@@ -1,4 +1,6 @@
 :-include('moveGenerator.pl').
+:-use_module(library(system)).
+
 
 /**
     This file is where we make all the function that move the pieces.
@@ -44,7 +46,9 @@ placeDisc(Board, [PieceColor, NrPieces, PlayerSemaphores, LastMove], NextTurnBoa
     lastMoveToLowerCase(LastMove, NewBoard, NextTurnBoard, PieceColor).
 
 placeDisc(Board, [PieceColor, NrPieces, PlayerSemaphores, LastMove], NextTurnBoard, [PieceColor, NrPieces, PlayerSemaphores, []]):-
-    lastMoveToLowerCase(LastMove, Board, NextTurnBoard, PieceColor).
+    write('You cant place any more pieces\n'),
+    lastMoveToLowerCase(LastMove, Board, NextTurnBoard, PieceColor),
+    sleep(1).
 
 
 /*
@@ -101,14 +105,15 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMov
 movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], EnemyPlayer, Board, [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], EnemyPlayer):-
     write('There are no '),
     write(PieceColor),
-    write(' pieces with valid moves.\n').
+    write(' pieces with valid moves.\n'),
+    sleep(1).
 
 /*
     moveEnemyDisc(Board, EnemyPlayer, BoardMoved)
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */
-moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], [PlayerColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], BoardMoved, UpdatedEnemy, UpdatedPlayer):-
+moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], Player, BoardMoved, UpdatedEnemy, UpdatedPlayer):-
     % There must be pieces on the board that as not been put there in the last play
     EnemyPieces < 20,
     pieceColorLower(EnemyPieceColor, LowerColer),
@@ -128,12 +133,13 @@ moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMo
 
     % Check for Sempahores
     getSemaphores(MoveSelected, LowerColer, BoardPieceMoved, NrSemaphores, BoardMoved),
-    updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], NrSemaphores, UpdatedPlayer, UpdatedEnemy, 'enemy').
+    updatePlayers(Player, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], NrSemaphores, UpdatedPlayer, UpdatedEnemy, 'enemy').
 
 moveEnemyDisc(Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], Player, Board, [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], Player):-
     write('There are no '),
     write(EnemyPieceColor),
-    write(' pieces with valid moves.\n').
+    write(' pieces with valid moves.\n'),
+    sleep(1).
 
 /*
     movePiece(Coords, MoveSelected, Board, NewBoard).

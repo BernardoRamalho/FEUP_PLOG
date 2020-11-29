@@ -172,3 +172,13 @@ displayAIPlacePiece([Column, Row], Colour):-
     write('The AI decided to place a '), write(Colour), write(' piece at position:\n'),
     write('Column: '), write(Column), write('\n'),
     write('Row: '), write(Row), write('\n').
+
+displayAIMovePiece([StartColumn, StartRow], [Column, Row], Colour):-
+    write('The AI decided to move a '), write(Colour), write(' piece:\n'),
+    write('-----------------------------------\n'),
+    write('|          |   From   |     To    |\n'),
+    write('-----------------------------------\n'),
+    write('|  Column  |   '), write(StartColumn), write('   -->   '), write(Column), write('\n'),
+    write('------------\n'),
+    write('|    Row   |   '), write(StartRow), write('   -->   '), write(Row), write('\n'),
+    write('------------\n').

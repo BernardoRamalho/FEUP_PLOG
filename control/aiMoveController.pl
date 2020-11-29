@@ -4,7 +4,7 @@
 
 test(Move):-
     initial(Board),
-    chooseMove(Board, ['red', 18, 0, []], 2, Move).
+    chooseMove(Board, ['red', 20, 0, []], 2, Move).
 
 % value(Move, Value, Player)
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
@@ -19,18 +19,22 @@ chooseMove(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], L
     % Generate Move Player Pieces
     generateMovePlayerPieces(GameState, PlayerColor, MovePieceGamestates),
     !,
-    getBestMovePiece(MovePieceGamestates, [FirstMove, MovePieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level),
+    bestMove(MovePieceGamestates, [FirstMove, MovePieceBoardState], [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, GameState),
 
     % Generate Move Enemy Pieces
     generateMovePlayerPieces(MovePieceBoardState, EnemyPlayerColor, MoveEnemyPieceGamestates),
     !,
-    getBestMovePiece(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], _, -1, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level),
+    bestMove(MoveEnemyPieceGamestates, [SecondMove, MoveEnemyPieceBoardState], [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, MovePieceBoardState),
+
 
     % Generate Place Piece
     generatePlacePlayerPieces(MoveEnemyPieceBoardState, PlayerColor, PlayerPieces, PlacePositions),
     !,
     getRandomMove(PlacePositions, ThirdMove).
 
+bestMove([], [[] , Board], _, _, Board).
+bestMove(Moves, BestMove, Player, Level, _):-
+    getBestMovePiece(Moves, BestMove, _, -1, Player, Level).
 
 getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1):-
     getRandomMove(Moves, RandomMove),
@@ -55,7 +59,7 @@ getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBes
     compareMoves(Move, MoveValue, CurrentBestMove, CurrentBestValue, BetterMove, BetterValue),
     getBestCoordsMove(RemainingGameStates, BestMove, BestValue, BetterValue, BetterMove, Player).
 
-
+getRandomMove([], []).
 getRandomMove(Moves, RandomMove):-
     length(Moves, Length), 
     random(0, Length, RandomNumber), 
@@ -65,9 +69,10 @@ getRandomMove(Moves, RandomMove):-
 /*
     generateMovePlayerPieces(Board, PlayerColor, Gamestates).
     Gets all the possible boardstates that the playe with PlayerColor can get if he moves a piece of it's color.
-*/ 
+*/
 generateMovePlayerPieces(Board, PlayerColor, Gamestates):-
-    getAllMovablePieces(Board, PlayerColor, MovablePieces, 1),
+    pieceColorLower(PlayerColor, LowerColor),
+    getAllMovablePieces(Board, LowerColor, MovablePieces, 1),
     getAllMoves(MovablePieces, Board, Moves),
     generateAllMovePlayerPieceBoards(Board, Moves, Gamestates).
 
@@ -79,7 +84,7 @@ generateMovePlayerPieces(Board, PlayerColor, Gamestates):-
     AllMoves will be  a list of type [BoardState1, Boardstate2, ..., BoardstateX], in which each BoardstateX is [[StartCoord, EndCoord], FinalBoard]
 */ 
 generateAllMovePlayerPieceBoards(_, [], []).
-generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves]] | Moves], [ FirstMoveBoard | RemainingBoards]):-    
+generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves]] | Moves], [ FirstMoveBoard | RemainingBoards]):- 
     generateMovePlayerPieceBoards(Board, [StartCoords, [FirstMove|RemainingMoves]], FirstMoveBoard),
     generateAllMovePlayerPieceBoards(Board, Moves, RemainingBoards).
 
