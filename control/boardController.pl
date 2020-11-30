@@ -26,16 +26,28 @@ initial([
 expe([
     [o, o, o, o, o, o, o, o, o, o, empty, o, o, o, o, o, o, o, o, o, o],
     [o, o, o, o, o, o, o, o, o, empty, o, green, o, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, o, green, o, yellow, o, empty, o, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, o, empty, o, green, o, empty, o, empty, o, o, o, o, o, o, o],
-    [o, o, o, o, o, o, empty, o, green, o, empty, o, red, o, empty, o, o, o, o, o, o],
-    [o, o, o, o, o, red, o, empty, o, empty, o, empty, o, empty, o, empty, o, o, o, o, o],
-    [o, o, o, o, red, o, empty, o, green, o, empty, o, empty, o, yellow, o, empty, o, o, o, o],
-    [o, o, o, empty, o, empty, o, empty, o, yellow, o, empty, o, empty, o, empty, o, empty, o, o, o],
-    [o, o, red, o, yellow, o, empty, o, empty, o, empty, o, empty, o, 'Red', o, 'Green', o, empty, o, o],
-    [o, red, o, red, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o, empty, o],
-    [empty, o, green, o, empty, o, empty, o, empty, o, empty, o, green, o, empty, o, red, o, empty, o, empty]
+    [o, o, o, o, o, o, o, o, empty, o, yellow, o, empty, o, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, o, green, o, empty, o, empty, o, empty, o, o, o, o, o, o, o],
+    [o, o, o, o, o, o, empty, o, red, o, red, o, green, o, empty, o, o, o, o, o, o],
+    [o, o, o, o, o, green, o, empty, o, red, o, empty, o, red, o, empty, o, o, o, o, o],
+    [o, o, o, o, green, o, empty, o, green, o, empty, o, empty, o, yellow, o, 'Green', o, o, o, o],
+    [o, o, o, empty, o, empty, o, red, o, empty, o, red, o, green, o, empty, o, empty, o, o, o],
+    [o, o, 'Red', o, yellow, o, red, o, empty, o, empty, o, empty, o, green, o, empty, o, empty, o, o],
+    [o, empty, o, empty, o, green, o, red, o, empty, o, yellow, o, empty, o, green, o, green, o, red, o],
+    [empty, o, green, o, empty, o, empty, o, empty, o, empty, o, green, o, red, o, red, o, red, o, empty]
 ]).
+
+tested([[o,o,o,o,o,o,o,o,o,o,empty,o,o,o,o,o,o,o,o,o,o],
+[o,o,o,o,o,o,o,o,o,empty,o,red,o,o,o,o,o,o,o,o,o],
+[o,o,o,o,o,o,o,o,empty,o,empty,o,empty,o,o,o,o,o,o,o,o],
+[o,o,o,o,o,o,o,empty,o,empty,o,empty,o,empty,o,o,o,o,o,o,o],
+[o,o,o,o,o,o,empty,o,red,o,empty,o,empty,o,empty,o,o,o,o,o,o],
+[o,o,o,o,o,empty,o,empty,o,green,o,red,o,empty,o,green,o,o,o,o,o],
+[o,o,o,o,green,o,red,o,red,o,empty,o,empty,o,yellow,o,empty,o,o,o,o],
+[o,o,o,empty,o,green,o,red,o,yellow,o,green,o,green,o,empty,o,empty,o,o,o],
+[o,o,'Red',o,yellow,o,green,o,green,o,red,o,empty,o,green,o,red,o,empty,o,o],
+[o,empty,o,empty,o,green,o,green,o,'Green',o,empty,o,empty,o,empty,o,empty,o,red,o],
+[empty,o,empty,o,empty,o,red,o,empty,o,red,o,empty,o,red,o,red,o,empty,o,green]]).
 
 /*
     checkValidCoords(Coords);
@@ -237,9 +249,8 @@ getNumberMovesEDiagonal(Board, Start, Moves):-
     Moves is MovesCalculated + 1.
 
 /*
-
     Get number of moves in each way
-
+    The number of moves is given by the number of pieces in each direction.
 */
 % Calculates the number of moves in the North West direction
 getNumberNWMoves(Board, [Column,Row], MovesNW):-
@@ -345,7 +356,7 @@ getNumberEMoves(_, _, 0).
 
 /*
     checkForSemaphore(Coords, Board)
-    Checks if a semaphore exists starting from Coords.
+    Checks if a semaphore exists starting from Coords without deleting it.
 */  
 
 checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
@@ -371,11 +382,22 @@ checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
 checkForSemaphore(Coords, Board, PlayerColor, NrSemaphores):-
     enemyColor(PlayerColor, EnemyColor),
     checkForWSemaphore(Coords, EnemyColor, Board, NrSemaphores, _).
-    
+
+/*
+    getSemaphores(Coords, PlayerColor, Board, NrSempahores, NewBoard).
+    Function that calls controlSempahores/5. It is used by other files.
+    It helps make the code cleaner and easier to understand since it get the enemyColor.
+*/
 getSemaphores(Coords, PlayerColor, Board, NrSemaphores, NewBoard):-
     enemyColor(PlayerColor, EnemyColor),
     controlSemaphores(Coords, EnemyColor, Board, NrSemaphores, NewBoard).
 
+/*
+    controlSemaphors(Coords, Enemycolor, board, NrSemaphores, NewBoard).
+    Uses auxiliary functions to calculate and delete all the sempahores in all directions.
+    It sums all the semaphores and returns it in NrSemaphores. NewBoard is a Board where
+    all the sempahores ahve been deleted.
+*/
 controlSemaphores(Coords, EnemyColor, Board, NrSemaphores, NewBoard):-
     nWSemaphore(Coords, EnemyColor, Board, NWSemaphores, NWBoard),
     nESemaphore(Coords, EnemyColor, NWBoard, NESemaphores, NEBoard),
@@ -385,7 +407,12 @@ controlSemaphores(Coords, EnemyColor, Board, NrSemaphores, NewBoard):-
     wSemaphore(Coords, EnemyColor, EBoard, WSemaphores, NewBoard),
     sumlist([NWSemaphores, NESemaphores, SWSemaphores, SESemaphores, ESemaphores, WSemaphores], NrSemaphores).
 
-
+/*
+    XSemaphore(Coords, Enemycolor, Board, XSemaphores, XBoard).
+    This calculates the number of semaphores in Coords for each X way.
+    X can be NW, NE, SE, SW, E and W, indicating the way it goes.
+    It also deletes the semaphores that find and saves the Board in XBoard.
+*/
 nWSemaphore(Coords, EnemyColor, Board, NWSemaphores, NWBoard):-
     checkForNWSemaphore(Coords, EnemyColor, Board, NWSemaphores, [YellowPostion, EnemyPosition]),
     deleteSemaphore(Coords, YellowPostion, EnemyPosition, Board, NWBoard).

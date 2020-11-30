@@ -2,13 +2,29 @@
 
 :-use_module(library(random)).
 
-% value(Move, Value, Player)
+test(L):-
+    tested(Board),printBoard(Board),
+    choose_move(Board, ['green', 8, 0, []], 1,L).
+
+% value(Move, Player, Value)
+/*
+    value(GameState, Value, Player)
+    Values the GAmestate according to how many semaphores where made. Returns the value in Player
+*/
 value([[_, FirstMove], BoardState], [PlayerColor, _, PlayerSemaphores, _], Value):-
     enemyColor(PlayerColor, EnemyColor),
     controlSemaphores(FirstMove, EnemyColor, BoardState, NrSemaphores, _),
     Value is PlayerSemaphores + NrSemaphores.
 
-% choose_move(GameState, Player, Level, Move)
+% 
+
+/*
+    choose_move(GameState, Player, Level, Move)
+    This function calculates the best Move for a certain GameState.
+    Since our move as three stages we choose the best for each stage.
+    The way it chooses the best move depende on the Level.
+    Level 1 -> random, Level 2 -> semi random, Level 3 -> chooses the best one each time
+*/
 choose_move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [FirstMove, SecondMove, ThirdMove]):-
     enemyColor(PlayerColor, EnemyPlayerColor),
 
@@ -28,23 +44,42 @@ choose_move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], 
     !,
     getRandomMove(PlacePositions, ThirdMove).
 
+
+/*
+    bestMove(Moves, BestMove, Player Level, Board).
+    Call an auxiliary function to get the best move. Checks if it needs to be a random move at Levle 3.
+*/
 bestMove([], [[] , Board], _, _, Board).
 bestMove(Moves, BestMove, Player, 3, _):-
     getBestMovePiece(Moves, Move, _, -1, Player, 3, MoveValue),
     !,
+    % If the MoveValue is 0 then there is no Best play, choose one randomly
     checkNeedForRandom(Moves, Move, MoveValue, BestMove, Player).
 
-bestMove(Moves, BestMove, Player, Level, _):-
-    getBestMovePiece(Moves, BestMove, _, -1, Player, Level, _).
+bestMove(Moves, BestMove, Player, Level, Board):-
+    getBestMovePiece(Moves, BestMove, _, -1, Player, Level, Board).
 
-getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1, _):-
-    getRandomMove(Moves, RandomMove),
-    getRandomMove(RandomMove, [FirstMove, BoardState]). 
+/*
+    getBestMovePiece(Moves, BestMove, CurentBestMove, CurrentBestMoveValue, Player, Level, BEstCoordValue).
+    This function is an auxiliary fucntion to bestMove.
+    This function calculates the best move from Moves depending on the level.
+*/
+% For Level 1 get a totally random Move
+getBestMovePiece(Moves, [FirstMove, BoardState], _, _, _, 1, Board):-
+   % Get random start piece
+    getRandomMove(Moves, RandomMove, Board),
+    % Get random move for that piece
+    getRandomMove(RandomMove, [FirstMove, BoardState], Board).
 
-getBestMovePiece(Moves, BestCoordsMove, _, _, Player, 2, _):-
-    getRandomMove(Moves, RandomMove),
+
+% For Level 2 get a semi random Move
+getBestMovePiece(Moves, BestCoordsMove, _, _, Player, 2, Board):-
+    % Get random start piece
+    getRandomMove(Moves, RandomMove, Board),
+    % Get best move for that piece
     getBestCoordsMove(RandomMove, BestCoordsMove, _, -1, _, Player).    
 
+% For Level 3 get the absolute best move
 getBestMovePiece([], BestMove, BestMove, BestValue, _, 3, BestValue).
 
 getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentBestMoveValue,  Player, 3, BestCoordValue):-
@@ -52,7 +87,10 @@ getBestMovePiece([ CoordsMove | Rest], BestCoordsMove, CurrentBestMove, CurrentB
     compareMoves(BestCoordMove, MoveValue, CurrentBestMove, CurrentBestMoveValue, BestMove, BestValue),
     getBestMovePiece(Rest, BestCoordsMove, BestMove, BestValue, Player, 3, BestCoordValue).
 
-
+/*
+    getBestCoordsMove(Moves, BestMove, BestValue, CurrentBestValue, CurrentBestMove, Player)
+    Gets the Best move for a set of coords.
+*/
 getBestCoordsMove([], BestMove, BestValue, BestValue, BestMove, _).
 
 getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBestValue, CurrentBestMove, Player):-
@@ -60,14 +98,21 @@ getBestCoordsMove([ Move | RemainingGameStates], BestMove, BestValue, CurrentBes
     compareMoves(Move, MoveValue, CurrentBestMove, CurrentBestValue, BetterMove, BetterValue),
     getBestCoordsMove(RemainingGameStates, BestMove, BestValue, BetterValue, BetterMove, Player).
 
-
+/*
+    checkNeedForRandom(Moves, CurrentBestMove, Value, BestMove, Player).
+    check if it needs to be a random move. Thi sis true when Value is 0. Else BestMove e CurrentBestMove.
+*/
 checkNeedForRandom(Moves, _, 0, BestMove, Player):-
    getBestMovePiece(Moves, BestMove, _, _, Player, 2, _).
 
 checkNeedForRandom(_, Move, _, Move, _).
 
-getRandomMove([], []).
-getRandomMove(Moves, RandomMove):-
+/*
+    getRandomMove(Moves, RandomMove)
+    Returns a random move from a list of moves.
+*/
+getRandomMove([], [[], Board], Board).
+getRandomMove(Moves, RandomMove, _):-
     length(Moves, Length), 
     random(0, Length, RandomNumber), 
     nth0(RandomNumber, Moves, RandomMove).

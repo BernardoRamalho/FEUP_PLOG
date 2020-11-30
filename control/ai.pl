@@ -1,9 +1,15 @@
 :-include('aiMoveController.pl').
 
+/*
+    setupPvE(NumberPiecesPlaced, PieceColor, NewTurnBoard, playerType).
+    This function is responsible ot run the setup phase of a PvE game.
+    It switches from asking the player for a place to put a yellow piece and ask the AI.
+    When 5 pieces are place, it succeds.
+*/
 setupPvE(5,Board,_,Board, _).
 
 setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'player'):-
-	% Display Information
+	% Display Player Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
 	printBoard(Board),
@@ -18,7 +24,7 @@ setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'player'):-
 	setupPvE(PiecesPlaced,NewBoard,EnemyPieceColor,NewTurnBoard, 'ai').
 
 setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'ai'):-
-	% Display Information
+	% Display Player Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
 	printBoard(Board),
@@ -34,10 +40,16 @@ setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'ai'):-
 	enemyColor(PieceColor,EnemyPieceColor),
 	setupPvE(PiecesPlaced,NewBoard,EnemyPieceColor,NewTurnBoard, 'player').
 
+/*
+    setupPvE(NumberPiecesPlaced, PieceColor, NewTurnBoard, playerType).
+    This function is responsible ot run the setup phase of a EvE game.
+    It asks the AI for a place to put a piece and then switches player asking the AI again.
+    When 5 pieces are place, it succeds.
+*/
 setupEvE(5,Board,_,Board).
 
 setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
-	% Display Information
+	% Display Player Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
 	printBoard(Board),
@@ -53,7 +65,12 @@ setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
 	enemyColor(PieceColor,EnemyPieceColor),
 	setupEvE(PiecesPlaced,NewBoard,EnemyPieceColor,NewTurnBoard).
 
-moveAI(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, Level, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
+/*
+    moveAI(GameState, Level, NewGameState)
+    This function is responsible for changing the GameState according to the moves choosen by and auxiliary function.
+    It alsos calls display function to better show what the AI is doing.
+*/
+moveAI([Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], Level, [NewBoard, UpdatedPlayer, NewEnemyPlayer]):-
     % Get Moves to be done
     choose_move(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Level, [MovePlayerDisc, MoveEnemyDisc, PlaceDisc]),
 
@@ -62,21 +79,21 @@ moveAI(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlay
     printBoard(Board),
     !,
     moveAIDisc(Board, MovePlayerDisc, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, BoardMoved, PlayerAfterMove, EnemyAfterMove),
-    sleep(1),
+    %sleep(1),
 
     % Stage 2: Move Enemy Piece
     displayMoveEnemyPieceHead,
     printBoard(BoardMoved),
     !,
     moveAIEnemyDisc(BoardMoved, MoveEnemyDisc, EnemyAfterMove, PlayerAfterMove, BoardEnemyMoved, NewEnemyPlayer, PlayerEnemyMove),
-    sleep(1),
+    %sleep(1),
 
     % Stage 3: Place a New Piece
     displayPlacePieceHead,
     printBoard(BoardEnemyMoved),
     !,
-    placeAIDisc(BoardEnemyMoved, PlaceDisc, PlayerEnemyMove, NewBoard, UpdatedPlayer),
-    sleep(1).
+    placeAIDisc(BoardEnemyMoved, PlaceDisc, PlayerEnemyMove, NewBoard, UpdatedPlayer).
+    %sleep(1).
 
 
 /*

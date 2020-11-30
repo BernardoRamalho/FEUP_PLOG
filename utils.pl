@@ -38,7 +38,7 @@ letterToNumber('g', L) :- L = 7.
 letterToNumber('h', L) :- L = 8.
 letterToNumber('i', L) :- L = 9.
 letterToNumber('j', L) :- L = 10.
-letterToNumber('g', L) :- L = 11.
+letterToNumber('l', L) :- L = 11.
 letterToNumber(1, 1).
 letterToNumber(2, 2).
 letterToNumber(3, 3).
@@ -121,6 +121,7 @@ existsInListofLists([H|_], X):-
 existsInListofLists([_|T], X):-
     existsInListofLists(T, X).
 
+% Checks if X or Y is the greater value
 greater(X, Y, X):-
     X > Y.
 greater(X, Y, Y):-

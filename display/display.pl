@@ -20,7 +20,7 @@ letter(7, L) :- L = 'g'.
 letter(8, L) :- L = 'h'.
 letter(9, L) :- L = 'i'.
 letter(10, L) :- L = 'j'.
-letter(11, L) :- L = 'g'.
+letter(11, L) :- L = 'l'.
 
 % Printing fuctions
 

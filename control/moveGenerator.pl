@@ -39,6 +39,7 @@ valid_moves(StartCoords, EndCoords, Board, NWDiagonalMoves, NEDiagonalMoves, ELi
 
 /*
     getNWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Calls the predicate generateNWMoves/6 so it can generate and returns all the moves in the NW direction.
 */
 
 getNWMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
@@ -52,6 +53,8 @@ getNWMoves(_, _, [], _, _, _).
 
 /*
     generateNWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Generates all valid moves, starting at StartCoords and saving them in EndCoords, in the North West direction
+
 */
 
 generateNWMoves(StartCoords, [CurrentColumn,CurrentRow], [CurrentColumn,CurrentRow], PreviousCoords, Board, 0):-
@@ -94,6 +97,7 @@ generateNWMoves(_, _, [], _, _, _).
 
 /*
     getNEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Calls the predicate generateNEMoves/6 so it can generate and returns all the moves in the North East direction.
 */
 
 getNEMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
@@ -107,6 +111,7 @@ getNEMoves(_, _, [], _, _, _).
 
 /*
     generateNEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Generates all valid moves, starting at StartCoords and saving them in EndCoords, in the North East direction
 */
 
 generateNEMoves(StartCoords, [CurrentColumn,CurrentRow], [CurrentColumn,CurrentRow], PreviousCoords, Board, 0):-
@@ -149,6 +154,7 @@ generateNEMoves(_, _, [], _, _, _).
 
 /*
     getEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Calls the predicate generateEMoves/6 so it can generate and returns all the moves in the East direction.
 */
 
 getEMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
@@ -160,6 +166,7 @@ getEMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Bo
 getEMoves(_, _, [], _, _, _).
 /*
     generateEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Generates all valid moves, starting at StartCoords and saving them in EndCoords, in the East direction
 */
 
 generateEMoves(StartCoords, [CurrentColumn,CurrentRow], [CurrentColumn,CurrentRow], PreviousCoords, Board, 0):-
@@ -202,6 +209,7 @@ generateEMoves(_, _, [], _, _, _).
 
 /*
     getWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Calls the predicate generateWMoves/6 so it can generate and returns all the moves in the West direction.
 */
 
 getWMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
@@ -214,6 +222,7 @@ getWMoves(_, _, [], _, _, _).
 
 /*
     generateWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Generates all valid moves, starting at StartCoords and saving them in EndCoords, in the West direction
 */
 
 generateWMoves(StartCoords, [CurrentColumn,CurrentRow], [CurrentColumn,CurrentRow], PreviousCoords, Board, 0):-
@@ -257,6 +266,7 @@ generateWMoves(_, _, [], _, _, _).
 
 /*
     getSEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Calls the predicate generateSEMoves/6 so it can generate and returns all the moves in the South East direction.
 */
 
 getSEMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
@@ -270,6 +280,7 @@ getSEMoves(_, _, [], _, _, _).
 
 /*
     generateSEMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Generates all valid moves, starting at StartCoords and saving them in EndCoords, in the South East direction
 */
 
 generateSEMoves(StartCoords, [CurrentColumn,CurrentRow], [CurrentColumn,CurrentRow], PreviousCoords, Board, 0):-
@@ -312,6 +323,7 @@ generateSEMoves(_, _, [], _, _, _).
 
 /*
     getSWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Calls the predicate generateSWMoves/6 so it can generate and returns all the moves in the South West direction.
 */
 
 getSWMoves(StartCoords, [CurrentColumn,CurrentRow], EndCoords, PreviousCoords, Board, NrMoves):-
@@ -325,6 +337,7 @@ getSWMoves(_, _, [], _, _, _).
 
 /*
     generateSWMoves(StartCoords, CurrentCoords, EndCoords, PreviousCoords, Board, NrMoves).
+    Generates all valid moves, starting at StartCoords and saving them in EndCoords, in the South West direction
 */
 
 generateSWMoves(StartCoords, [CurrentColumn,CurrentRow], [CurrentColumn,CurrentRow], PreviousCoords, Board, 0):-

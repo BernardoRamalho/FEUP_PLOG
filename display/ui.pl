@@ -14,7 +14,6 @@ askForGameType(GameType):-
     skip_line.
 
 % askPlacePiece(Move), ask the player for a place to put a piece
-
 askPlacePiece([Column,Row]):-
     write('Enter the column and row where you want to place a piece.\n'),
     write('Column: '),
@@ -25,8 +24,7 @@ askPlacePiece([Column,Row]):-
     skip_line,
     letterToNumber(Letter,Row).
 
-% askPiece(Move), ask the player for a place to put a piece
-
+% askPiece(Move), ask the player for a piece to move
 askPiece([Column,Row], Color):-
     write('Enter the column and row of the '),
     write(Color),
@@ -38,7 +36,8 @@ askPiece([Column,Row], Color):-
     read(Letter),
     skip_line,
     letterToNumber(Letter,Row).
-
+    
+% SelectMove(PossibleMoves, SelectedMove), asks the player to select a move from the PossibleMoves
 selectMove([], _):-
     fail.
 selectMove(PossibleMoves, SelectedMove):-

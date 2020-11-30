@@ -175,22 +175,29 @@ move(GameState, [Coords, MoveSelected], NewGameState):-
     setPieceAt(MoveSelected, IntermidiateGameState, Piece, NewGameState).
 
 /*
-    updatePlayers(Player, EnemyPlayer, NrSemaphores, UpdatedPlayer, UpdatedEnemy, MovedPiece)
+    updatePlayers(Player, EnemyPlayer, NrSemaphores, UpdatedPlayer, UpdatedEnemy, MovedPiece).
+    Updates the player acoording to the type of piece moved (saved in MovedPiece).
+    If there are any semaphores it adds tthe number os semaphores to the current player.
+    It also returns the pieces that have been removed from the board to each player.
 */ 
 
 updatePlayers(Player, Enemy, 0, Player, Enemy, _).
 
+% If there is only one Semaphore it doenst matter the moved piece since only one piece of each player has beed returned to them
 updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], 1, [PlayerColor, UpdatedPlayerPieces, UpdatedPlayerSemaphores, PlayerLastMove], [EnemyPieceColor, UpdatedEnemyPieces, EnemySemaphores, EnemyLastMove], _):-
     UpdatedPlayerSemaphores is PlayerSemaphores + 1,
     UpdatedPlayerPieces is PlayerPieces + 1,
     UpdatedEnemyPieces is EnemyPieces + 1.
 
+% If there are more than 1 semaphore and the piece moved was of the player
+% then the enemy player will receive 2 pieces and the player will only receive one. The sempahore is of type (EnemyColor - Yellow - PlayerColour - Yellow - EnemyColor)
 updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], NrSemaphores, [PlayerColor, UpdatedPlayerPieces, UpdatedPlayerSemaphores, PlayerLastMove], [EnemyPieceColor, UpdatedEnemyPieces, EnemySemaphores, EnemyLastMove], 'player'):-
     UpdatedPlayerSemaphores is PlayerSemaphores + NrSemaphores,
     PiecesUsed is NrSemaphores - 1,
     UpdatedPlayerPieces is PlayerPieces + PiecesUsed,
     UpdatedEnemyPieces is EnemyPieces + NrSemaphores.
 
+% If there are more  than 2 semaphores adn the piece moved was of the enemy player then its the reverse from the previous predicate.
 updatePlayers([PlayerColor, PlayerPieces, PlayerSemaphores, PlayerLastMove], [EnemyPieceColor, EnemyPieces, EnemySemaphores, EnemyLastMove], NrSemaphores, [PlayerColor, UpdatedPlayerPieces, UpdatedPlayerSemaphores, PlayerLastMove], [EnemyPieceColor, UpdatedEnemyPieces, EnemySemaphores, EnemyLastMove], 'enemy'):-
     UpdatedPlayerSemaphores is PlayerSemaphores + NrSemaphores,
     PiecesUsed is NrSemaphores - 1,
