@@ -17,17 +17,17 @@
 takeTurn([Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, UpdatedPlayer, NewEnemyPlayer]):-
     % Stage 1: Move Player Piece
     displayMovePieceHead,
-    printBoard(Board),
+    display_game(Board),
     movePlayerDisc(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, BoardMoved, PlayerAfterMove, EnemyAfterMove),
 
     % Stage 2: Move Enemy Piece
     displayMoveEnemyPieceHead,
-    printBoard(BoardMoved),
+    display_game(BoardMoved),
     moveEnemyDisc(BoardMoved, EnemyAfterMove, PlayerAfterMove, BoardEnemyMoved, NewEnemyPlayer, PlayerEnemyMove),
 
     % Stage 3: Place a New Piece
     displayPlacePieceHead,
-    printBoard(BoardEnemyMoved),
+    display_game(BoardEnemyMoved),
     placeDisc(BoardEnemyMoved, PlayerEnemyMove, NewBoard, UpdatedPlayer).
 
 /*
@@ -62,7 +62,7 @@ setupPvP(Counter,Board, PieceColor, NewTurnBoard):-
 	% Display Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
-	printBoard(Board),
+	display_game(Board),
 
     % Ask for Valid position and put a piece there
     getValidYellowPosition(Coords, Board, 'empty'),
@@ -85,7 +85,7 @@ setup(Counter,Board, PieceColor, NewTurnBoard):-
 	% Display Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
-	printBoard(Board),
+	display_game(Board),
 
     % Ask for Valid position and put a piece there
     getValidYellowPosition(Coords, Board, 'empty'),

@@ -35,9 +35,10 @@ printBoardFooter:-
     write('   | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 20| 21| 22|\n'),
     write('   -----------------------------------------------------------------------------------------\n').
 
-printBoard(X) :-
+% Displays a GameState
+display_game(GameState) :-
     printBoardHeader,
-    printBoardPlayArea(X, 1),
+    printBoardPlayArea(GameState, 1),
     printBoardFooter.
 
 printBoardPlayArea([], 12).
@@ -64,21 +65,17 @@ printLine([Head|Tail]):-
 % Displays the initial board
 displayInitialBoard:-
     initial(InitialBoard),
-    printBoard(InitialBoard).
+    display_game(InitialBoard).
 
 % Displays a possible intermediate board
 displayIntermediateBoard:-
     intermediateBoard(IntermediateBoard),
-    printBoard(IntermediateBoard).
+    display_game(IntermediateBoard).
 
 % Displays a possible end board (half of the yellow pieces are gone, in this case 3 of the 5 yellow)
 displayFinalBoard:-
     finalBoard(FinalBoard),
-    printBoard(FinalBoard).
-
-% Displays a GameState
-displayGame(GameState):-
-    printBoard(GameState).
+    display_game(FinalBoard).
 
 displayMovesHeader:-
     write('-----------------------------------\n'),

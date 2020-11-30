@@ -3,7 +3,7 @@
 :-use_module(library(random)).
 
 test(L):-
-    tested(Board),printBoard(Board),
+    tested(Board),display_game(Board),
     choose_move(Board, ['green', 8, 0, []], 1,L).
 
 % value(Move, Player, Value)
@@ -211,10 +211,13 @@ getAllMoves([H|T], Board, [[H, EndCoords] | X]):-
 /*
     generatePlacePlayerPieces(Board, PlayerColor, Gamestates).
     Gets all the boardstates that the playe with PlayerColor can get if he places a piece on all the empty spaces.
-*/ 
+*/
+generatePlacePlayerPieces(_, _, 0, []).
+
 generatePlacePlayerPieces(Board, PlayerColor, PlayerPieces, EmptyPieces):-
     PlayerPieces > 0,
     getAllPlaceablePieces(Board, PlayerColor, EmptyPieces, 1, Board).
+
 
 /*
     getAllMovablePieces(Board, PieceColor, PiecesCoords, CurentRowNumber).

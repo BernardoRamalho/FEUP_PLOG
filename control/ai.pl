@@ -12,7 +12,7 @@ setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'player'):-
 	% Display Player Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
-	printBoard(Board),
+	display_game(Board),
 
     % Ask for Valid position and put a piece there
     getValidYellowPosition(Coords, Board, 'empty'),
@@ -27,7 +27,7 @@ setupPvE(Counter,Board, PieceColor, NewTurnBoard, 'ai'):-
 	% Display Player Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
-	printBoard(Board),
+	display_game(Board),
 	
     % Get AI yellow piece and place it
     yellowAI(AICoords, Board),
@@ -52,7 +52,7 @@ setupEvE(Counter,Board, PieceColor, NewTurnBoard):-
 	% Display Player Information
     displayPlayerTurn(PieceColor),
     displayPlaceYellowPieces,
-	printBoard(Board),
+	display_game(Board),
 	
     % Get AI yellow piece and place it
     yellowAI(AICoords, Board),
@@ -76,21 +76,21 @@ moveAI([Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPla
 
     % Stage 1: Move Player Piece
     displayMovePieceHead,
-    printBoard(Board),
+    display_game(Board),
     !,
     moveAIDisc(Board, MovePlayerDisc, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, BoardMoved, PlayerAfterMove, EnemyAfterMove),
     %sleep(1),
 
     % Stage 2: Move Enemy Piece
     displayMoveEnemyPieceHead,
-    printBoard(BoardMoved),
+    display_game(BoardMoved),
     !,
     moveAIEnemyDisc(BoardMoved, MoveEnemyDisc, EnemyAfterMove, PlayerAfterMove, BoardEnemyMoved, NewEnemyPlayer, PlayerEnemyMove),
     %sleep(1),
 
     % Stage 3: Place a New Piece
     displayPlacePieceHead,
-    printBoard(BoardEnemyMoved),
+    display_game(BoardEnemyMoved),
     !,
     placeAIDisc(BoardEnemyMoved, PlaceDisc, PlayerEnemyMove, NewBoard, UpdatedPlayer).
     %sleep(1).
