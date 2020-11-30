@@ -130,10 +130,18 @@ pieceSymbol(o, P) :- P = ' '.
 
 ## Visualização do Estado de Jogo
 
-O predicado de visualização começa por chamar uma função que desenha o header (consite em número para o jogador facilmente visualizar a coluna que quer escolher). 
+Inicialmente,temos um ecrã inicial que, em letras maiúsculas, apresenta o nome do jogo.De seguida é dado display dum ecrã que dá as boas
+vindas ao jogador ou jogadores e,para além disso,apresenta ao jogador algumas considerações que achamos importantes.Possuímos também um
+menu onde o jogador deve selecionar qual o modo de jogo que pretende,isto é,multiplayer local,mostrado como Player vs Player,jogo entre
+dois Bot's/AI's e,por fim,entre jogador normal e AI.Caso seja escolhido o modo de jogo que envolve AI,aparece ainda outro menu onde o
+jogador pode selecionar a dificuldade que pretende,tendo duas dificuldades ao seu dispor:Facil,média,dificil.
 
-Depois chama uma função recursiva responsável por desenhar o board state. Esta função escreve a letra que designa a linha que está a desenhar. Para desenhar o conteudo da linha do board state, é utilizado um função auxiliar. Esta função auxiliar percorre a linha enquanto converte o que encontra para o simbolo desejado e desenha esse simbolo no ecrã. Quando a linha acaba de ser desenha, a função reponsável por desenhar o board state chama-se a si própria, incrementando uma variavel. Quando essa variavel fica igual ao número máximo de linhas, encontra-se a condição de paragem.
+De uma perspetiva mais técnica:
+Temos um predicado de visualização que começa por chamar uma função que desenha o header (consiste em número para o jogador facilmente visualizar a coluna que quer escolher). 
+Depois chama uma função recursiva responsável por desenhar o board state. Esta função escreve a letra que designa a linha que está a desenhar. Para desenhar o conteudo da linha do board state, é utilizado um função auxiliar. Esta função auxiliar percorre a linha enquanto converte o que encontra para o simbolo desejado e desenha esse simbolo no ecrã. Quando a linha acaba de ser desenhada, a função reponsável por desenhar o board state chama-se a si própria, incrementando uma variavel. Quando essa variavel fica igual ao número máximo de linhas, encontra-se a condição de paragem.
 Entre cada linha é desenhada uma sepração para ser mais fácil distinguir.
+
+
 
 No final de o board state estar desenhado, é chamada uma função para desenhar o footer (que é igual ao header mas invertido).
 
