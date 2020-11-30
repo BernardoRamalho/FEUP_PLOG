@@ -128,13 +128,14 @@ pieceSymbol(green, P) :- P = 'G'.
 pieceSymbol(o, P) :- P = ' '.
 ```  
 
-## Visualização do Estado de Jogo
+### Visualização do Estado de Jogo
 
-Inicialmente,temos um ecrã inicial que, em letras maiúsculas, apresenta o nome do jogo.De seguida é dado display dum ecrã que dá as boas
-vindas ao jogador ou jogadores e,para além disso,apresenta ao jogador algumas considerações que achamos importantes.Possuímos também um
-menu onde o jogador deve selecionar qual o modo de jogo que pretende,isto é,multiplayer local,mostrado como Player vs Player,jogo entre
-dois Bot's/AI's e,por fim,entre jogador normal e AI.Caso seja escolhido o modo de jogo que envolve AI,aparece ainda outro menu onde o
-jogador pode selecionar a dificuldade que pretende,tendo duas dificuldades ao seu dispor:Facil,média,dificil.
+Inicialmente,temos um ecrã que, em letras maiúsculas, apresenta o nome do jogo. De seguida, é dado display dum ecrã que dá as boas vindas, ao jogador ou jogadores, e,para além disso, apresenta ao jogador algumas considerações que achamos importantes. Possuímos também um menu onde o jogador deve selecionar qual o modo de jogo que pretende:
+ * Multiplayer local, mostrado como Player vs Player;
+ * Jogo entre dois Bot's/AI's, mostrado como Environment vs Environment; 
+ * single Player contra AI, mostrado como Player vs Environment. 
+ 
+Caso seja escolhido o modo de jogo que envolve AI, aparece ainda outro menu onde o jogador pode selecionar a dificuldade que pretende, tendo três dificuldades ao seu dispor: facil, média e dificil.
 
 De uma perspetiva mais técnica:
 Temos um predicado de visualização que começa por chamar uma função que desenha o header (consiste em número para o jogador facilmente visualizar a coluna que quer escolher). 
@@ -145,7 +146,7 @@ Entre cada linha é desenhada uma sepração para ser mais fácil distinguir.
 
 No final de o board state estar desenhado, é chamada uma função para desenhar o footer (que é igual ao header mas invertido).
 
-## Lista de Jogadas Válidas
+### Lista de Jogadas Válidas
 
 No nosso jogo existem dois tipos de movimento: mover uma peça de um sítio para o outro e colocar uma peça nova no tabuleiro. Uma jogada é composta por dois movimentos do primeiro tipo e um do segundo. Devido a isto achamos que era mais prático ter duas funções para achar as jogadas válidas. Para o primeiro tipo de movimento criamos um predicado chamado **valid_moves(StartCoords, EndCoords, Board, NWDDiagonalMoves, NEDiagonalMoves, ElineMoves)**. Este predicado recebe as coordenadas de uma peça (**StartCoords**) e retorna na variável **EndCoords** todos os movimentos que a peça pode fazer no actual **Board**. **NWDDiagonalMoves, NEDiagonalMoves e ElineMoves** são variáveis que mostram o número de movimentos que a peça pode fazer em cada diagonal e na horizontal, respetivamente.
 
@@ -154,9 +155,49 @@ Isto é feito usando predicados auxiliares que calculam os movimentos para cada 
 No entanto, ao chamar tantos predicaods, no final, iriamos ficar com uma Lista de Listas que podia ter mais Listas de Listas dentro dela. Para isso foi criado um predicado **formatAllCoords(OldCoords, NewCoords)** que, como o nome indica, formata as coordenadas, isto é, mete todas as cordenadas numa unica Lista de Listas e apaga todos os duplicados e todas as listas vazias.
 Para conseguir converter uma Lista com N niveis de listas dentro dela, tivemos de criar um predicado **appendAllLists(Old Coords, NewCoords, PlaceHolder)** que usa o predicado append/2 para converter as listas de listas em listas.
 
-## Execução de Jogadas
+Para gerar todas as hipoteses da terceira etapa (colocar uma peça nova no tabuleiro), usamos o predicado **generatePlacePlayerPieces(Board, PlayerColor, Gamestates)**. Este predicado percorre o Board todo e guarda todos os GameStates em que se pode por uma peça num lugar vazio de forma a não fazer um semáforo.
+
+### Execução de Jogadas
+
+Tambem como na secção da Lista de Jogadas Válidas, devido ao funcionamento do nosso jogo, fazer um predicado **move(+GameState, +Move,-NewGameState)** não seria possível porque cada jogada tem 3 etapas e em cada uma é necessário ter um novo GameState. Isto é, cada etapa necessita que o jogador introduza um move consoante o GameState gerado na etapa anterior. Também não seria possível usar essa função em loop ou recursivamente porque cada etapa é diferente das outras. Usamos um predicado com esse nome para mudar uma peça de sítio.
+
+Para fazer uma jogada usamos o predicado **takeTurn(GameState, NewGameState)**. Neste predicado chamamos 3 predicados auxiliares reponsáveis por cada etapa. **movePlayerDisc(Board, Player, EnemyPlayer, BoardMoved, UpdatedPlayer, UpdatedEnemy)** é responsável por mover uma peça do jogador (Etapa 1). **moveEnemyDisc(Board, Player, EnemyPlayer, BoardMoved, UpdatedPlayer, UpdatedEnemy)** é responsável por mover uma peça do enimigo (Etapa 2). **placeDisc(Board, Player, NewBoard)** é responsável por meter uma peça nova no tabuleiro (Etapa 3).
+
+### Final do Jogo
+
+Em vez de utilizarmos o predicado **game_over(+GameState, -Winner)** usamos o predicado **game_over(Winner)**. Isto porque não necessitamos do GameState para verificar quem ganhou. Como após cada jogada, só o jogador que jogou é que pode ganhar, apenas precisamos de saber o número de semáforos que esse jogador tem. Se for maior que 2, então esse jogador ganhou. Achamos que não valia a pena levar o GameState para dentro desta função visto que apenas porecisamos do jogador que jogou.
+
+### Avaliação do Tabuleiro
+
+Utilizamos um predicado **value(+GameState, +Player, -Value)** para avaliar cada GameState feita pelo AI. Como não existe muita informação sobre o jogo nem nenhuma análise profunda às caracteristicas do jogo, a única coisa que foi usada para avaliar os GameStates é o número de semáforos que o jogador fez nessa jogada.
+
+Pensamos em usar uma forma de tentar perceber qual os GameStates em que mais facilmente se poderia fazer futuramente um semáforo mas não há informação suficiente e isso requeria muitas horas a jogar contra pessoas que sabem jogar para conseguir perceber.
+
+Apesar de não ser uma forma muito fiel, achamos que, com a informação existente sobre o jogo, esta forma é adequada para o âmbito deste trabalho.
+
+### Jogada do Computador
+
+Utilizamos o predicado **choose_move(+GameState, +Player, +Level, -Move)** para escolher a melhor jogada para o computador fazer. Optamos por fazer com que o jogador escolhe a melhor jogada para cada etapa e não a melhor jogada para a jogada no total. Isto faz com que o AI não seja tão inteligente mas não tem um impacto assim tão grande na sua perfomance.
+
+É utilizado o predicado auxiliar **generateMovePlayerPieces(Board, PlayerColor, Gamestates)** para gerar todos os GameStates de todas as peças que podem ser movidas. Isto é feito chamando o predicado **getAllMovablePieces(Board, PieceColor, PiecesCoords, CurentRowNumber)** que retorna na variável PiecesCoords todas as peças da cor PieceColor que podem ser movidas. Sobre essas peças é aplicado o predicado **getAllMoves/3** que chama **valid_moves/6** para cada peça. Na varia´vel Moves do predicado getAllMoves temos as coordenadas de cada peça e todas as posições que essa peça pode ir. Por fim, é chamado o predicado **generateAllMovePlayerPieceBoards(Board, Moves, AllMoves)** que cria um BoardState para cada Move gerado e guarda tudo na variável AllMoves. O predicado **generateMovePlayerPieces/3** é chamda duas vezes, uma vez para gerar os movimentos das peças do jogador e uma segunda vez para gerar os movimentos das peças do enimigo.
+Para gerar os GameStates da terceira etapa é usado o predicado **generatePlacePlayerPieces/3** explicado na secção **Lista de Jogadas Válidas**.
+
+Para o AI de nível 3, entre cada etapa, é escolhido o melhor GameState para ser usado na próxima etapa. Isto serve para diminuir o espaço de movimentos o quefaz com que o AI seja mais rápido a tomar decisões. O AI de nível 1 faz as jogadas totalmente randome  o AI de nivel 2 escolhe uma peça random e escolhe a melhor jogada para essa peça.
 
 
+## Conclusão
+
+Após este trabalho, sentimos que o nosso conhecimento e à vontade com Prolog aumento bastante. Este projeto permitiu-nos trabalhar extensivamente com listas e perceber a forma como o Prolog funciona.
+
+Achamos que conseguimos atingir todos os requesitos pedidos no enunciado, no entanto, vê-mos várias melhorias que podiam ser feitas, maioritariamente na implementação do AI. Em primeiro lugar, começavamos por fazer com que a escolha da melhor jogada fosse feita no final das três etapas e não entre cada uma. Em segundo lugar, tentariamos aplicar o algoritmo Minimax, de forma, a ter um AI verdadeiramente inteligente. Por último, após conseguir implementar o Minimax, seria benéfico aumentar a sua eficiência utilizando cortes Alfa Beta. Também seria muito benéfico tentar arranjar uma forma melhor de avaliar as jogadas, apesar de que, utilizando o Minimax com uma profundidade > 6, o critério utilizado seria suficiente.
+
+Ao testar o nosso código encontramos apenas um erro que acontecia raramente com o AI de nível 1. Infelizmente, devido a sua natureza random, não conseguimos recriar os jogos de forma a solucionar o problema.
+
+Em suma, achamos que este projeto foi uma mais vália para o nosso percurso académico e esperamos poder aprofundar melhor os nossos conhecimentos de Prolog no próximo projeto.
+
+## Bibliografia
+
+Regras Oficiais do Ampel: https://nestorgames.com/rulebooks/AMPEL_EN.pdf
 
  ### Grupo Ampel_3
 

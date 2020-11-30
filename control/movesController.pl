@@ -6,16 +6,15 @@
     This file is where we make all the function that move the pieces.
 */
 
-
 /*
-    takeTurn(Board, Player)
+    takeTurn(GameState, NewGameState)
     Player move has 3 stages.
     First the player moves one of its pieces.
     Then it moves one of the enemy pieces.
     And it places one piece. 
 */
 
-takeTurn(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
+takeTurn([Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, UpdatedPlayer, NewEnemyPlayer]):-
     % Stage 1: Move Player Piece
     displayMovePieceHead,
     printBoard(Board),
@@ -99,7 +98,7 @@ setup(Counter,Board, PieceColor, NewTurnBoard):-
 
 setup(_, Player, _, Player).
 /*
-    movePlayerDisc(Board, Player, BoardMoved)
+    movePlayerDisc(Board, Player, EnemyPlayer, BoardMoved, UpdatedPlayer, UpdatedEnemy)
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */
@@ -133,7 +132,7 @@ movePlayerDisc(Board, [PieceColor, PlayerPieces, PlayerSemaphores, PlayerLastMov
     sleep(1).
 
 /*
-    moveEnemyDisc(Board, EnemyPlayer, BoardMoved)
+    moveEnemyDisc(Board, Player, EnemyPlayer, BoardMoved, UpdatedPlayer, UpdatedEnemy)
     Asks the player for a piece to move and where to place it.
     Moves that piece to the desired place, leaving the spot empty.
 */

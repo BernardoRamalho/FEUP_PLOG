@@ -29,8 +29,9 @@ play(GameState, 2):-
 
 
 play(GameState, 3):-
+    askDifficulty(Level),
     setupPvE(0, GameState, 'Red', NewGameState, 'player'),
-    playPvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []], 'player').
+    playPvE(NewGameState, Level, ['Red', 20, 0, []], ['Green', 20, 0, []], 'player').
 
 /*
     Group of function that run the game based on the type of game.
@@ -43,7 +44,7 @@ playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Enem
     displayPlayerTurn(PlayerColor),
     displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
 
-    takeTurn(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    takeTurn([GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, NewPlayer, NewEnemyPlayer]),
     playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 
@@ -63,7 +64,7 @@ playPvE(_, _, _, Player, _):-
 
 playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay],  EnemyPlayer, 'player'):-
     displayPlayerTurn(PlayerColor),
-    move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    takeTurn([GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, NewPlayer, NewEnemyPlayer]),
     playPvE(NewBoard, Level, NewEnemyPlayer, NewPlayer, 'ai').
 
 playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, 'ai'):-
