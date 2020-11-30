@@ -7,22 +7,14 @@
 */
 
 /*
-<<<<<<< HEAD
     takeTurn(GameState, NewGameState)
-=======
-    takeTurn(Board, Player)
->>>>>>> main
     Player move has 3 stages.
     First the player moves one of its pieces.
     Then it moves one of the enemy pieces.
     And it places one piece. 
 */
 
-<<<<<<< HEAD
 takeTurn([Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, UpdatedPlayer, NewEnemyPlayer]):-
-=======
-takeTurn(Board, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, UpdatedPlayer, NewEnemyPlayer):-
->>>>>>> main
     % Stage 1: Move Player Piece
     displayMovePieceHead,
     printBoard(Board),

@@ -108,14 +108,14 @@ generateAllMovePlayerPieceBoards(Board, [[StartCoords, [FirstMove|RemainingMoves
 generateMovePlayerPieceBoards(_, [_, []], []).
 
 generateMovePlayerPieceBoards(Board, [StartCoords, [FirstMove | RemainingMoves]], [[ [StartCoords, FirstMove] , BoardState] | RemainingGameStates]):- 
-    movePiece( StartCoords, FirstMove, Board, BoardState),
+    move(Board, [StartCoords, FirstMove], BoardState),
     generateMovePlayerPieceBoards(Board, [StartCoords, RemainingMoves], RemainingGameStates).
 
 
 generateMoveEnemyPlayerPieceBoards(_, _, [], []).
 
 generateMoveEnemyPlayerPieceBoards(Board, StartCoords, [FirstMove | RemainingMoves], [[ [StartCoords, FirstMove] , BoardState] | RemainingGameStates]):-
-    movePiece(Board, StartCoords, FirstMove, BoardState),
+    move(Board, [StartCoords, FirstMove], BoardState),
     generateMoveEnemyPlayerPieceBoards(Board, StartCoords, RemainingMoves, RemainingGameStates).
 
 
