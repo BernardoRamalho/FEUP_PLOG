@@ -29,8 +29,9 @@ play(GameState, 2):-
 
 
 play(GameState, 3):-
+    askDifficulty(Level),
     setupPvE(0, GameState, 'Red', NewGameState, 'player'),
-    playPvE(NewGameState, 2, ['Red', 20, 0, []], ['Green', 20, 0, []], 'player').
+    playPvE(NewGameState, Level, ['Red', 20, 0, []], ['Green', 20, 0, []], 'player').
 
 /*
     Group of function that run the game based on the type of game.
