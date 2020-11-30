@@ -43,7 +43,7 @@ playPvP(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], Enem
     displayPlayerTurn(PlayerColor),
     displayPlayerStats([PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay]),
 
-    takeTurn(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    takeTurn([GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, NewPlayer, NewEnemyPlayer]),
     playPvP(NewBoard, NewEnemyPlayer, NewPlayer).
 
 
@@ -63,7 +63,7 @@ playPvE(_, _, _, Player, _):-
 
 playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay],  EnemyPlayer, 'player'):-
     displayPlayerTurn(PlayerColor),
-    move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, NewBoard, NewPlayer, NewEnemyPlayer),
+    takeTurn([GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer], [NewBoard, NewPlayer, NewEnemyPlayer]),
     playPvE(NewBoard, Level, NewEnemyPlayer, NewPlayer, 'ai').
 
 playPvE(GameState, Level, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], EnemyPlayer, 'ai'):-
