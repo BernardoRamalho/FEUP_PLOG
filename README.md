@@ -142,6 +142,8 @@ Temos um predicado de visualização que começa por chamar uma função que des
 Depois chama uma função recursiva responsável por desenhar o board state. Esta função escreve a letra que designa a linha que está a desenhar. Para desenhar o conteudo da linha do board state, é utilizado um função auxiliar. Esta função auxiliar percorre a linha enquanto converte o que encontra para o simbolo desejado e desenha esse simbolo no ecrã. Quando a linha acaba de ser desenhada, a função reponsável por desenhar o board state chama-se a si própria, incrementando uma variavel. Quando essa variavel fica igual ao número máximo de linhas, encontra-se a condição de paragem.
 Entre cada linha é desenhada uma sepração para ser mais fácil distinguir.
 
+
+
 No final de o board state estar desenhado, é chamada uma função para desenhar o footer (que é igual ao header mas invertido).
 
 ### Lista de Jogadas Válidas
