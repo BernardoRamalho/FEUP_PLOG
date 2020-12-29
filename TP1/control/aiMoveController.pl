@@ -42,7 +42,7 @@ choose_move(GameState, [PlayerColor, PlayerPieces, PlayerSemaphores, LastPlay], 
     % Generate Place Piece
     generatePlacePlayerPieces(MoveEnemyPieceBoardState, PlayerColor, PlayerPieces, PlacePositions),
     !,
-    getRandomMove(PlacePositions, ThirdMove).
+    getRandomMove(PlacePositions, ThirdMove, PlacePositions).
 
 
 /*
