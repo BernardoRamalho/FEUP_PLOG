@@ -1,16 +1,16 @@
-% house(id, proprietário)
+% house(id, proprietário, preferedTime)
 
-house(1, 'Manel').
-house(2, 'Joana').
-house(3, 'Antunes').
-house(4, 'José').
+house(1, 'Manel', 85).
+house(2, 'Joana', 98).
+house(3, 'Antunes', 60).
+house(4, 'José', 40).
 
 % tempoViagem(local, local, tempo)
 
-tempoViagem('padaria', 1, 5).
-tempoViagem('padaria', 2, 15).
-tempoViagem('padaria', 3, 25).
-tempoViagem('padaria', 4, 1).
+tempoViagem(0, 1, 5).
+tempoViagem(0, 2, 15).
+tempoViagem(0, 3, 25).
+tempoViagem(0, 4, 1).
 tempoViagem(1, 2, 3).
 tempoViagem(1, 3, 14).
 tempoViagem(1, 4, 20).
