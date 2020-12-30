@@ -27,18 +27,14 @@ baker(PreferedTime, TravelTime):-
 getRouteTime([PrevHouse, House], TravelTimeList, Time, NumberOfHouses):-
     write(TravelTimeList),
     write('\n'),
-    Index #= PrevHouse - 1,
-    StartPosition #= Index * NumberOfHouses,
-    Position #= StartPosition + House,
+    Position #= (PrevHouse - 1) * NumberOfHouses + House,
     element(Position, TravelTimeList, HouseTravelTime),
     Time #= HouseTravelTime.
 
 getRouteTime([PrevHouse, House|Rest], TravelTimeList, Time, NumberOfHouses):- 
     write(TravelTimeList),
     write('\n'),
-    Index #= PrevHouse - 1,
-    StartPosition #= Index * NumberOfHouses,
-    Position #= StartPosition + House,
+    Position #= (PrevHouse - 1) * NumberOfHouses + House,
     element(Position, TravelTimeList, HouseTravelTime),
     Time #= HouseTravelTime + NextTime,
-    getRouteTime([House|Rest], TravelTimeList, NextTime).
+    getRouteTime([House|Rest], TravelTimeList, NextTime, NumberOfHouses).
