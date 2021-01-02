@@ -42,13 +42,7 @@ baker(PreferedTime, HouseTravelTime, BakeryTravelTime):-
     evaluateRoute(Time, Delay, Score),
 
     labeling([minimize(Score)], Route),
-    write(Time),
-    write('<-->'),
-    write(Delay),
-    write('<-->'),
-    write(Score),
-    write('<-->'),
-    write(Route).
+    displayResults(Route, DeliveryInstants).
 
 
 getRouteTime([PrevHouse, House], TravelTimeList, PreferedTime, [PrevHouseTime, HouseTime], Delay, NumberOfHouses):-
@@ -58,7 +52,7 @@ getRouteTime([PrevHouse, House], TravelTimeList, PreferedTime, [PrevHouseTime, H
 
     % Get Delay
     element(House, PreferedTime, DeliveryTime),
-    SignedDelay #= HouseTime - DeliveryTime,
+    SignedDelay #= HouseTime - DeliveryTime - 40,
     convertDelay(SignedDelay, Delay).
 
 getRouteTime([PrevHouse, House|Rest], TravelTimeList, PreferedTime, [PrevHouseTime, HouseTime | RestTime], Delay, NumberOfHouses):- 
@@ -69,11 +63,12 @@ getRouteTime([PrevHouse, House|Rest], TravelTimeList, PreferedTime, [PrevHouseTi
 
     % Get Delay
     element(House, PreferedTime, DeliveryTime),
-    SignedDelay #= HouseTime - DeliveryTime,
+    SignedDelay #= HouseTime - DeliveryTime - 40,
     convertDelay(SignedDelay, UnsignedDelay),
     Delay #= UnsignedDelay + NewDelay,
 
     getRouteTime([House|Rest], TravelTimeList, PreferedTime, [HouseTime | RestTime], NewDelay, NumberOfHouses).
+
 
 
 evaluateRoute(Time, Delay, Score):-
@@ -84,3 +79,32 @@ convertDelay(SignedDelay, UnsignedDelay):-
     UnsignedDelay #= SignedDelay * -1.
 
 convertDelay(SignedDelay, SignedDelay).
+
+displayResults([], []).
+displayResults(Route, DeliveryInstants):-
+    write('\n  Route  \n'),
+    displayRoute(Route),
+    displayHeader,
+    displayTableContent(Route, DeliveryInstants).
+
+displayHeader:-
+    nl,
+    write('House  Instants'),
+    nl.
+
+displayRoute([House|[]]):-
+    write(House),
+    nl.
+displayRoute([House|Rest]):- 
+    write(House),
+    write(' ---> '),
+    displayRoute(Rest).
+
+displayTableContent([],[]).
+displayTableContent([House|Rest], [Time|RestTime]):-
+    write('   '),
+    write(House),
+    write(' --> '),
+    write(Time),
+    nl,
+    displayTableContent(Rest, RestTime).
