@@ -38,12 +38,15 @@ baker(PreferedTime, HouseTravelTime, BakeryTravelTime):-
     element(LastHouseID, BakeryTravelTime, HouseToBakeryTime),
     element(NumberOfHouses, DeliveryInstants, LastInstant),
     Time #= LastInstant + HouseToBakeryTime,
-    
 
-    labeling([minimize(Time)], Route),
+    evaluateRoute(Time, Delay, Score),
+
+    labeling([minimize(Score)], Route),
     write(Time),
     write('<-->'),
     write(Delay),
+    write('<-->'),
+    write(Score),
     write('<-->'),
     write(Route).
 
@@ -52,9 +55,11 @@ getRouteTime([PrevHouse, House], TravelTimeList, PreferedTime, [PrevHouseTime, H
     Position #= (PrevHouse - 1) * NumberOfHouses + House,
     element(Position, TravelTimeList, HouseTravelTime),
     HouseTime #= (PrevHouseTime + 5) + HouseTravelTime,
+
     % Get Delay
     element(House, PreferedTime, DeliveryTime),
-    Delay #= HouseTime - DeliveryTime.
+    SignedDelay #= HouseTime - DeliveryTime,
+    convertDelay(SignedDelay, Delay).
 
 getRouteTime([PrevHouse, House|Rest], TravelTimeList, PreferedTime, [PrevHouseTime, HouseTime | RestTime], Delay, NumberOfHouses):- 
     % Get travel Time
@@ -64,7 +69,18 @@ getRouteTime([PrevHouse, House|Rest], TravelTimeList, PreferedTime, [PrevHouseTi
 
     % Get Delay
     element(House, PreferedTime, DeliveryTime),
-    Delay #= HouseTime - DeliveryTime + NewDelay,
+    SignedDelay #= HouseTime - DeliveryTime,
+    convertDelay(SignedDelay, UnsignedDelay),
+    Delay #= UnsignedDelay + NewDelay,
 
     getRouteTime([House|Rest], TravelTimeList, PreferedTime, [HouseTime | RestTime], NewDelay, NumberOfHouses).
 
+
+evaluateRoute(Time, Delay, Score):-
+    Score #= Time + Delay.
+
+convertDelay(SignedDelay, UnsignedDelay):-
+    SignedDelay #< 0,
+    UnsignedDelay #= SignedDelay * -1.
+
+convertDelay(SignedDelay, SignedDelay).
