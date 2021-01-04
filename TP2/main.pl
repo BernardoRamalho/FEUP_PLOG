@@ -42,7 +42,7 @@ baker(PreferedTime, HouseTravelTime, BakeryTravelTime):-
     evaluateRoute(Time, Delay, Score),
 
     labeling([minimize(Score)], Route),
-    displayResults(Route, DeliveryInstants).
+    displayResults(Route, DeliveryInstants, Time, Delay).
 
 
 getRouteTime([PrevHouse, House], TravelTimeList, PreferedTime, [PrevHouseTime, HouseTime], Delay, NumberOfHouses):-
@@ -89,11 +89,17 @@ convertDelay(SignedDelay, UnsignedDelay):-
 convertDelay(SignedDelay, SignedDelay).
 
 displayResults([], []).
-displayResults(Route, DeliveryInstants):-
+displayResults(Route, DeliveryInstants, Time, Delay):-
     write('\n  Route  \n'),
     displayRoute(Route),
     displayHeader,
-    displayTableContent(Route, DeliveryInstants).
+    displayTableContent(Route, DeliveryInstants),
+    nl,
+    write('The trip was made in '),
+    write(Time),
+    write(' instants with a delay of '),
+    write(Delay),
+    write(' instants.\n').
 
 displayHeader:-
     nl,
