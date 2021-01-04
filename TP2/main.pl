@@ -24,9 +24,9 @@ baker(PreferedTime, HouseTravelTime, BakeryTravelTime):-
     all_distinct(Route),
     all_distinct(DeliveryInstants),
 
-    % The first instant must be the the travel time from the bakery to the first house
+    % The first instant must be the prefered time from the bakery to the first house
     element(1, Route, FirstHouseID),
-    element(FirstHouseID, BakeryTravelTime, BakeryToHouseTime),
+    element(FirstHouseID, PreferedTime, BakeryToHouseTime),
     element(1, DeliveryInstants, BakeryToHouseTime),
 
     % Each house delivery instant must be equal to the previous house instant plus the travel time between houses
@@ -48,28 +48,37 @@ baker(PreferedTime, HouseTravelTime, BakeryTravelTime):-
 getRouteTime([PrevHouse, House], TravelTimeList, PreferedTime, [PrevHouseTime, HouseTime], Delay, NumberOfHouses):-
     Position #= (PrevHouse - 1) * NumberOfHouses + House,
     element(Position, TravelTimeList, HouseTravelTime),
-    HouseTime #= (PrevHouseTime + 5) + HouseTravelTime,
+    TimeAtHouse #= (PrevHouseTime + 5) + HouseTravelTime,
 
     % Get Delay
     element(House, PreferedTime, DeliveryTime),
-    SignedDelay #= HouseTime - DeliveryTime - 40,
-    convertDelay(SignedDelay, Delay).
+    isLate(TimeAtHouse, DeliveryTime, HouseTime, Delay).
 
 getRouteTime([PrevHouse, House|Rest], TravelTimeList, PreferedTime, [PrevHouseTime, HouseTime | RestTime], Delay, NumberOfHouses):- 
     % Get travel Time
     Position #= (PrevHouse - 1) * NumberOfHouses + House,
     element(Position, TravelTimeList, HouseTravelTime),
-    HouseTime #= HouseTravelTime + (PrevHouseTime + 5),
+    TimeAtHouse #= HouseTravelTime + (PrevHouseTime + 5),
 
     % Get Delay
     element(House, PreferedTime, DeliveryTime),
-    SignedDelay #= HouseTime - DeliveryTime - 40,
-    convertDelay(SignedDelay, UnsignedDelay),
+    isLate(TimeAtHouse, DeliveryTime, HouseTime, UnsignedDelay),
+
     Delay #= UnsignedDelay + NewDelay,
 
     getRouteTime([House|Rest], TravelTimeList, PreferedTime, [HouseTime | RestTime], NewDelay, NumberOfHouses).
 
+isLate(GetToHouseTime, SupposedTime, GetToHouseTime, 0):-
+    GetToHouseTime #=< SupposedTime - 10,
+    GetToHouseTime #>= SupposedTime - 40.
 
+isLate(GetToHouseTime, SupposedTime, GetToHouseTime, Delay):-
+    GetToHouseTime #> SupposedTime - 10,
+    Delay #= GetToHouseTime - SupposedTime.
+
+isLate(GetToHouseTime, SupposedTime, GetToHouseTime, Delay):-
+    GetToHouseTime #< SupposedTime - 40,
+    Delay #= SupposedTime - GetToHouseTime.
 
 evaluateRoute(Time, Delay, Score):-
     Score #= Time + Delay.
