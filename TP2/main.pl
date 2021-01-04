@@ -3,7 +3,7 @@
 :-use_module(library(lists)).
 
 main:-
-    baker([85, 98, 60, 70], [[0, 3, 14, 1], [15, 0, 10, 25], [14, 10, 0, 3], [1, 25, 3, 0]], [10, 5, 20, 15]).
+    baker([20, 70, 120, 130], [[0, 3, 14, 1], [15, 0, 10, 25], [14, 10, 0, 3], [1, 25, 3, 0]], [10, 5, 20, 15]).
 
 baker(PreferedTime, HouseTravelTime, BakeryTravelTime):-
     % Get the number of houses to visit
@@ -76,9 +76,8 @@ isLate(GetToHouseTime, SupposedTime, GetToHouseTime, Delay):-
     GetToHouseTime #> SupposedTime - 10,
     Delay #= GetToHouseTime - SupposedTime.
 
-isLate(GetToHouseTime, SupposedTime, GetToHouseTime, Delay):-
-    GetToHouseTime #< SupposedTime - 40,
-    Delay #= SupposedTime - GetToHouseTime.
+isLate(_, SupposedTime, TimeAtHouse, 0):-
+    TimeAtHouse #= SupposedTime - 10.
 
 evaluateRoute(Time, Delay, Score):-
     Score #= Time + Delay.
